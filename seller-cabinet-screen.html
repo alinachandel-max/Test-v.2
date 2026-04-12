@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>BirBir Seller Cabinet</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="prototype-library/birbir-prototype-library.css">
+</head>
+<body>
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M4.99999 10C4.99999 8.67392 5.52677 7.40215 6.46446 6.46447C7.40214 5.52678 8.67391 5 9.99999 5C11.3261 5 12.5978 5.52678 13.5355 6.46447C14.4732 7.40215 15 8.67392 15 10C15 11.3261 14.4732 12.5979 13.5355 13.5355C12.5978 14.4732 11.3261 15 9.99999 15C8.67391 15 7.40214 14.4732 6.46446 13.5355C5.52677 12.5979 4.99999 11.3261 4.99999 10ZM9.99999 3C8.89125 3 7.79837 3.26338 6.81134 3.76843C5.82431 4.27349 4.97138 5.00578 4.32276 5.90501C3.67415 6.80423 3.24842 7.84467 3.08063 8.94064C2.91283 10.0366 3.00778 11.1568 3.35764 12.2089C3.7075 13.2609 4.30228 14.2149 5.09298 14.9921C5.88369 15.7693 6.84771 16.3476 7.90567 16.6794C8.96362 17.0111 10.0852 17.0868 11.1782 16.9001C12.2711 16.7135 13.304 16.27 14.192 15.606L19.292 20.707C19.4795 20.8946 19.7339 21.0001 19.9991 21.0002C20.2644 21.0003 20.5188 20.895 20.7065 20.7075C20.8941 20.52 20.9996 20.2656 20.9997 20.0004C20.9998 19.7351 20.8945 19.4806 20.707 19.293L15.607 14.193C16.3853 13.1525 16.8587 11.9159 16.9741 10.6217C17.0895 9.32741 16.8424 8.02658 16.2604 6.86481C15.6784 5.70304 14.7846 4.72618 13.6789 4.0436C12.5732 3.36103 11.2994 2.99967 9.99999 3Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-arrow-left" viewBox="0 0 24 24">
+      <path d="M18 12H6.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M10.5 8L6.5 12L10.5 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+    <symbol id="icon-close" viewBox="0 0 8 8">
+      <path d="M1 1L7 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+      <path d="M7 1L1 7" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+    </symbol>
+    <symbol id="icon-heart-empty" viewBox="0 0 24 24">
+      <path d="M20 8.39551C20 6.51496 18.5119 5 16.5 5C15.9615 5 15.4222 5.11732 14.9229 5.33496L14.7119 5.43457C14.2051 5.69039 13.7662 5.91157 13.4268 6.06543C13.2556 6.14299 13.064 6.22525 12.8701 6.29004C12.7249 6.33857 12.4609 6.41911 12.1406 6.43848L12 6.44238C11.6168 6.44238 11.2959 6.3455 11.1299 6.29004C10.936 6.22525 10.7444 6.14299 10.5732 6.06543C10.4035 5.98848 10.2086 5.89477 9.99316 5.78809L9.28809 5.43457C8.73147 5.15359 8.11531 5 7.5 5C5.48808 5 4 6.51496 4 8.39551C4.00012 9.57869 4.52443 10.8144 5.87695 12.4375C7.25135 14.0868 9.25434 15.876 11.8662 18.1992L11.8789 18.2109L11.8818 18.2139L12.0049 18.3232L12.123 18.2178L12.1582 18.1865L13.998 16.54C15.7226 14.9809 17.1025 13.6669 18.1299 12.4316C19.4778 10.811 19.9999 9.57668 20 8.39551ZM21.9902 8.74023C21.7868 12.2837 18.4567 15.2517 13.4893 19.6797L13.4502 19.7148L13.332 19.8203L12.9102 20.1885C12.5359 20.5043 12.2862 20.6615 12.001 20.6611L11.8604 20.6484C11.6289 20.6041 11.4047 20.449 11.0938 20.1846L10.6729 19.8154L10.5498 19.7051L10.5371 19.6943C5.5548 15.2626 2.21358 12.29 2.00977 8.74023L2 8.39551C2 5.37425 4.42 3 7.5 3L7.85254 3.01074C8.67327 3.06114 9.47051 3.28554 10.1895 3.64844C11.1062 4.11122 11.6222 4.37163 11.8965 4.42969L12 4.44238C12.1786 4.44238 12.5182 4.29381 13.1191 3.99609L13.8105 3.64844C14.632 3.23377 15.5558 3 16.5 3L16.7871 3.00684C19.7291 3.14909 22 5.46878 22 8.39551L21.9902 8.74023Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-chat" viewBox="0 0 24 24">
+      <path d="M3.825 18.859L4.607 15.729C4.25663 15.1206 4.0192 14.4538 3.906 13.761C3.7928 13.0682 3.8061 12.3605 3.94517 11.6728C4.08425 10.9851 4.34642 10.3283 4.71808 9.73381C5.08974 9.1393 5.56359 8.61586 6.117 8.19C6.6704 7.76414 7.30489 7.45589 7.98164 7.28365C8.6584 7.11142 9.36306 7.07897 10.0528 7.18837C10.7426 7.29778 11.4019 7.54659 11.9907 7.91969C12.5795 8.29279 13.0854 8.7824 13.477 9.358L13.5 9.392C14.4737 9.62548 15.3763 10.0947 16.129 10.759C16.8818 11.4233 17.4618 12.2629 17.8175 13.2036C18.1732 14.1444 18.2937 15.1577 18.1686 16.1559C18.0434 17.1541 17.6764 18.1066 17.0994 18.9306C16.5224 19.7545 15.7528 20.4251 14.8579 20.8845C13.9631 21.3438 12.9707 21.5782 11.965 21.567L11.81 21.566C10.406 21.5692 9.02886 21.1817 7.832 20.447L3.825 18.859Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M16 14C17.2885 14.0001 18.5272 14.4975 19.4578 15.3887C20.3884 16.2798 20.9391 17.4958 20.995 18.783L21 19V21C20.9997 21.2549 20.9021 21.5 20.7272 21.6854C20.5522 21.8707 20.313 21.9822 20.0586 21.9972C19.8042 22.0121 19.5536 21.9293 19.3582 21.7657C19.1627 21.6021 19.0371 21.3701 19.007 21.117L19 21V19C19 18.2348 18.7077 17.4985 18.1827 16.9417C17.6577 16.3849 16.9395 16.0496 16.175 16.004L16 16H8C7.23479 16 6.49849 16.2923 5.9417 16.8173C5.38491 17.3423 5.04961 18.0605 5.00401 18.825L5 19V21C4.99974 21.2549 4.90212 21.5 4.72718 21.6854C4.55223 21.8707 4.31299 21.9822 4.0586 21.9972C3.8042 22.0121 3.55364 21.9293 3.35818 21.7657C3.16272 21.6021 3.03709 21.3701 3.007 21.117L3 21V19C3.00014 17.7115 3.49754 16.4728 4.38868 15.5422C5.27981 14.6116 6.49581 14.0609 7.783 14.005L8 14H16ZM12 2C13.0609 2 14.0783 2.42143 14.8284 3.17157C15.5786 3.92172 16 4.93913 16 6C16 7.06087 15.5786 8.07828 14.8284 8.82843C14.0783 9.57857 13.0609 10 12 10C10.9391 10 9.92172 9.57857 9.17157 8.82843C8.42143 8.07828 8 7.06087 8 6C8 4.93913 8.42143 3.92172 9.17157 3.17157C9.92172 2.42143 10.9391 2 12 2Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-add-circle-fill" viewBox="0 0 24 24">
+      <path d="M12 2C17.523 2 22 6.477 22 12C22 17.523 17.523 22 12 22C6.477 22 2 17.523 2 12C2 6.477 6.477 2 12 2ZM12 7C11.7551 7.00003 11.5187 7.08996 11.3356 7.25272C11.1526 7.41547 11.0357 7.63975 11.007 7.883L11 8V11H8C7.74512 11.0003 7.49997 11.0979 7.31463 11.2728C7.1293 11.4478 7.01777 11.687 7.00283 11.9414C6.98789 12.1958 7.07067 12.4464 7.23426 12.6418C7.39786 12.8373 7.6299 12.9629 7.883 12.993L8 13H11V16C11.0003 16.2549 11.0979 16.5 11.2728 16.6854C11.4478 16.8707 11.687 16.9822 11.9414 16.9972C12.1958 17.0121 12.4464 16.9293 12.6418 16.7657C12.8373 16.6021 12.9629 16.3701 12.993 16.117L13 16V13H16C16.2549 12.9997 16.5 12.9021 16.6854 12.7272C16.8707 12.5522 16.9822 12.313 16.9972 12.0586C17.0121 11.8042 16.9293 11.5536 16.7657 11.3582C16.6021 11.1627 16.3701 11.0371 16.117 11.007L16 11H13V8C13 7.73478 12.8946 7.48043 12.7071 7.29289C12.5196 7.10536 12.2652 7 12 7Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-chevron-right-circle-fill" viewBox="0 0 24 24">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2ZM15.0399 11.9949C15.0399 12.2168 14.9519 12.4296 14.7951 12.5866H14.7962L11.637 15.7447C11.5597 15.8246 11.4673 15.8884 11.3651 15.9322C11.2629 15.976 11.1531 15.9991 11.0419 16C10.9307 16.0009 10.8205 15.9796 10.7176 15.9375C10.6147 15.8954 10.5213 15.8331 10.4427 15.7545C10.3641 15.6758 10.302 15.5823 10.2599 15.4794C10.2179 15.3765 10.1968 15.2662 10.1978 15.1551C10.1988 15.0439 10.222 14.9341 10.2659 14.8319C10.3098 14.7298 10.3736 14.6374 10.4536 14.5602L13.019 11.9949L10.4542 9.42954C10.3764 9.35181 10.3147 9.25952 10.2726 9.15794C10.2305 9.05636 10.2088 8.94748 10.2088 8.83752C10.2088 8.72756 10.2304 8.61868 10.2725 8.51708C10.3145 8.41548 10.3762 8.32316 10.4539 8.24539C10.5316 8.16762 10.6239 8.10592 10.7255 8.06381C10.8271 8.02171 10.936 8.00003 11.0459 8C11.268 7.99995 11.481 8.08812 11.6381 8.24511L14.7951 11.4032C14.9519 11.5602 15.0399 11.773 15.0399 11.9949Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-business-fill" viewBox="0 0 24 24">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M18.8422 2.00049C19.6798 2.00049 20.483 2.33319 21.0752 2.9254C21.6674 3.5176 22.0001 4.32081 22.0001 5.15832V18.8422C22.0001 19.6798 21.6674 20.483 21.0752 21.0752C20.483 21.6674 19.6798 22.0001 18.8422 22.0001H15.6844V15.6844C15.6844 14.8469 15.3517 14.0437 14.7595 13.4515C14.1673 12.8593 13.3641 12.5266 12.5266 12.5266H11.474C10.6365 12.5266 9.83326 12.8593 9.24106 13.4515C8.64885 14.0437 8.31615 14.8469 8.31615 15.6844V22.0001H5.15832C4.32081 22.0001 3.5176 21.6674 2.9254 21.0752C2.33319 20.483 2.00049 19.6798 2.00049 18.8422V5.15832C2.00049 4.32081 2.33319 3.5176 2.9254 2.9254C3.5176 2.33319 4.32081 2.00049 5.15832 2.00049H18.8422Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-lightning-fill" viewBox="0 0 24 24">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M8.08384 2.6C8.24584 2.235 8.60684 2 9.00684 2H16.9838C17.7338 2 18.2228 2.79 17.8868 3.462L15.6178 8H18.9758C19.8758 8 20.3258 9.088 19.6898 9.724L7.73684 21.677C6.98284 22.431 5.72684 21.655 6.06484 20.644L8.61284 13H5.01484C4.84659 13 4.681 12.958 4.53312 12.8777C4.38524 12.7974 4.25975 12.6815 4.16806 12.5404C4.07636 12.3994 4.02136 12.2376 4.00805 12.0699C3.99474 11.9022 4.02354 11.7338 4.09184 11.58L8.08384 2.6Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-track-fill" viewBox="0 0 24 24">
+      <path d="M15.1504 3.59961C16.3097 3.59986 17.2496 4.53993 17.25 5.69922V6.75H18.8457C19.4834 6.75014 20.0869 7.0402 20.4854 7.53809L22.04 9.48145C22.3376 9.85363 22.4999 10.3164 22.5 10.793V15.1494C22.5 16.3092 21.5592 17.25 20.3994 17.25H19.3496L19.3457 17.4121C19.2613 19.0764 17.8845 20.4004 16.1992 20.4004C14.5141 20.4002 13.1381 19.0763 13.0537 17.4121L13.0498 17.25H9.89941L9.89551 17.4121C9.81112 19.0764 8.43433 20.4004 6.74902 20.4004C5.06382 20.4003 3.68792 19.0764 3.60352 17.4121L3.59961 17.25L3.38574 17.2383C2.32663 17.1309 1.5 16.2368 1.5 15.1494V6.69922C1.50028 4.72708 2.60372 3.59975 4.59961 3.59961H15.1504Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-crown-fill" viewBox="0 0 24 24">
+      <path d="M6.06459 19.1471H17.9344C18.3153 19.1473 18.6855 19.0201 18.9858 18.7857C19.2862 18.5513 19.4996 18.2233 19.592 17.8537L21.4462 10.7962C21.4713 10.6948 21.4699 10.5886 21.4418 10.4879C21.4138 10.3872 21.3602 10.2955 21.2863 10.2216C21.2123 10.1478 21.1205 10.0943 21.0198 10.0664C20.9191 10.0386 20.8129 10.0372 20.7115 10.0625L19.68 10.3204C18.834 10.532 17.945 10.4961 17.1187 10.2171C16.2925 9.93814 15.5637 9.42775 15.0191 8.74664L12.945 6.15371C12.8314 6.01203 12.6875 5.89768 12.5239 5.81909C12.3602 5.74051 12.181 5.69971 11.9995 5.69971C11.8179 5.69971 11.6387 5.74051 11.4751 5.81909C11.3114 5.89768 11.1675 6.01203 11.054 6.15371L8.97984 8.74664C8.43521 9.42775 7.70645 9.93814 6.8802 10.2171C6.05394 10.4961 5.16495 10.532 4.31891 10.3204L3.28747 10.0625C3.18607 10.0372 3.07985 10.0386 2.97912 10.0664C2.8784 10.0943 2.7866 10.1478 2.71265 10.2216C2.6387 10.2955 2.58511 10.3872 2.55709 10.4879C2.52908 10.5886 2.52759 10.6948 2.55277 10.7962L4.40793 17.8537C4.50034 18.2231 4.71357 18.551 5.01373 18.7854C5.3139 19.0197 5.68377 19.147 6.06459 19.1471Z" fill="currentColor"/>
+    </symbol>
+  </svg>
+
+  <div class="app seller-cabinet-app">
+    <main class="screen seller-cabinet-page" data-seller-cabinet-root>
+      <section class="seller-cabinet-header">
+        <div class="seller-cabinet-header__top">
+          <h1 class="seller-cabinet-header__title">Мои объявления</h1>
+        </div>
+
+        <section class="seller-cabinet-banners banners" aria-label="Промо продавца">
+          <div class="seller-cabinet-banners__row">
+            <button class="seller-cabinet-banner" type="button" data-seller-sheet-open="services" aria-label="Продажи на BirBir">
+              <img class="seller-cabinet-banner__image" src="assets/seller-cabinet/banner-sales.png" alt="50 000 000 сум Продажи на BirBir">
+            </button>
+            <button class="seller-cabinet-banner" type="button" data-seller-open-tooltip aria-label="Советы для продавца">
+              <img class="seller-cabinet-banner__image" src="assets/seller-cabinet/banner-tips.png" alt="Советы для продавца">
+            </button>
+          </div>
+        </section>
+
+        <div class="seller-cabinet-tabs" data-seller-tabs aria-label="Вкладки объявлений"></div>
+      </section>
+
+      <section class="seller-cabinet-content" data-seller-content aria-live="polite"></section>
+    </main>
+
+    <div class="seller-cabinet-notification" data-seller-notification hidden aria-hidden="true"></div>
+
+    <div class="filters-tooltip seller-cabinet-tooltip" data-seller-tooltip hidden aria-hidden="true">
+      <button class="filters-tooltip__close" type="button" data-seller-tooltip-close aria-label="Закрыть подсказку">
+        <span class="icon-box icon-box--8">
+          <svg class="icon-svg" viewBox="0 0 8 8" aria-hidden="true">
+            <use href="#icon-close"></use>
+          </svg>
+        </span>
+      </button>
+      <p class="filters-tooltip__text">Поднимайте объявления и включайте услуги, чтобы быстрее получать отклики.</p>
+      <span class="filters-tooltip__pointer" aria-hidden="true"></span>
+    </div>
+
+    <div class="seller-cabinet-footer">
+      <div class="seller-cabinet-footer__cta">
+        <button class="library-button library-button--accent-filled" type="button" data-seller-primary-cta>
+          <span class="library-button__label">+ Поставить объявление</span>
+        </button>
+      </div>
+
+      <nav class="tabbar" aria-label="Основная навигация">
+        <div class="tabbar__items">
+          <a class="tabbar__item" href="birbir-home-screen.html">
+            <span class="icon-box icon-box--24 icon-color--primary">
+              <svg class="icon-svg icon--search" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="#icon-search"></use>
+              </svg>
+            </span>
+            <span>Поиск</span>
+          </a>
+          <a class="tabbar__item" href="#">
+            <span class="icon-box icon-box--24 icon-color--primary">
+              <svg class="icon-svg icon--heart-empty" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="#icon-heart-empty"></use>
+              </svg>
+            </span>
+            <span>Избранное</span>
+          </a>
+          <a class="tabbar__item tabbar__item--active" href="seller-cabinet-screen.html">
+            <span class="icon-box icon-box--24 icon-color--active">
+              <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="#icon-add-circle-fill"></use>
+              </svg>
+            </span>
+            <span>Продажа</span>
+          </a>
+          <a class="tabbar__item" href="#">
+            <span class="icon-box icon-box--24 icon-color--primary">
+              <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="#icon-chat"></use>
+              </svg>
+            </span>
+            <span>Сообщения</span>
+          </a>
+          <a class="tabbar__item" href="#">
+            <span class="icon-box icon-box--24 icon-color--primary">
+              <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="#icon-user"></use>
+              </svg>
+            </span>
+            <span>Профиль</span>
+          </a>
+        </div>
+      </nav>
+    </div>
+  </div>
+
+  <div class="filter-bottomsheet seller-bottomsheet" data-seller-bottomsheet aria-hidden="true">
+    <div class="filter-bottomsheet__backdrop" data-seller-sheet-close></div>
+    <div class="filter-bottomsheet__panel" role="dialog" aria-modal="true" aria-labelledby="seller-bottomsheet-title">
+      <div class="filter-bottomsheet__header">
+        <div class="filter-bottomsheet__title-row">
+          <button class="filter-bottomsheet__reset seller-bottomsheet__ghost" type="button" data-seller-sheet-secondary hidden></button>
+          <h2 class="filter-bottomsheet__title" id="seller-bottomsheet-title">Детали</h2>
+          <button class="filter-bottomsheet__close" type="button" data-seller-sheet-close aria-label="Закрыть">
+            <span class="icon-box icon-box--16" aria-hidden="true">
+              <img class="seller-icon-img" src="prototype-library/icon-source-svg/Close.svg" alt="">
+            </span>
+          </button>
+        </div>
+      </div>
+      <div class="filter-bottomsheet__list seller-bottomsheet__list" data-seller-sheet-content></div>
+      <div class="filter-apply-bar seller-bottomsheet__footer">
+        <div class="filter-apply-bar__inner">
+          <button class="filter-apply-bar__button" type="button" data-seller-sheet-primary>Понятно</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script id="seller-cabinet-state-map" type="application/json">
+    {
+      "activeTab": "active",
+      "tooltip": {
+        "text": "Поднимайте объявления и включайте услуги, чтобы быстрее получать отклики."
+      },
+      "notifications": {
+        "default": {
+          "tone": "info",
+          "title": "Сервисы помогут выделиться",
+          "text": "Попробуйте поднятие, VIP или доставку для большего охвата."
+        },
+        "published": {
+          "tone": "success",
+          "title": "Объявление опубликовано",
+          "text": "Теперь оно появится во вкладке «Активные»."
+        },
+        "archived": {
+          "tone": "info",
+          "title": "Объявление отправлено в архив",
+          "text": "Вы сможете вернуть его в публикацию в любой момент."
+        },
+        "review": {
+          "tone": "warning",
+          "title": "Отправили на модерацию",
+          "text": "Проверка обычно занимает до 15 минут."
+        },
+        "saved": {
+          "tone": "success",
+          "title": "Изменения сохранены",
+          "text": "Продолжить редактирование можно из вкладки «Черновики»."
+        },
+        "removed": {
+          "tone": "info",
+          "title": "Карточка удалена",
+          "text": "Если вкладка опустеет, появится пустое состояние."
+        }
+      },
+      "emptyStates": {
+        "active": {
+          "title": "Пока нет активных объявлений",
+          "text": "Разместите первое объявление или верните товар из архива.",
+          "cta": "Разместить объявление"
+        },
+        "draft": {
+          "title": "Черновиков пока нет",
+          "text": "Сохраненные объявления появятся здесь, когда вы прервете создание.",
+          "cta": "Начать объявление"
+        },
+        "needs-action": {
+          "title": "Все объявления в порядке",
+          "text": "Когда понадобится исправление или продление, карточки появятся здесь.",
+          "cta": "Открыть активные"
+        },
+        "archived": {
+          "title": "Архив пуст",
+          "text": "Скрытые объявления будут храниться здесь, если вы снимете их с публикации.",
+          "cta": "Вернуться к активным"
+        }
+      },
+      "services": [
+        {
+          "id": "vip",
+          "title": "VIP на 7 дней",
+          "description": "Яркая карточка и приоритет в подборках.",
+          "price": "45 000 сум",
+          "icon": "prototype-library/icon-source-svg/CrownFill.svg"
+        },
+        {
+          "id": "boost",
+          "title": "Поднять в выдаче",
+          "description": "Объявление снова попадет в верхние позиции.",
+          "price": "15 000 сум",
+          "icon": "prototype-library/icon-source-svg/UpAdFill.svg"
+        },
+        {
+          "id": "delivery",
+          "title": "BirBir Доставка",
+          "description": "Повышает доверие и добавляет удобный бейдж в карточку.",
+          "price": "Бесплатно",
+          "icon": "prototype-library/icon-source-svg/TrackFill.svg"
+        }
+      ],
+      "cardsByTab": {
+        "active": [
+          {
+            "id": "active-card",
+            "variant": "active",
+            "title": "Название сокращено до одной строки с многоточием",
+            "price": "7 000 000 сум",
+            "oldPrice": "150 000 000",
+            "discount": "-10%",
+            "badges": [
+              { "type": "premium", "iconOnly": true },
+              { "type": "push-up", "iconOnly": true },
+              { "type": "delivery", "iconOnly": true }
+            ],
+            "stats": { "views": 23, "favorites": 12, "calls": 10 },
+            "statusTone": "muted",
+            "statusText": "Осталось 29 дней",
+            "promoAction": { "id": "services", "label": "Поднять за 15 000 сум", "dot": true, "icon": "prototype-library/icon-source-svg/UpAdFill.svg" },
+            "photo": "https://www.figma.com/api/mcp/asset/80e08fe7-fd24-4c4b-876b-f318ba9e808c"
+          },
+          {
+            "id": "active-expires-card",
+            "variant": "activeExpires",
+            "title": "Название сокращено до одной строки с многоточием",
+            "price": "7 000 000 сум",
+            "oldPrice": "150 000 000",
+            "discount": "-10%",
+            "badges": [
+              { "type": "premium", "iconOnly": true },
+              { "type": "push-up", "iconOnly": true },
+              { "type": "delivery", "iconOnly": true }
+            ],
+            "stats": { "views": 23, "favorites": 12, "calls": 10 },
+            "statusTone": "muted",
+            "statusText": "Осталось 3 дня",
+            "statusAction": { "id": "renew", "label": "Продлить" },
+            "promoAction": { "id": "services", "label": "Поднять за 15 000 сум", "dot": false, "icon": "prototype-library/icon-source-svg/UpAdFill.svg" },
+            "photo": "https://www.figma.com/api/mcp/asset/80e08fe7-fd24-4c4b-876b-f318ba9e808c"
+          }
+        ],
+        "draft": [
+          {
+            "id": "draft-card",
+            "variant": "draft",
+            "title": "Название сокращено до одной строки с многоточием",
+            "price": "7 000 000 сум",
+            "badges": [
+              { "type": "delivery", "iconOnly": true }
+            ],
+            "statusTone": "muted",
+            "statusText": "29 дней до удаления",
+            "photo": "https://www.figma.com/api/mcp/asset/80e08fe7-fd24-4c4b-876b-f318ba9e808c"
+          },
+          {
+            "id": "draft-expires-card",
+            "variant": "draftExpires",
+            "title": "Название сокращено до одной строки с многоточием",
+            "price": "7 000 000 сум",
+            "badges": [
+              { "type": "delivery", "iconOnly": true }
+            ],
+            "statusTone": "warning",
+            "statusText": "3 дня до удаления",
+            "photo": "https://www.figma.com/api/mcp/asset/80e08fe7-fd24-4c4b-876b-f318ba9e808c"
+          }
+        ],
+        "needs-action": [
+          {
+            "id": "under-review-card",
+            "variant": "underReview",
+            "title": "Название сокращено до одной строки с многоточием",
+            "price": "7 000 000 сум",
+            "oldPrice": "150 000 000",
+            "discount": "-10%",
+            "badges": [
+              { "type": "premium", "iconOnly": true },
+              { "type": "push-up", "iconOnly": true },
+              { "type": "delivery", "iconOnly": true }
+            ],
+            "stats": { "views": 23, "favorites": 12, "calls": 10 },
+            "statusTone": "warning",
+            "statusText": "На проверке",
+            "actions": [
+              { "id": "services", "label": "Реклама", "icon": "prototype-library/icon-source-svg/UpAdFill.svg" }
+            ],
+            "photo": "https://www.figma.com/api/mcp/asset/80e08fe7-fd24-4c4b-876b-f318ba9e808c"
+          },
+          {
+            "id": "needs-revision-card",
+            "variant": "needsRevision",
+            "title": "Название сокращено до одной строки с многоточием",
+            "price": "7 000 000 сум",
+            "oldPrice": "150 000 000",
+            "discount": "-10%",
+            "badges": [
+              { "type": "delivery", "iconOnly": true }
+            ],
+            "statusTone": "warning",
+            "statusText": "Требует доработки",
+            "alert": {
+              "tone": "warning",
+              "text": "Текст описания причины отклонения может быть в несколько строк"
+            },
+            "actions": [
+              { "id": "edit", "label": "Редактировать" }
+            ],
+            "photo": "https://www.figma.com/api/mcp/asset/80e08fe7-fd24-4c4b-876b-f318ba9e808c"
+          },
+          {
+            "id": "rejected-card",
+            "variant": "rejected",
+            "title": "Название сокращено до одной строки с многоточием",
+            "price": "7 000 000 сум",
+            "oldPrice": "150 000 000",
+            "discount": "-10%",
+            "badges": [
+              { "type": "delivery", "iconOnly": true }
+            ],
+            "statusTone": "danger",
+            "statusText": "Отклонено",
+            "alert": {
+              "tone": "danger",
+              "text": "Текст описания причины отклонения может быть в несколько строк"
+            },
+            "actions": [
+              { "id": "remove", "label": "Удалить" }
+            ],
+            "photo": "https://www.figma.com/api/mcp/asset/80e08fe7-fd24-4c4b-876b-f318ba9e808c"
+          },
+          {
+            "id": "expired-card",
+            "variant": "expired",
+            "title": "Название сокращено до одной строки с многоточием",
+            "price": "7 000 000 сум",
+            "oldPrice": "150 000 000",
+            "discount": "-10%",
+            "badges": [
+              { "type": "premium", "iconOnly": true },
+              { "type": "push-up", "iconOnly": true },
+              { "type": "delivery", "iconOnly": true }
+            ],
+            "stats": { "views": 23, "favorites": 12, "calls": 10 },
+            "statusTone": "danger",
+            "statusText": "Истек срок",
+            "actions": [
+              { "id": "reactivate", "label": "Опубликовать повторно" },
+              { "id": "services", "label": "Реклама", "icon": "prototype-library/icon-source-svg/UpAdFill.svg", "compact": true }
+            ],
+            "photo": "https://www.figma.com/api/mcp/asset/80e08fe7-fd24-4c4b-876b-f318ba9e808c"
+          }
+        ],
+        "archived": [
+          {
+            "id": "archived-card",
+            "variant": "archived",
+            "title": "Название сокращено до одной строки с многоточием",
+            "price": "7 000 000 сум",
+            "oldPrice": "150 000 000",
+            "discount": "-10%",
+            "badges": [
+              { "type": "premium", "iconOnly": true },
+              { "type": "push-up", "iconOnly": true },
+              { "type": "delivery", "iconOnly": true }
+            ],
+            "stats": { "views": 23, "favorites": 12, "calls": 10 },
+            "statusTone": "muted",
+            "statusText": "Закрыто",
+            "photo": "https://www.figma.com/api/mcp/asset/80e08fe7-fd24-4c4b-876b-f318ba9e808c"
+          }
+        ]
+      }
+    }
+  </script>
+  <script src="prototype-library/birbir-prototype-library.js"></script>
+</body>
+</html>
