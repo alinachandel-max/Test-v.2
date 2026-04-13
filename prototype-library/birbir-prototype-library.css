@@ -4028,39 +4028,6 @@
       object-fit: fill;
     }
 
-    .seller-badge-icon {
-      position: relative;
-      display: inline-flex;
-      width: 10px;
-      height: 10px;
-      flex: none;
-    }
-
-    .seller-badge-icon__image {
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      max-width: none;
-      object-fit: contain;
-      transform: translate(-50%, -50%);
-    }
-
-    .seller-badge-icon__image--premium {
-      width: 9.17px;
-      height: 8.95px;
-    }
-
-    .seller-badge-icon__image--push-up {
-      width: 6.67px;
-      height: 8.33px;
-      transform: translate(-50%, -50%) rotate(-90deg);
-    }
-
-    .seller-badge-icon__image--delivery {
-      width: 8.75px;
-      height: 7px;
-    }
-
     .seller-status-icon {
       position: relative;
       display: inline-flex;

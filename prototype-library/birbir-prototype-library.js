@@ -184,29 +184,30 @@
     }
 
     function renderSellerBadgeGlyph(type) {
-      var src = "";
+      var symbolId = "";
+      var viewBox = "";
 
       if (type === "premium") {
-        src = SELLER_BADGE_ICON_SRC.premium;
+        symbolId = "icon-seller-badge-premium";
+        viewBox = "0 0 9.16664 8.9535";
       } else if (type === "push-up") {
-        src = SELLER_BADGE_ICON_SRC.pushUp;
+        symbolId = "icon-seller-badge-pushup";
+        viewBox = "0 0 10 9.40293";
       } else if (type === "delivery") {
-        src = SELLER_BADGE_ICON_SRC.delivery;
+        symbolId = "icon-seller-badge-delivery";
+        viewBox = "0 0 10.5 8.40039";
       }
 
-      if (!src) {
+      if (!symbolId) {
         return "";
       }
 
-      return [
-        '<span class="seller-badge-icon seller-badge-icon--',
-        type,
-        '" aria-hidden="true"><img class="seller-badge-icon__image seller-badge-icon__image--',
-        type,
-        '" src="',
-        src,
-        '" alt=""></span>'
-      ].join("");
+      return createIconMarkup({
+        symbolId: symbolId,
+        size: 10,
+        colorClass: "icon-color--on-dark",
+        viewBox: viewBox
+      });
     }
 
     function getBadgeIconConfig(badge) {
