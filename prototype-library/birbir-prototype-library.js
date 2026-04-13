@@ -9,14 +9,126 @@
     });
 
     var SELLER_CARD_ICON_SRC = {
-      more: "prototype-library/icon-source-svg/More.svg",
-      coin: "prototype-library/icon-source-svg/CoinFill.svg",
-      eye: "prototype-library/icon-source-svg/Eye.svg",
-      heart: "prototype-library/icon-source-svg/HeartEmpty.svg",
-      phone: "prototype-library/icon-source-svg/PhoneFill.svg",
-      rocketFill: "prototype-library/icon-source-svg/UpAdFill.svg",
-      rocketStroke: "prototype-library/icon-source-svg/UpAdFill.svg"
+      more: "prototype-library/icon-source-svg/SellerMoreLine.svg",
+      coin: "prototype-library/icon-source-svg/SellerCoin2Fill.svg",
+      eye: "prototype-library/icon-source-svg/SellerEyeFill.svg",
+      heart: "prototype-library/icon-source-svg/SellerHeartFill.svg",
+      phone: "prototype-library/icon-source-svg/SellerPhoneFill.svg",
+      rocketFill: "prototype-library/icon-source-svg/SellerRocketFillLayer.svg",
+      rocketStroke: "prototype-library/icon-source-svg/SellerRocketStrokeLayer.svg"
     };
+
+    var SELLER_BADGE_ICON_SRC = {
+      premium: "prototype-library/icon-source-svg/SellerBadgePremium.svg",
+      pushUp: "prototype-library/icon-source-svg/SellerBadgePushUp.svg",
+      delivery: "prototype-library/icon-source-svg/SellerBadgeDelivery.svg"
+    };
+
+    var RADIO_COMPONENT_CHECKED_SRC = "prototype-library/icon-source-svg/RadioChecked.svg";
+
+    var HOME_FEED_PHOTOS = [
+      "assets/Photo/karolina-grabowska-1-6q3sT4zuA-unsplash.jpg",
+      "assets/Photo/3b6ce1f096e72287f6d7c2933f26.webp",
+      "assets/Photo/32b509cedd2580cc76395a051202.webp",
+      "assets/Photo/429d19915775cea9a9275fa633dd.webp",
+      "assets/Photo/6e921e0fc482b4eace9c2be9f1f1.webp",
+      "assets/Photo/karolina-grabowska-4A8N12Dl0Us-unsplash.jpg",
+      "assets/Photo/karolina-grabowska-6JJkzi-3TQM-unsplash.jpg",
+      "assets/Photo/c9015e7d3f066b6b163b9c0babbe.webp",
+      "assets/Photo/2a9ddec28868becbf08a7f918ab0.webp",
+      "assets/Photo/3c8ba0b52ef4b055440d94b94d57.webp",
+      "assets/Photo/994253a58d8fb94a9dafd9f8fe82.webp",
+      "assets/Photo/photo-1636831990680-0d088e4cd83c.avif",
+      "assets/Photo/photo-1676325826380-16232d9fb5d8.avif",
+      "assets/Photo/karolina-grabowska-5VTLDmr3_DA-unsplash.jpg",
+      "assets/Photo/karolina-grabowska-9gZ0KgcHInc-unsplash.jpg",
+      "assets/Photo/karolina-grabowska-FbFz1moR894-unsplash.jpg",
+      "assets/Photo/karolina-grabowska-g4ve1q1gQxM-unsplash.jpg",
+      "assets/Photo/cf897c293769fbea79f5339c4484.webp"
+    ];
+
+    var HOME_FEED_BLUEPRINTS = [
+      { title: "Минималистичные кеды из экокожи", price: "289 000 сум", oldPrice: "349 000 сум", discount: "-17%", badges: [], installmentLabel: "", distance: "3 км", postedAt: "Сегодня, 10:42", seller: "Частное лицо", condition: "Новое", category: "Одежда и обувь", currency: "UZS", priceValue: 289000, urgentSale: ["Торг уместен"], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Nike"], searchHints: "кеды обувь белые женские" },
+      { title: "Плетеная корзина для хранения", price: "165 000 сум", oldPrice: "", discount: "", badges: [{ type: "business", label: "Магазин" }], installmentLabel: "", distance: "6 км", postedAt: "Сегодня, 12:08", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 165000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Ikea"], searchHints: "корзина хранение дом ротанг" },
+      { title: "Настольная лампа с теплым светом", price: "420 000 сум", oldPrice: "", discount: "", badges: [{ type: "business", label: "Магазин" }, { type: "urgent-sale", label: "Срочно. Торг", iconOnly: true }], installmentLabel: "Рассрочка", distance: "12 км", postedAt: "Сегодня, 09:17", seller: "Магазин", condition: "Б/у", category: "Товары для дома", currency: "UZS", priceValue: 420000, urgentSale: ["Срочно"], gift: [], installment: ["Есть рассрочка"], delivery: [], region: "Самарканд", manufacturer: ["Xiaomi"], searchHints: "лампа настольная светильник диммер" },
+      { title: "Набор столовых приборов на шесть персон", price: "238 000 сум", oldPrice: "", discount: "", badges: [], installmentLabel: "", distance: "8 км", postedAt: "Вчера, 21:30", seller: "Частное лицо", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 238000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Tefal"], searchHints: "приборы кухня набор сервировка" },
+      { title: "Чайный сервиз в пастельных оттенках", price: "510 000 сум", oldPrice: "640 000 сум", discount: "-20%", badges: [{ type: "premium", label: "Premium" }, { type: "business", label: "Магазин", iconOnly: true }, { type: "urgent-sale", label: "Срочно. Торг", iconOnly: true }], installmentLabel: "", distance: "5 км", postedAt: "Сегодня, 13:54", seller: "Агентство", condition: "После ремонта", category: "Товары для дома", currency: "USD", priceValue: 510000, urgentSale: ["Срочно"], gift: [], installment: [], delivery: [], region: "Бухара", manufacturer: ["Luminarc"], searchHints: "сервиз чайный набор посуда premium" },
+      { title: "Тренч песочного оттенка", price: "690 000 сум", oldPrice: "", discount: "", badges: [{ type: "delivery", label: "Доставка" }], installmentLabel: "", distance: "4 км", postedAt: "Сегодня, 08:26", seller: "Частное лицо", condition: "Б/у", category: "Одежда и обувь", currency: "UZS", priceValue: 690000, urgentSale: [], gift: [], installment: [], delivery: ["Курьером"], region: "Самарканд", manufacturer: ["Mango"], searchHints: "тренч женский плащ бежевый" },
+      { title: "Кардиган с мягкой фактурой и свободным кроем", price: "340 000 сум", oldPrice: "410 000 сум", discount: "-17%", badges: [], installmentLabel: "", distance: "9 км", postedAt: "Сегодня, 16:02", seller: "Частное лицо", condition: "Как новое", category: "Одежда и обувь", currency: "USD", priceValue: 340000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Фергана", manufacturer: ["Zara"], searchHints: "кардиган женский вязка мягкий" },
+      { title: "Органайзер для косметики", price: "129 000 сум", oldPrice: "", discount: "", badges: [{ type: "business", label: "Магазин" }], installmentLabel: "", distance: "2 км", postedAt: "Сегодня, 11:21", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 129000, urgentSale: [], gift: ["Самовывоз"], installment: [], delivery: ["Самовывоз"], region: "Ташкент", manufacturer: ["Google"], searchHints: "органайзер косметика контейнер" },
+      { title: "Настольный сейф для документов", price: "1 180 000 сум", oldPrice: "1 350 000 сум", discount: "-13%", badges: [{ type: "premium", label: "Premium", iconOnly: true }, { type: "delivery", label: "Доставка", iconOnly: true }], installmentLabel: "", distance: "7 км", postedAt: "Сегодня, 15:10", seller: "Магазин", condition: "Новое", category: "Электроника", currency: "UZS", priceValue: 1180000, urgentSale: [], gift: [], installment: [], delivery: ["Курьером"], region: "Ташкент", manufacturer: ["Yale"], searchHints: "сейф металлический документы дом" },
+      { title: "Корзина для белья с крышкой", price: "209 000 сум", oldPrice: "", discount: "", badges: [{ type: "delivery", label: "Доставка", iconOnly: true }], installmentLabel: "", distance: "11 км", postedAt: "Сегодня, 17:48", seller: "Частное лицо", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 209000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Home"], searchHints: "корзина белье крышка ротанг" },
+      { title: "Керамическое кашпо с автополивом", price: "249 000 сум", oldPrice: "320 000 сум", discount: "-22%", badges: [{ type: "premium", label: "Premium", iconOnly: true }], installmentLabel: "", distance: "5 км", postedAt: "Сегодня, 09:55", seller: "Частное лицо", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 249000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Garden"], searchHints: "кашпо растение автополив интерьер" },
+      { title: "Ваза из матового стекла", price: "154 000 сум", oldPrice: "", discount: "", badges: [], installmentLabel: "", distance: "14 км", postedAt: "Сегодня, 07:48", seller: "Частное лицо", condition: "Как новое", category: "Товары для дома", currency: "UZS", priceValue: 154000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Бухара", manufacturer: ["Ikea"], searchHints: "ваза стекло декор интерьер" },
+      { title: "Комплект органайзеров для кухни", price: "279 000 сум", oldPrice: "", discount: "", badges: [{ type: "business", label: "Магазин", iconOnly: true }, { type: "delivery", label: "Доставка", iconOnly: true }], installmentLabel: "", distance: "6 км", postedAt: "Вчера, 19:05", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 279000, urgentSale: [], gift: [], installment: [], delivery: ["Курьером"], region: "Самарканд", manufacturer: ["Tupperware"], searchHints: "контейнеры кухня хранение набор" },
+      { title: "Капсульная кофеварка для дома", price: "1 490 000 сум", oldPrice: "1 650 000 сум", discount: "-10%", badges: [{ type: "premium", label: "Premium", iconOnly: true }], installmentLabel: "Рассрочка", distance: "13 км", postedAt: "Сегодня, 18:11", seller: "Магазин", condition: "Б/у", category: "Электроника", currency: "UZS", priceValue: 1490000, urgentSale: [], gift: [], installment: ["Есть рассрочка"], delivery: [], region: "Ташкент", manufacturer: ["Nespresso"], searchHints: "кофеварка капсульная кухня техника" },
+      { title: "Подарочный набор ароматических свечей", price: "189 000 сум", oldPrice: "", discount: "", badges: [{ type: "urgent-sale", label: "Срочно. Торг", iconOnly: true }], installmentLabel: "", distance: "3 км", postedAt: "Сегодня, 20:20", seller: "Частное лицо", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 189000, urgentSale: ["Срочно"], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Zara Home"], searchHints: "свечи подарок набор декор" },
+      { title: "Зеркало с тонкой рамой", price: "580 000 сум", oldPrice: "", discount: "", badges: [{ type: "delivery", label: "Доставка" }], installmentLabel: "", distance: "10 км", postedAt: "Сегодня, 14:04", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 580000, urgentSale: [], gift: [], installment: [], delivery: ["Курьером"], region: "Фергана", manufacturer: ["Asus"], searchHints: "зеркало интерьер круглая рама" },
+      { title: "Текстильный шоппер с плотными ручками", price: "119 000 сум", oldPrice: "", discount: "", badges: [], installmentLabel: "", distance: "1 км", postedAt: "Сегодня, 12:47", seller: "Частное лицо", condition: "Новое", category: "Одежда и обувь", currency: "UZS", priceValue: 119000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Uniqlo"], searchHints: "шоппер сумка текстиль аксессуары" },
+      { title: "Хлопковый плед для спальни", price: "245 000 сум", oldPrice: "289 000 сум", discount: "-15%", badges: [{ type: "business", label: "Магазин" }], installmentLabel: "", distance: "15 км", postedAt: "Сегодня, 09:39", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 245000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Бухара", manufacturer: ["Ikea"], searchHints: "плед хлопок спальня покрывало" },
+      { title: "Набор контейнеров для сыпучих продуктов", price: "215 000 сум", oldPrice: "", discount: "", badges: [{ type: "delivery", label: "Доставка", iconOnly: true }], installmentLabel: "", distance: "8 км", postedAt: "Вчера, 22:11", seller: "Частное лицо", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 215000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Lock&Lock"], searchHints: "контейнеры кухня крупы хранение" },
+      { title: "Детский конструктор из 120 деталей", price: "175 000 сум", oldPrice: "", discount: "", badges: [{ type: "business", label: "Магазин", iconOnly: true }, { type: "premium", label: "Premium", iconOnly: true }], installmentLabel: "", distance: "7 км", postedAt: "Сегодня, 10:06", seller: "Магазин", condition: "Новое", category: "Для детей", currency: "UZS", priceValue: 175000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Самарканд", manufacturer: ["Lego"], searchHints: "конструктор дети игрушки набор" },
+      { title: "Ланчбокс с разделителями", price: "99 000 сум", oldPrice: "", discount: "", badges: [], installmentLabel: "", distance: "4 км", postedAt: "Сегодня, 13:12", seller: "Частное лицо", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 99000, urgentSale: [], gift: ["Только бесплатно"], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Tefal"], searchHints: "ланчбокс контейнер еда работа" },
+      { title: "Ботильоны на устойчивом каблуке", price: "560 000 сум", oldPrice: "690 000 сум", discount: "-19%", badges: [{ type: "urgent-sale", label: "Срочно. Торг", iconOnly: true }], installmentLabel: "", distance: "6 км", postedAt: "Сегодня, 16:40", seller: "Частное лицо", condition: "Как новое", category: "Одежда и обувь", currency: "UZS", priceValue: 560000, urgentSale: ["Торг уместен"], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Zara"], searchHints: "ботильоны обувь женская каблук" },
+      { title: "Кресло для балкона с подушкой", price: "890 000 сум", oldPrice: "", discount: "", badges: [{ type: "delivery", label: "Доставка" }, { type: "premium", label: "Premium", iconOnly: true }], installmentLabel: "", distance: "18 км", postedAt: "Сегодня, 11:58", seller: "Агентство", condition: "Новое", category: "Товары для дома", currency: "USD", priceValue: 890000, urgentSale: [], gift: [], installment: [], delivery: ["Курьером"], region: "Фергана", manufacturer: ["Home"], searchHints: "кресло балкон мебель подушка" },
+      { title: "Комод-тележка для мелочей", price: "370 000 сум", oldPrice: "", discount: "", badges: [{ type: "business", label: "Магазин" }], installmentLabel: "", distance: "9 км", postedAt: "Сегодня, 15:41", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 370000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Asus"], searchHints: "комод тележка хранение" },
+      { title: "Дорожная косметичка с отделениями", price: "135 000 сум", oldPrice: "", discount: "", badges: [], installmentLabel: "", distance: "2 км", postedAt: "Сегодня, 18:22", seller: "Частное лицо", condition: "Новое", category: "Одежда и обувь", currency: "UZS", priceValue: 135000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Mango"], searchHints: "косметичка дорожная органайзер" },
+      { title: "Набор стеклянных стаканов", price: "159 000 сум", oldPrice: "", discount: "", badges: [{ type: "delivery", label: "Доставка", iconOnly: true }], installmentLabel: "", distance: "5 км", postedAt: "Вчера, 18:44", seller: "Частное лицо", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 159000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Самарканд", manufacturer: ["Luminarc"], searchHints: "стаканы стекло набор кухня" },
+      { title: "Держатель для книг из металла", price: "89 000 сум", oldPrice: "", discount: "", badges: [{ type: "premium", label: "Premium", iconOnly: true }], installmentLabel: "", distance: "11 км", postedAt: "Сегодня, 09:02", seller: "Частное лицо", condition: "Б/у", category: "Товары для дома", currency: "UZS", priceValue: 89000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Бухара", manufacturer: ["Ikea"], searchHints: "держатель книг металл офис" },
+      { title: "Хлопковая рубашка oversize", price: "279 000 сум", oldPrice: "330 000 сум", discount: "-15%", badges: [{ type: "business", label: "Магазин", iconOnly: true }], installmentLabel: "", distance: "4 км", postedAt: "Сегодня, 14:27", seller: "Магазин", condition: "Новое", category: "Одежда и обувь", currency: "UZS", priceValue: 279000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Uniqlo"], searchHints: "рубашка oversize хлопок" },
+      { title: "Органайзер для украшений с зеркалом", price: "199 000 сум", oldPrice: "", discount: "", badges: [{ type: "delivery", label: "Доставка" }, { type: "urgent-sale", label: "Срочно. Торг", iconOnly: true }], installmentLabel: "", distance: "3 км", postedAt: "Сегодня, 17:03", seller: "Частное лицо", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 199000, urgentSale: ["Срочно"], gift: [], installment: [], delivery: ["Самовывоз"], region: "Ташкент", manufacturer: ["Home"], searchHints: "органайзер украшения зеркало" },
+      { title: "Торшер с мягким рассеиванием света", price: "740 000 сум", oldPrice: "", discount: "", badges: [{ type: "business", label: "Магазин" }, { type: "delivery", label: "Доставка", iconOnly: true }], installmentLabel: "Рассрочка", distance: "16 км", postedAt: "Сегодня, 19:10", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 740000, urgentSale: [], gift: [], installment: ["Есть рассрочка"], delivery: [], region: "Ташкент", manufacturer: ["Philips"], searchHints: "торшер свет интерьер лампа" },
+      { title: "Декоративный плед в клетку", price: "225 000 сум", oldPrice: "280 000 сум", discount: "-19%", badges: [], installmentLabel: "", distance: "12 км", postedAt: "Сегодня, 08:58", seller: "Частное лицо", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 225000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Фергана", manufacturer: ["Zara Home"], searchHints: "плед клетка декор спальня" }
+    ].map(function (item, index) {
+      return Object.assign({
+        id: "home-card-" + String(index + 1),
+        imageSrc: HOME_FEED_PHOTOS[index % HOME_FEED_PHOTOS.length],
+        imageAlt: item.title,
+        liked: false,
+        photoDots: false
+      }, item);
+    });
+
+    var SEARCH_FEED_BLUEPRINTS = [
+      { title: "Беспроводные наушники с шумоподавлением", price: "890 000 сум", oldPrice: "990 000 сум", discount: "-10%", badges: [{ type: "business", label: "Магазин" }], installmentLabel: "Рассрочка", distance: "6 км", postedAt: "Сегодня, 09:11", seller: "Магазин", condition: "Новое", category: "Электроника", currency: "UZS", priceValue: 890000, urgentSale: [], gift: [], installment: ["Есть рассрочка"], delivery: [], region: "Ташкент", manufacturer: ["Sony"], searchHints: "наушники bluetooth шумоподавление" },
+      { title: "Детский самокат трехколесный", price: "355 000 сум", oldPrice: "", discount: "", badges: [{ type: "premium", label: "Premium", iconOnly: true }], installmentLabel: "", distance: "9 км", postedAt: "Сегодня, 10:26", seller: "Частное лицо", condition: "Б/у", category: "Для детей", currency: "UZS", priceValue: 355000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Самарканд", manufacturer: ["Xiaomi"], searchHints: "самокат дети прогулка" },
+      { title: "Рабочее кресло с поясничной поддержкой", price: "1 250 000 сум", oldPrice: "", discount: "", badges: [{ type: "delivery", label: "Доставка" }], installmentLabel: "", distance: "14 км", postedAt: "Сегодня, 12:31", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 1250000, urgentSale: [], gift: [], installment: [], delivery: ["Курьером"], region: "Ташкент", manufacturer: ["Asus"], searchHints: "кресло офисное рабочее спинка" },
+      { title: "Худи oversize из плотного футера", price: "310 000 сум", oldPrice: "370 000 сум", discount: "-16%", badges: [], installmentLabel: "", distance: "5 км", postedAt: "Сегодня, 08:14", seller: "Частное лицо", condition: "Новое", category: "Одежда и обувь", currency: "UZS", priceValue: 310000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Фергана", manufacturer: ["Uniqlo"], searchHints: "худи oversize свитшот" },
+      { title: "Складной столик для ноутбука", price: "198 000 сум", oldPrice: "", discount: "", badges: [{ type: "business", label: "Магазин", iconOnly: true }, { type: "delivery", label: "Доставка", iconOnly: true }], installmentLabel: "", distance: "3 км", postedAt: "Сегодня, 14:12", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 198000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Ikea"], searchHints: "столик ноутбук складной" },
+      { title: "Увлажнитель воздуха для спальни", price: "470 000 сум", oldPrice: "", discount: "", badges: [{ type: "urgent-sale", label: "Срочно. Торг", iconOnly: true }], installmentLabel: "", distance: "7 км", postedAt: "Сегодня, 18:03", seller: "Частное лицо", condition: "Как новое", category: "Товары для дома", currency: "UZS", priceValue: 470000, urgentSale: ["Срочно"], gift: [], installment: [], delivery: [], region: "Бухара", manufacturer: ["Philips"], searchHints: "увлажнитель воздух спальня" },
+      { title: "Женская сумка через плечо", price: "259 000 сум", oldPrice: "320 000 сум", discount: "-19%", badges: [{ type: "premium", label: "Premium" }], installmentLabel: "", distance: "2 км", postedAt: "Сегодня, 15:47", seller: "Частное лицо", condition: "Новое", category: "Одежда и обувь", currency: "UZS", priceValue: 259000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Mango"], searchHints: "сумка женская аксессуары" },
+      { title: "Смарт-часы с AMOLED экраном", price: "1 050 000 сум", oldPrice: "", discount: "", badges: [{ type: "business", label: "Магазин" }], installmentLabel: "Рассрочка", distance: "11 км", postedAt: "Сегодня, 11:51", seller: "Магазин", condition: "Новое", category: "Электроника", currency: "UZS", priceValue: 1050000, urgentSale: [], gift: [], installment: ["Есть рассрочка"], delivery: [], region: "Ташкент", manufacturer: ["Apple"], searchHints: "смарт часы amoled watch" },
+      { title: "Постельное белье из сатина", price: "380 000 сум", oldPrice: "", discount: "", badges: [{ type: "delivery", label: "Доставка" }], installmentLabel: "", distance: "10 км", postedAt: "Вчера, 20:44", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 380000, urgentSale: [], gift: [], installment: [], delivery: ["Курьером"], region: "Самарканд", manufacturer: ["Zara Home"], searchHints: "постельное белье сатин спальня" },
+      { title: "Кожаный ремень ручной работы", price: "145 000 сум", oldPrice: "", discount: "", badges: [], installmentLabel: "", distance: "4 км", postedAt: "Сегодня, 13:36", seller: "Частное лицо", condition: "Новое", category: "Одежда и обувь", currency: "UZS", priceValue: 145000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Фергана", manufacturer: ["Home"], searchHints: "ремень кожа аксессуары" },
+      { title: "Комплект баночек для специй", price: "119 000 сум", oldPrice: "", discount: "", badges: [{ type: "business", label: "Магазин", iconOnly: true }], installmentLabel: "", distance: "5 км", postedAt: "Сегодня, 16:19", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 119000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Tefal"], searchHints: "специи баночки кухня" },
+      { title: "Детский ночник в форме облака", price: "168 000 сум", oldPrice: "", discount: "", badges: [{ type: "premium", label: "Premium", iconOnly: true }], installmentLabel: "", distance: "8 км", postedAt: "Сегодня, 09:41", seller: "Частное лицо", condition: "Новое", category: "Для детей", currency: "UZS", priceValue: 168000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Xiaomi"], searchHints: "детский ночник облако" },
+      { title: "Робот-пылесос для квартиры", price: "2 250 000 сум", oldPrice: "2 500 000 сум", discount: "-10%", badges: [{ type: "business", label: "Магазин" }, { type: "delivery", label: "Доставка", iconOnly: true }], installmentLabel: "Рассрочка", distance: "15 км", postedAt: "Сегодня, 18:40", seller: "Магазин", condition: "Б/у", category: "Электроника", currency: "UZS", priceValue: 2250000, urgentSale: [], gift: [], installment: ["Есть рассрочка"], delivery: ["Курьером"], region: "Ташкент", manufacturer: ["Samsung"], searchHints: "робот пылесос дом техника" },
+      { title: "Плетеный пуф для гостиной", price: "430 000 сум", oldPrice: "", discount: "", badges: [{ type: "urgent-sale", label: "Срочно. Торг", iconOnly: true }], installmentLabel: "", distance: "12 км", postedAt: "Сегодня, 10:58", seller: "Частное лицо", condition: "Как новое", category: "Товары для дома", currency: "UZS", priceValue: 430000, urgentSale: ["Торг уместен"], gift: [], installment: [], delivery: [], region: "Бухара", manufacturer: ["Ikea"], searchHints: "пуф гостиная плетеный" },
+      { title: "Свитер крупной вязки", price: "285 000 сум", oldPrice: "340 000 сум", discount: "-16%", badges: [], installmentLabel: "", distance: "7 км", postedAt: "Сегодня, 11:23", seller: "Частное лицо", condition: "Новое", category: "Одежда и обувь", currency: "UZS", priceValue: 285000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Самарканд", manufacturer: ["Zara"], searchHints: "свитер вязаный теплый" },
+      { title: "Набор кистей для макияжа", price: "149 000 сум", oldPrice: "", discount: "", badges: [{ type: "business", label: "Магазин", iconOnly: true }], installmentLabel: "", distance: "2 км", postedAt: "Сегодня, 17:32", seller: "Магазин", condition: "Новое", category: "Красота и здоровье", currency: "UZS", priceValue: 149000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Real Techniques"], searchHints: "кисти макияж набор" },
+      { title: "Детская полка для книг", price: "340 000 сум", oldPrice: "", discount: "", badges: [{ type: "delivery", label: "Доставка", iconOnly: true }], installmentLabel: "", distance: "9 км", postedAt: "Вчера, 18:13", seller: "Частное лицо", condition: "Новое", category: "Для детей", currency: "UZS", priceValue: 340000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Ikea"], searchHints: "полка книги детская комната" },
+      { title: "Кофейный столик из дерева", price: "780 000 сум", oldPrice: "", discount: "", badges: [{ type: "premium", label: "Premium", iconOnly: true }, { type: "delivery", label: "Доставка" }], installmentLabel: "", distance: "18 км", postedAt: "Сегодня, 14:49", seller: "Агентство", condition: "После ремонта", category: "Товары для дома", currency: "USD", priceValue: 780000, urgentSale: [], gift: [], installment: [], delivery: ["Курьером"], region: "Фергана", manufacturer: ["Home"], searchHints: "столик дерево интерьер" },
+      { title: "Фитнес-коврик для тренировок", price: "210 000 сум", oldPrice: "", discount: "", badges: [], installmentLabel: "", distance: "6 км", postedAt: "Сегодня, 07:55", seller: "Частное лицо", condition: "Новое", category: "Хобби и спорт", currency: "UZS", priceValue: 210000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Самарканд", manufacturer: ["Nike"], searchHints: "коврик фитнес тренировки" },
+      { title: "Тумба под телевизор", price: "1 090 000 сум", oldPrice: "1 240 000 сум", discount: "-12%", badges: [{ type: "business", label: "Магазин" }], installmentLabel: "", distance: "13 км", postedAt: "Сегодня, 13:04", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 1090000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Ikea"], searchHints: "тумба тв гостиная мебель" },
+      { title: "Блендер для смузи", price: "525 000 сум", oldPrice: "", discount: "", badges: [{ type: "urgent-sale", label: "Срочно. Торг", iconOnly: true }], installmentLabel: "", distance: "4 км", postedAt: "Сегодня, 16:55", seller: "Частное лицо", condition: "Б/у", category: "Электроника", currency: "UZS", priceValue: 525000, urgentSale: ["Срочно"], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Philips"], searchHints: "блендер кухня смузи" },
+      { title: "Органайзер для детских игрушек", price: "230 000 сум", oldPrice: "", discount: "", badges: [{ type: "delivery", label: "Доставка", iconOnly: true }], installmentLabel: "", distance: "8 км", postedAt: "Сегодня, 10:19", seller: "Частное лицо", condition: "Новое", category: "Для детей", currency: "UZS", priceValue: 230000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Бухара", manufacturer: ["Home"], searchHints: "органайзер игрушки детская" },
+      { title: "Этажерка для ванной комнаты", price: "265 000 сум", oldPrice: "", discount: "", badges: [{ type: "business", label: "Магазин", iconOnly: true }], installmentLabel: "", distance: "11 км", postedAt: "Сегодня, 12:42", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 265000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Ikea"], searchHints: "этажерка ванная хранение" },
+      { title: "Повседневные кроссовки на платформе", price: "440 000 сум", oldPrice: "520 000 сум", discount: "-15%", badges: [{ type: "premium", label: "Premium" }], installmentLabel: "", distance: "3 км", postedAt: "Сегодня, 09:45", seller: "Частное лицо", condition: "Как новое", category: "Одежда и обувь", currency: "UZS", priceValue: 440000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Nike"], searchHints: "кроссовки платформа обувь" },
+      { title: "Портативная колонка с Bluetooth", price: "615 000 сум", oldPrice: "", discount: "", badges: [{ type: "business", label: "Магазин" }, { type: "delivery", label: "Доставка", iconOnly: true }], installmentLabel: "", distance: "6 км", postedAt: "Сегодня, 17:15", seller: "Магазин", condition: "Новое", category: "Электроника", currency: "UZS", priceValue: 615000, urgentSale: [], gift: [], installment: [], delivery: ["Курьером"], region: "Самарканд", manufacturer: ["Sony"], searchHints: "колонка bluetooth музыка" },
+      { title: "Набор постеров для интерьера", price: "175 000 сум", oldPrice: "", discount: "", badges: [], installmentLabel: "", distance: "2 км", postedAt: "Сегодня, 18:52", seller: "Частное лицо", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 175000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Home"], searchHints: "постеры интерьер декор" },
+      { title: "Детский вигвам для комнаты", price: "540 000 сум", oldPrice: "", discount: "", badges: [{ type: "premium", label: "Premium", iconOnly: true }], installmentLabel: "", distance: "14 км", postedAt: "Сегодня, 11:04", seller: "Частное лицо", condition: "Новое", category: "Для детей", currency: "UZS", priceValue: 540000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Фергана", manufacturer: ["Lego"], searchHints: "вигвам детская комната" },
+      { title: "Коврик для прихожей с бортиком", price: "129 000 сум", oldPrice: "", discount: "", badges: [{ type: "delivery", label: "Доставка" }], installmentLabel: "", distance: "5 км", postedAt: "Вчера, 17:06", seller: "Частное лицо", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 129000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Home"], searchHints: "коврик прихожая дом" },
+      { title: "Шерстяной шарф с бахромой", price: "158 000 сум", oldPrice: "", discount: "", badges: [], installmentLabel: "", distance: "4 км", postedAt: "Сегодня, 13:58", seller: "Частное лицо", condition: "Новое", category: "Одежда и обувь", currency: "UZS", priceValue: 158000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Бухара", manufacturer: ["Mango"], searchHints: "шарф шерсть аксессуары" },
+      { title: "Полка-органайзер для книг и декора", price: "455 000 сум", oldPrice: "520 000 сум", discount: "-13%", badges: [{ type: "business", label: "Магазин" }], installmentLabel: "", distance: "7 км", postedAt: "Сегодня, 15:33", seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 455000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Ikea"], searchHints: "полка книги декор хранение" }
+    ].map(function (item, index) {
+      return Object.assign({
+        id: "search-card-" + String(index + 1),
+        imageSrc: HOME_FEED_PHOTOS[(index + 7) % HOME_FEED_PHOTOS.length],
+        imageAlt: item.title,
+        liked: false,
+        photoDots: false
+      }, item);
+    });
 
     function createIconMarkup(config) {
       var size = config.size || 24;
@@ -69,6 +181,32 @@
       }
 
       return icon ? renderSellerAssetIcon(icon, 16) : "";
+    }
+
+    function renderSellerBadgeGlyph(type) {
+      var src = "";
+
+      if (type === "premium") {
+        src = SELLER_BADGE_ICON_SRC.premium;
+      } else if (type === "push-up") {
+        src = SELLER_BADGE_ICON_SRC.pushUp;
+      } else if (type === "delivery") {
+        src = SELLER_BADGE_ICON_SRC.delivery;
+      }
+
+      if (!src) {
+        return "";
+      }
+
+      return [
+        '<span class="seller-badge-icon seller-badge-icon--',
+        type,
+        '" aria-hidden="true"><img class="seller-badge-icon__image seller-badge-icon__image--',
+        type,
+        '" src="',
+        src,
+        '" alt=""></span>'
+      ].join("");
     }
 
     function getBadgeIconConfig(badge) {
@@ -220,7 +358,6 @@
       var categoryCard = searchOverlay.querySelector(".search-card--categories");
       var categoryList = searchOverlay.querySelector(".search-category-list");
       var favoriteToast = document.querySelector(".favorite-toast");
-      var RADIO_COMPONENT_CHECKED_SRC = "prototype-library/icon-source-svg/RadioChecked.svg";
       var STORAGE_KEY = "birbir-search-history-v1";
       var SEARCH_HISTORY_SEED = [
         { label: "ррр", caption: "" },
@@ -1025,6 +1162,14 @@
         { label: "Антиквариат", caption: "", value: "Товары для дома" },
         { label: "Детские товары", caption: "Для детей", value: "Для детей" }
       ];
+      var FILTER_CATEGORY_ITEMS = [
+        { label: "Мобильные телефоны", caption: "Телефоны и связь", value: "Электроника" },
+        { label: "Аксессуары", caption: "Телефоны и связь", value: "Электроника" },
+        { label: "Детские игрушки", caption: "Для детей", value: "Для детей" },
+        { label: "Мобильные телефоны", caption: "Телефоны и связь", value: "Электроника" },
+        { label: "Антиквариат", caption: "", value: "Товары для дома" },
+        { label: "Детские игрушки", caption: "Для детей", value: "Для детей" }
+      ];
       var BOTTOMSHEET_CONFIGS = {
         seller: {
           title: "Продавец",
@@ -1115,6 +1260,7 @@
         return;
       }
 
+      initHomeFeed();
       resultItems = buildResultItemsSeed();
       renderResults();
       renderFullFilterSheet();
@@ -1417,6 +1563,112 @@
         ].join("");
       }
 
+      function renderHomeBadge(item) {
+        var iconType = item.type || "business";
+        var symbolId = "icon-business-fill";
+        var label = item.label || "";
+
+        if (iconType === "premium") {
+          symbolId = "icon-crown-fill";
+          label = label || "Premium";
+        } else if (iconType === "delivery") {
+          symbolId = "icon-track-fill";
+          label = label || "Доставка";
+        } else if (iconType === "urgent-sale") {
+          symbolId = "icon-lightning-fill";
+          label = label || "Срочно. Торг";
+        } else if (iconType === "agency") {
+          symbolId = "icon-agency-fill";
+          label = label || "Агентство";
+        } else {
+          label = label || "Магазин";
+        }
+
+        return [
+          '<span class="badge badge--old badge--',
+          escapeHtml(iconType),
+          item.iconOnly ? ' badge--icon-only' : "",
+          '"',
+          label ? ' aria-label="' + escapeHtml(label) + '"' : "",
+          '><span class="badge__icon badge__icon--12"><span class="icon-box icon-box--12 icon-color--on-dark" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24"><use href="#',
+          symbolId,
+          '"></use></svg></span></span>',
+          item.iconOnly ? "" : '<span class="badge__label">' + escapeHtml(label) + "</span>",
+          "</span>"
+        ].join("");
+      }
+
+      function renderHomeBadgesMarkup(items) {
+        if (!items || !items.length) {
+          return "";
+        }
+
+        return [
+          '<div class="card__badges">',
+          items.map(renderHomeBadge).join(""),
+          "</div>"
+        ].join("");
+      }
+
+      function renderHomeCardMarkup(item) {
+        return [
+          '<article class="card" data-home-card-id="',
+          escapeHtml(item.id),
+          '">',
+          '<div class="card__media">',
+          '<img class="card__image" src="',
+          escapeHtml(item.imageSrc),
+          '" alt="',
+          escapeHtml(item.imageAlt || item.title),
+          '">',
+          renderHomeBadgesMarkup(item.badges),
+          item.photoDots ? '<div class="photo-dots" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>' : "",
+          item.installmentLabel ? '<span class="installment">' + escapeHtml(item.installmentLabel) + "</span>" : "",
+          renderLikeButtonMarkup(Boolean(item.liked)),
+          "</div>",
+          '<div class="card__body">',
+          '<div class="card__price-block">',
+          '<p class="card__price">',
+          escapeHtml(item.price),
+          "</p>",
+          item.oldPrice || item.discount ? [
+            '<div class="card__old">',
+            item.oldPrice ? ["<s>", escapeHtml(item.oldPrice), "</s>"].join("") : "",
+            item.discount ? ['<span class="card__discount">', escapeHtml(item.discount), "</span>"].join("") : "",
+            "</div>"
+          ].join("") : "",
+          "</div>",
+          '<p class="card__title">',
+          escapeHtml(item.title),
+          "</p>",
+          '<div class="card__meta">',
+          '<div class="card__meta-row">',
+          '<span class="icon-box icon-box--12 icon-color--secondary card__meta-icon"><svg class="icon-svg icon--navigation-fill" viewBox="0 0 24 24" aria-hidden="true"><use href="#icon-navigation-fill"></use></svg></span>',
+          '<span>',
+          escapeHtml(item.distance),
+          "</span>",
+          "</div>",
+          '<div class="card__meta-row"><span>',
+          escapeHtml(item.postedAt),
+          "</span></div>",
+          "</div>",
+          "</div>",
+          "</article>"
+        ].join("");
+      }
+
+      function initHomeFeed() {
+        var cardsRoot = document.querySelector(".cards");
+
+        if (!cardsRoot) {
+          return;
+        }
+
+        cardsRoot.innerHTML = HOME_FEED_BLUEPRINTS.map(function (item) {
+          return renderHomeCardMarkup(item);
+        }).join("");
+      }
+
       function renderResultsCard(item) {
         return [
           '<article class="results-card" data-result-id="',
@@ -1468,47 +1720,33 @@
       }
 
       function buildResultItemsSeed() {
-        var metadata = [
-          { seller: "Частное лицо", condition: "Новое", category: "Одежда и обувь", currency: "UZS", priceValue: 175000, urgentSale: ["Торг уместен"], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Nike"], postedRank: 8, searchHints: "кеды турецкие женские одежда" },
-          { seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 300000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Asus"], postedRank: 7, searchHints: "органайзер дом хранение кухня" },
-          { seller: "Магазин", condition: "Б/у", category: "Электроника", currency: "USD", priceValue: 1000000, urgentSale: ["Срочно", "Торг уместен"], gift: [], installment: ["Есть рассрочка", "До 12 месяцев"], delivery: [], region: "Самарканд", manufacturer: ["Apple"], postedRank: 6, searchHints: "iphone 12 pro max iphone11 телефон мобильные телефоны" },
-          { seller: "Частное лицо", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 100000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Ташкент", manufacturer: ["Samsung"], postedRank: 5, searchHints: "набор кухня приборы дом" },
-          { seller: "Агентство", condition: "После ремонта", category: "Товары для дома", currency: "USD", priceValue: 600000, urgentSale: ["Срочно"], gift: [], installment: [], delivery: [], region: "Бухара", manufacturer: ["Sony"], postedRank: 4, searchHints: "подарочный сервиз premium посуда" },
-          { seller: "Частное лицо", condition: "Б/у", category: "Одежда и обувь", currency: "UZS", priceValue: 230000, urgentSale: [], gift: [], installment: [], delivery: ["Курьером", "Самовывоз"], region: "Самарканд", manufacturer: ["Mango"], postedRank: 3, searchHints: "пальто женское верхняя одежда доставка" },
-          { seller: "Частное лицо", condition: "Как новое", category: "Одежда и обувь", currency: "USD", priceValue: 455000, urgentSale: [], gift: [], installment: [], delivery: [], region: "Фергана", manufacturer: ["Zara"], postedRank: 2, searchHints: "кардиган трансформер адрас женская одежда" },
-          { seller: "Магазин", condition: "Новое", category: "Товары для дома", currency: "UZS", priceValue: 300000, urgentSale: [], gift: ["Только бесплатно", "Самовывоз"], installment: [], delivery: ["Самовывоз"], region: "Ташкент", manufacturer: ["Google"], postedRank: 1, searchHints: "органайзер подарок отдам даром дом" }
-        ];
-
-        return Array.prototype.map.call(document.querySelectorAll(".cards .card"), function (card, index) {
-          var extracted = extractSeedCardData(card);
-          var meta = metadata[index] || metadata[0];
-
+        return SEARCH_FEED_BLUEPRINTS.map(function (item, index) {
           return {
-            id: "result-card-" + String(index + 1),
-            imageSrc: extracted.imageSrc,
-            imageAlt: extracted.imageAlt,
-            title: extracted.title,
-            price: extracted.price,
-            oldPrice: extracted.oldPrice,
-            discount: extracted.discount,
-            badgesHtml: extracted.badgesHtml,
-            installmentHtml: extracted.installmentHtml,
-            distance: extracted.distance,
-            postedAt: extracted.postedAt,
-            liked: extracted.liked,
-            seller: meta.seller,
-            condition: meta.condition,
-            category: meta.category,
-            currency: meta.currency,
-            priceValue: meta.priceValue,
-            urgentSale: meta.urgentSale,
-            gift: meta.gift,
-            installment: meta.installment,
-            delivery: meta.delivery,
-            region: meta.region,
-            manufacturer: meta.manufacturer,
-            postedRank: meta.postedRank,
-            tokens: tokenize([extracted.title, meta.category, meta.seller, meta.condition, meta.region, (meta.manufacturer || []).join(" "), meta.searchHints].join(" "))
+            id: item.id || ("result-card-" + String(index + 1)),
+            imageSrc: item.imageSrc,
+            imageAlt: item.imageAlt,
+            title: item.title,
+            price: item.price,
+            oldPrice: item.oldPrice || "",
+            discount: item.discount || "",
+            badgesHtml: renderHomeBadgesMarkup(item.badges),
+            installmentHtml: item.installmentLabel ? '<span class="installment">' + escapeHtml(item.installmentLabel) + "</span>" : "",
+            distance: item.distance,
+            postedAt: item.postedAt,
+            liked: Boolean(item.liked),
+            seller: item.seller,
+            condition: item.condition,
+            category: item.category,
+            currency: item.currency,
+            priceValue: item.priceValue,
+            urgentSale: item.urgentSale,
+            gift: item.gift,
+            installment: item.installment,
+            delivery: item.delivery,
+            region: item.region,
+            manufacturer: item.manufacturer,
+            postedRank: 100 - index,
+            tokens: tokenize([item.title, item.category, item.seller, item.condition, item.region, (item.manufacturer || []).join(" "), item.searchHints].join(" "))
           };
         });
       }
@@ -1605,8 +1843,23 @@
       }
 
       function renderFeed(visibleItems) {
-        var items = visibleItems.length ? visibleItems.slice() : resultItems.slice(0, 4);
+        var items = visibleItems.length ? visibleItems.slice(0, 30) : resultItems.slice(0, 30);
         var markup = [];
+        var usedIds = {};
+
+        items.forEach(function (item) {
+          usedIds[item.id] = true;
+        });
+
+        if (items.length < 30) {
+          resultItems.some(function (item) {
+            if (!usedIds[item.id]) {
+              items.push(item);
+              usedIds[item.id] = true;
+            }
+            return items.length >= 30;
+          });
+        }
 
         items.forEach(function (item, index) {
           markup.push(renderResultsCard(item));
@@ -1847,7 +2100,7 @@
       }
 
       function renderCategorySheet() {
-        categorySheetList.innerHTML = CATEGORY_ITEMS.slice(1).map(function (item) {
+        categorySheetList.innerHTML = FILTER_CATEGORY_ITEMS.map(function (item) {
           return [
             '<button class="category-sheet__item" type="button" data-category-value="',
             escapeHtml(item.value),
@@ -1921,19 +2174,15 @@
         if (config.type === "multi") {
           bottomsheetState.draftValues = getSourceMultiValue(source, key).slice();
         } else {
-          bottomsheetState.draftValue = getSourceSingleValue(source, key);
-        }
+        bottomsheetState.draftValue = getSourceSingleValue(source, key);
+      }
 
         renderBottomsheet();
+        filterBottomsheetList.scrollTop = 0;
         updateTooltipVisibility();
         window.requestAnimationFrame(function () {
-          window.setTimeout(function () {
-            try {
-              filterBottomsheetSearchInput.focus({ preventScroll: true });
-            } catch (error) {
-              filterBottomsheetSearchInput.focus();
-            }
-          }, 50);
+          renderBottomsheetList();
+          filterBottomsheetList.scrollTop = 0;
         });
       }
 
@@ -1987,7 +2236,12 @@
         categorySheet.classList.add("is-open");
         categorySheet.setAttribute("aria-hidden", "false");
         renderCategorySheet();
+        categorySheetList.scrollTop = 0;
         updateTooltipVisibility();
+        window.requestAnimationFrame(function () {
+          renderCategorySheet();
+          categorySheetList.scrollTop = 0;
+        });
       }
 
       function closeCategorySheet(options) {
@@ -2626,6 +2880,7 @@
 
       function closeDetail() {
         window.clearTimeout(detailHeroBadgeTimer);
+        detailHeroBadge.classList.remove("is-visible", "is-leaving");
         detailHeroBadge.hidden = true;
         detailScreen.classList.remove("is-open");
         detailScreen.setAttribute("aria-hidden", "true");
@@ -2732,6 +2987,7 @@
         var noticeIndex;
 
         window.clearTimeout(detailHeroBadgeTimer);
+        detailHeroBadge.classList.remove("is-visible", "is-leaving");
         detailHeroBadge.hidden = true;
 
         if (!sourceOrdinal || sourceOrdinal % 2 !== 0) {
@@ -2741,8 +2997,15 @@
         noticeIndex = Math.max(0, Math.floor(sourceOrdinal / 2) - 1) % DETAIL_HERO_NOTICE_MESSAGES.length;
         detailHeroBadge.textContent = DETAIL_HERO_NOTICE_MESSAGES[noticeIndex];
         detailHeroBadge.hidden = false;
+        detailHeroBadge.offsetWidth;
+        detailHeroBadge.classList.add("is-visible");
         detailHeroBadgeTimer = window.setTimeout(function () {
-          detailHeroBadge.hidden = true;
+          detailHeroBadge.classList.remove("is-visible");
+          detailHeroBadge.classList.add("is-leaving");
+          window.setTimeout(function () {
+            detailHeroBadge.classList.remove("is-leaving");
+            detailHeroBadge.hidden = true;
+          }, 220);
         }, 3000);
       }
 
@@ -2883,7 +3146,7 @@
       var favoriteToastTitle = favoriteToast ? favoriteToast.querySelector(".favorite-toast__title") : null;
       var favoriteToastText = favoriteToast ? favoriteToast.querySelector(".favorite-toast__text") : null;
       var favoriteToastTimer = null;
-      var fallbackToastImage = "assets/collections/1.png";
+      var fallbackToastImage = "assets/Photo/karolina-grabowska-g4ve1q1gQxM-unsplash.jpg";
       var likeBurstPreset = [
         { x: -42, y: -56, scale: 1.28, rotate: "-28deg", delay: 0 },
         { x: -24, y: -76, scale: 1.08, rotate: "-16deg", delay: 35 },
@@ -3244,17 +3507,16 @@
             "</button>"
           ].join("") : "",
           "</div>",
+          "</div>",
+          "</div>",
           card.alert ? renderAlert(card.alert) : "",
           card.actions && card.actions.length ? renderActions(card) : "",
           card.promoAction ? renderPromo(card) : "",
-          "</div>",
-          "</div>",
           "</article>"
         ].join("");
       }
 
       function renderBadge(badge) {
-        var iconConfig = getBadgeSymbolConfig(badge.type);
         var classes = ["badge", "badge--new", "badge--" + badge.type];
 
         if (badge.iconOnly) {
@@ -3268,11 +3530,9 @@
           badge.label ? ' aria-label="' + escapeHtml(badge.label) + '"' : "",
           '><span class="badge__icon badge__icon--12"><span class="badge__round-icon badge__round-icon--',
           badge.type,
-          '"><span class="icon-box icon-box--12 icon-color--on-dark" aria-hidden="true"><svg class="icon-svg ',
-          iconConfig.iconClass,
-          '" viewBox="0 0 24 24"><use href="#',
-          iconConfig.symbolId,
-          '"></use></svg></span></span></span>',
+          '">',
+          renderSellerBadgeGlyph(badge.type),
+          "</span></span>",
           badge.iconOnly ? "" : '<span class="badge__label">' + escapeHtml(badge.label || "") + "</span>",
           "</span>"
         ].join("");
@@ -3283,16 +3543,20 @@
           '<button class="seller-product-card__stats" type="button" data-seller-card-stats="',
           card.id,
           '">',
-          renderStat(SELLER_CARD_ICON_SRC.eye, card.stats.views),
-          renderStat(SELLER_CARD_ICON_SRC.heart, card.stats.favorites),
-          renderStat(SELLER_CARD_ICON_SRC.phone, card.stats.calls),
+          renderStat("views", SELLER_CARD_ICON_SRC.eye, card.stats.views),
+          renderStat("favorites", SELLER_CARD_ICON_SRC.heart, card.stats.favorites),
+          renderStat("calls", SELLER_CARD_ICON_SRC.phone, card.stats.calls),
           "</button>"
         ].join("");
       }
 
-      function renderStat(iconSrc, value) {
+      function renderStat(type, iconSrc, value) {
         return [
-          '<span class="seller-product-card__stat"><span class="icon-box icon-box--16" aria-hidden="true"><img class="seller-icon-img" src="',
+          '<span class="seller-product-card__stat"><span class="icon-box icon-box--16 seller-product-card__stat-icon seller-product-card__stat-icon--',
+          type,
+          '" aria-hidden="true"><img class="seller-icon-img seller-product-card__stat-icon seller-product-card__stat-icon--',
+          type,
+          '" src="',
           iconSrc,
           '" alt=""></span><span class="seller-product-card__stat-value">',
           String(value),
@@ -3453,9 +3717,9 @@
             title: "Статистика объявления",
             primaryLabel: "Понятно",
             rows: [
-              { icon: "prototype-library/icon-source-svg/Eye.svg", title: "Просмотры", text: "Сколько раз открывали карточку", value: String(card.stats.views) },
-              { icon: "prototype-library/icon-source-svg/HeartEmpty.svg", title: "Избранное", text: "Сколько человек сохранили товар", value: String(card.stats.favorites) },
-              { icon: "prototype-library/icon-source-svg/PhoneFill.svg", title: "Звонки", text: "Сколько раз нажимали на звонок", value: String(card.stats.calls) }
+              { icon: "prototype-library/icon-source-svg/SellerEyeFill.svg", title: "Просмотры", text: "Сколько раз открывали карточку", value: String(card.stats.views) },
+              { icon: "prototype-library/icon-source-svg/SellerHeartFill.svg", title: "Избранное", text: "Сколько человек сохранили товар", value: String(card.stats.favorites) },
+              { icon: "prototype-library/icon-source-svg/SellerPhoneFill.svg", title: "Звонки", text: "Сколько раз нажимали на звонок", value: String(card.stats.calls) }
             ]
           };
           renderBottomsheet();
