@@ -1089,6 +1089,7 @@
       var sortButton = resultsScreen ? resultsScreen.querySelector('[data-results-secondary="sort"]') : null;
       var sortText = sortButton ? sortButton.querySelector(".results-secondary-button__text") : null;
       var feedGrid = resultsScreen ? resultsScreen.querySelector(".results-feed__grid") : null;
+      var feedSurface = resultsScreen ? resultsScreen.querySelector(".results-feed__surface") : null;
       var tooltip = resultsScreen ? resultsScreen.querySelector(".filters-tooltip") : null;
       var tooltipClose = tooltip ? tooltip.querySelector(".filters-tooltip__close") : null;
       var filterSheet = document.querySelector(".filter-sheet");
@@ -1261,7 +1262,7 @@
       var scrollDirection = "up";
       var pendingChipKey = "";
 
-      if (!resultsScreen || !resultsScroller || !titleBackButton || !resultsBackButton || !resultsTitle || !resultsSearchTrigger || !resultsSearchText || !filterRow || !filterScroll || !regionButton || !regionText || !sortButton || !sortText || !feedGrid || !filterSheet || !filterSheetBackdrop || !filterSheetBack || !filterSheetReset || !filterSheetApply || !filterSheetCategoryLabel || !filterSheetRegionLabel || !filterSheetSellerCaption || !filterSheetSellerTabs || !filterSheetConditionTabs || !filterSheetManufacturerValue || !filterSheetSortValue || !filterSheetCurrencyTabs || !filterSheetPriceRange || !filterSheetToggleList || !filterBottomsheet || !filterBottomsheetBackdrop || !filterBottomsheetReset || !filterBottomsheetClose || !filterBottomsheetTitle || !filterBottomsheetSearch || !filterBottomsheetSearchInput || !filterBottomsheetList || !filterBottomsheetApply || !categorySheet || !categorySheetBackdrop || !categorySheetClose || !categorySheetList || !categorySheetAll) {
+      if (!resultsScreen || !resultsScroller || !titleBackButton || !resultsBackButton || !resultsTitle || !resultsSearchTrigger || !resultsSearchText || !filterRow || !filterScroll || !regionButton || !regionText || !sortButton || !sortText || !feedGrid || !feedSurface || !filterSheet || !filterSheetBackdrop || !filterSheetBack || !filterSheetReset || !filterSheetApply || !filterSheetCategoryLabel || !filterSheetRegionLabel || !filterSheetSellerCaption || !filterSheetSellerTabs || !filterSheetConditionTabs || !filterSheetManufacturerValue || !filterSheetSortValue || !filterSheetCurrencyTabs || !filterSheetPriceRange || !filterSheetToggleList || !filterBottomsheet || !filterBottomsheetBackdrop || !filterBottomsheetReset || !filterBottomsheetClose || !filterBottomsheetTitle || !filterBottomsheetSearch || !filterBottomsheetSearchInput || !filterBottomsheetList || !filterBottomsheetApply || !categorySheet || !categorySheetBackdrop || !categorySheetClose || !categorySheetList || !categorySheetAll) {
         return;
       }
 
@@ -1392,9 +1393,7 @@
         renderFullFilterSheet();
       });
       filterSheetApply.addEventListener("click", function () {
-        if (!filterSheetApply.disabled) {
-          applyFullFilterSheet();
-        }
+        applyFullFilterSheet();
       });
 
       filterSheet.addEventListener("click", function (event) {
@@ -1667,9 +1666,7 @@
         renderBottomsheetList();
       });
       filterBottomsheetApply.addEventListener("click", function () {
-        if (!filterBottomsheetApply.disabled) {
-          applyBottomsheet();
-        }
+        applyBottomsheet();
       });
       document.addEventListener("keydown", function (event) {
         if (event.key !== "Escape") {
@@ -2201,9 +2198,14 @@
         var usedIds = {};
 
         if (shouldShowEmptyState) {
+          feedSurface.classList.add("results-feed__surface--empty");
+          feedGrid.classList.add("results-feed__grid--empty");
           feedGrid.innerHTML = renderResultsEmptyState();
           return;
         }
+
+        feedSurface.classList.remove("results-feed__surface--empty");
+        feedGrid.classList.remove("results-feed__grid--empty");
 
         items.forEach(function (item) {
           usedIds[item.id] = true;
@@ -3409,39 +3411,29 @@
       }
 
       function updateFullFilterFooterState() {
-        var rangeFlags = getRangeStateFlags(fullFilterState.draft.priceRange);
-
         filterSheetReset.hidden = false;
-        filterSheetApply.disabled = !isFullFilterDraftDirty() || rangeFlags.isError;
+        filterSheetApply.disabled = false;
       }
 
       function updateBottomsheetFooterState() {
         var isDefault = false;
-        var isDirty = false;
-        var hasError = false;
-        var rangeFlags;
 
         if (!bottomsheetState.isOpen) {
           filterBottomsheetReset.hidden = true;
-          filterBottomsheetApply.disabled = true;
+          filterBottomsheetApply.disabled = false;
           return;
         }
 
         if (bottomsheetState.type === "range") {
-          rangeFlags = getRangeStateFlags(bottomsheetState.range);
-          isDefault = rangeFlags.isDefault;
-          isDirty = rangeFlags.isDirty;
-          hasError = rangeFlags.isError;
+          isDefault = getRangeStateFlags(bottomsheetState.range).isDefault;
         } else if (bottomsheetState.type === "multi") {
           isDefault = bottomsheetState.draftValues.length === 0;
-          isDirty = JSON.stringify(bottomsheetState.draftValues.slice().sort()) !== JSON.stringify((bottomsheetState.initialDraftValues || []).slice().sort());
         } else {
           isDefault = bottomsheetState.draftValue === getDefaultValue(bottomsheetState.key);
-          isDirty = bottomsheetState.draftValue !== bottomsheetState.initialDraftValue;
         }
 
         filterBottomsheetReset.hidden = isDefault;
-        filterBottomsheetApply.disabled = !isDirty || hasError;
+        filterBottomsheetApply.disabled = false;
       }
 
       function syncFullFilterRangeBlock() {

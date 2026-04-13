@@ -862,7 +862,7 @@
     .results-header__body {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 12px;
       padding: 0 16px 12px;
     }
 
@@ -1186,11 +1186,24 @@
       border-radius: 16px;
     }
 
+    .results-feed__surface--empty {
+      padding: 0;
+      background: transparent;
+      border-radius: 0;
+    }
+
     .results-feed__grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, calc((100% - 8px) / 2)));
       gap: 24px 8px;
       align-items: start;
+    }
+
+    .results-feed__grid--empty {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 0 16px;
     }
 
     .results-card {
@@ -1377,7 +1390,6 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
-      grid-column: 1 / -1;
       padding: 16px;
       border-radius: 16px;
       background: #ffffff;
@@ -1987,8 +1999,8 @@
 
     .filter-range__native {
       position: absolute;
-      left: 16px;
-      right: 16px;
+      left: 0;
+      right: 0;
       top: -14px;
       width: auto;
       height: 72px;
@@ -2225,12 +2237,6 @@
       -webkit-appearance: none;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
-    }
-
-    .filter-apply-bar__button:disabled {
-      border-color: #ededed;
-      background: #e7e7e7;
-      color: #949494;
     }
 
     .filter-apply-bar__button--secondary {
@@ -3756,7 +3762,7 @@
       gap: 2px;
       height: 40px;
       overflow: hidden;
-      padding-right: 20px;
+      padding: 0 20px 0 0;
       border: 1px solid var(--border);
       border-radius: 14px;
       background: var(--chip-bg);
