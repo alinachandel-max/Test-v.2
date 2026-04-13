@@ -2236,7 +2236,7 @@
         return [
           '<section class="results-empty" aria-label="Пустая выдача">',
           '<div class="results-empty__card">',
-          '<span class="results-empty__icon icon-box icon-box--24" aria-hidden="true"><img class="seller-icon-img" src="prototype-library/icon-source-svg/BoxFill.svg" alt=""></span>',
+          '<span class="results-empty__illustration" aria-hidden="true"><img src="assets/detail/empty-box.png" alt=""></span>',
           '<p class="results-empty__title">Мы не нашли то, что вы искали</p>',
           '<p class="results-empty__text">Попробуйте изменить поисковый запрос или расширьте радиус поиска</p>',
           '</div>',
