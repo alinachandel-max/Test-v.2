@@ -1092,8 +1092,8 @@
       var filterSheet = document.querySelector(".filter-sheet");
       var filterSheetBackdrop = filterSheet ? filterSheet.querySelector(".filter-sheet__backdrop") : null;
       var filterSheetBack = filterSheet ? filterSheet.querySelector(".filter-sheet__back") : null;
-      var filterSheetReset = filterSheet ? filterSheet.querySelector(".filter-sheet__reset") : null;
-      var filterSheetApply = filterSheet ? filterSheet.querySelector(".filter-apply-bar__button") : null;
+      var filterSheetReset = filterSheet ? filterSheet.querySelector(".filter-sheet__footer-reset") : null;
+      var filterSheetApply = filterSheet ? filterSheet.querySelector(".filter-sheet__footer-apply") : null;
       var filterSheetCategoryLabel = filterSheet ? filterSheet.querySelector("#filter-sheet-category-label") : null;
       var filterSheetRegionLabel = filterSheet ? filterSheet.querySelector("#filter-sheet-region-label") : null;
       var filterSheetSellerCaption = filterSheet ? filterSheet.querySelector("#filter-sheet-seller-caption") : null;
@@ -1102,14 +1102,14 @@
       var filterSheetManufacturerValue = filterSheet ? filterSheet.querySelector("#filter-sheet-manufacturer-value") : null;
       var filterSheetSortValue = filterSheet ? filterSheet.querySelector("#filter-sheet-sort-value") : null;
       var filterSheetCurrencyTabs = filterSheet ? filterSheet.querySelector("#filter-sheet-currency-tabs") : null;
-      var filterSheetPriceMin = filterSheet ? filterSheet.querySelector("#filter-sheet-price-min") : null;
-      var filterSheetPriceMax = filterSheet ? filterSheet.querySelector("#filter-sheet-price-max") : null;
+      var filterSheetPriceRange = filterSheet ? filterSheet.querySelector("#filter-sheet-price-range") : null;
       var filterSheetToggleList = filterSheet ? filterSheet.querySelector("#filter-sheet-toggle-list") : null;
       var filterBottomsheet = document.querySelector(".filter-bottomsheet");
       var filterBottomsheetBackdrop = filterBottomsheet ? filterBottomsheet.querySelector(".filter-bottomsheet__backdrop") : null;
       var filterBottomsheetReset = filterBottomsheet ? filterBottomsheet.querySelector(".filter-bottomsheet__reset") : null;
       var filterBottomsheetClose = filterBottomsheet ? filterBottomsheet.querySelector(".filter-bottomsheet__close") : null;
       var filterBottomsheetTitle = filterBottomsheet ? filterBottomsheet.querySelector(".filter-bottomsheet__title") : null;
+      var filterBottomsheetSearch = filterBottomsheet ? filterBottomsheet.querySelector(".filter-bottomsheet__search") : null;
       var filterBottomsheetSearchInput = filterBottomsheet ? filterBottomsheet.querySelector(".filter-bottomsheet__search-input") : null;
       var filterBottomsheetList = filterBottomsheet ? filterBottomsheet.querySelector(".filter-bottomsheet__list") : null;
       var filterBottomsheetApply = filterBottomsheet ? filterBottomsheet.querySelector(".filter-bottomsheet__apply") : null;
@@ -1175,9 +1175,9 @@
       var BOTTOMSHEET_CONFIGS = {
         seller: {
           title: "Продавец",
-          type: "single",
+          type: "multi",
+          searchable: false,
           options: [
-            { label: "Все", value: "" },
             { label: "Частное лицо", value: "Частное лицо" },
             { label: "Магазин / бизнес", value: "business" },
             { label: "Официальный дилер", value: "Официальный дилер" }
@@ -1185,12 +1185,14 @@
         },
         condition: {
           title: "Состояние",
-          type: "single",
+          type: "multi",
+          searchable: false,
           options: [
-            { label: "Все", value: "" },
             { label: "Новое", value: "Новое" },
             { label: "Б/у", value: "Б/у" },
-            { label: "После ремонта", value: "После ремонта" }
+            { label: "Б/у (есть следы носки)", value: "Б/у (есть следы носки)" },
+            { label: "Б/у (есть заметные дефекты)", value: "Б/у (есть заметные дефекты)" },
+            { label: "Новое (с биркой, в упаковке)", value: "Новое (с биркой, в упаковке)" }
           ]
         },
         manufacturer: {
@@ -1200,30 +1202,26 @@
         },
         currency: {
           title: "Валюта",
-          type: "single",
+          type: "multi",
+          searchable: false,
           options: [
-            { label: "Любая", value: "" },
-            { label: "UZS", value: "UZS" },
-            { label: "USD", value: "USD" },
-            { label: "EUR", value: "EUR" }
+            { label: "Из объявлений", value: "Из объявлений" },
+            { label: "В сумах", value: "UZS" },
+            { label: "В у.е.", value: "USD" }
           ]
         },
         price: {
-          title: "Цена",
-          type: "single",
-          options: [
-            { label: "Любая", value: "" },
-            { label: "до 100 000", value: "0-100000" },
-            { label: "100 000–500 000", value: "100000-500000" },
-            { label: "500 000–2 000 000", value: "500000-2000000" },
-            { label: "2 000 000+", value: "2000000+" }
-          ]
+          title: "Цена, у.е.",
+          type: "range",
+          searchable: false,
+          min: 100,
+          max: 1000,
+          step: 10
         },
         region: {
           title: "Регион",
-          type: "single",
+          type: "multi",
           options: [
-            { label: "Все регионы", value: "Все регионы" },
             { label: "Ташкент", value: "Ташкент" },
             { label: "Самарканд", value: "Самарканд" },
             { label: "Бухара", value: "Бухара" },
@@ -1232,11 +1230,13 @@
         },
         sort: {
           title: "Сортировка",
+          searchable: false,
           type: "single",
           options: [
-            { label: "По дате", value: "date" },
+            { label: "Рекомендованное", value: "recommended" },
             { label: "Сначала дешевле", value: "price-asc" },
-            { label: "Сначала дороже", value: "price-desc" }
+            { label: "Сначала дороже", value: "price-desc" },
+            { label: "По дате", value: "date" },
           ]
         },
         category: {
@@ -1258,7 +1258,7 @@
       var scrollDirection = "up";
       var pendingChipKey = "";
 
-      if (!resultsScreen || !resultsScroller || !titleBackButton || !resultsBackButton || !resultsTitle || !resultsSearchTrigger || !resultsSearchText || !filterRow || !filterScroll || !regionButton || !regionText || !sortButton || !sortText || !feedGrid || !filterSheet || !filterSheetBackdrop || !filterSheetBack || !filterSheetReset || !filterSheetApply || !filterSheetCategoryLabel || !filterSheetRegionLabel || !filterSheetSellerCaption || !filterSheetSellerTabs || !filterSheetConditionTabs || !filterSheetManufacturerValue || !filterSheetSortValue || !filterSheetCurrencyTabs || !filterSheetPriceMin || !filterSheetPriceMax || !filterSheetToggleList || !filterBottomsheet || !filterBottomsheetBackdrop || !filterBottomsheetReset || !filterBottomsheetClose || !filterBottomsheetTitle || !filterBottomsheetSearchInput || !filterBottomsheetList || !filterBottomsheetApply || !categorySheet || !categorySheetBackdrop || !categorySheetClose || !categorySheetList || !categorySheetAll) {
+      if (!resultsScreen || !resultsScroller || !titleBackButton || !resultsBackButton || !resultsTitle || !resultsSearchTrigger || !resultsSearchText || !filterRow || !filterScroll || !regionButton || !regionText || !sortButton || !sortText || !feedGrid || !filterSheet || !filterSheetBackdrop || !filterSheetBack || !filterSheetReset || !filterSheetApply || !filterSheetCategoryLabel || !filterSheetRegionLabel || !filterSheetSellerCaption || !filterSheetSellerTabs || !filterSheetConditionTabs || !filterSheetManufacturerValue || !filterSheetSortValue || !filterSheetCurrencyTabs || !filterSheetPriceRange || !filterSheetToggleList || !filterBottomsheet || !filterBottomsheetBackdrop || !filterBottomsheetReset || !filterBottomsheetClose || !filterBottomsheetTitle || !filterBottomsheetSearch || !filterBottomsheetSearchInput || !filterBottomsheetList || !filterBottomsheetApply || !categorySheet || !categorySheetBackdrop || !categorySheetClose || !categorySheetList || !categorySheetAll) {
         return;
       }
 
@@ -1393,26 +1393,43 @@
         var conditionTab = event.target.closest('[data-filter-sheet-tab="condition"]');
         var currencyTab = event.target.closest('[data-filter-sheet-tab="currency"]');
         var toggleRow = event.target.closest("[data-filter-sheet-toggle]");
+        var rangeReset = event.target.closest("[data-filter-range-reset]");
 
         if (button && filterSheet.contains(button)) {
           openBottomsheet(button.getAttribute("data-filter-sheet-open"), "full");
           return;
         }
 
+        if (rangeReset && filterSheet.contains(rangeReset)) {
+          fullFilterState.draft.filters.price = "";
+          fullFilterState.draft.filters.priceMin = "";
+          fullFilterState.draft.filters.priceMax = "";
+          renderFullFilterSheet();
+          return;
+        }
+
         if (sellerTab && filterSheet.contains(sellerTab)) {
-          fullFilterState.draft.filters.seller = sellerTab.getAttribute("data-filter-value") || "";
+          if ((sellerTab.getAttribute("data-filter-value") || "") === "") {
+            fullFilterState.draft.filters.seller = [];
+          } else {
+            toggleDraftArrayValue("seller", sellerTab.getAttribute("data-filter-value") || "");
+          }
           renderFullFilterSheet();
           return;
         }
 
         if (conditionTab && filterSheet.contains(conditionTab)) {
-          setDraftSingleArray("condition", conditionTab.getAttribute("data-filter-value") || "");
+          if ((conditionTab.getAttribute("data-filter-value") || "") === "") {
+            fullFilterState.draft.filters.condition = [];
+          } else {
+            toggleDraftArrayValue("condition", conditionTab.getAttribute("data-filter-value") || "");
+          }
           renderFullFilterSheet();
           return;
         }
 
         if (currencyTab && filterSheet.contains(currencyTab)) {
-          fullFilterState.draft.filters.currency = currencyTab.getAttribute("data-filter-value") || "";
+          toggleDraftArrayValue("currency", currencyTab.getAttribute("data-filter-value") || "");
           renderFullFilterSheet();
           return;
         }
@@ -1424,11 +1441,39 @@
       });
 
       filterSheetPriceMin.addEventListener("input", function () {
-        fullFilterState.draft.filters.priceMin = sanitizeDigits(filterSheetPriceMin.value);
+        fullFilterState.draft.filters.priceMin = sanitizeRangeValue(filterSheetPriceMin.value, 100, 1000);
+        clampDraftRangeFromInputs();
       });
 
       filterSheetPriceMax.addEventListener("input", function () {
-        fullFilterState.draft.filters.priceMax = sanitizeDigits(filterSheetPriceMax.value);
+        fullFilterState.draft.filters.priceMax = sanitizeRangeValue(filterSheetPriceMax.value, 100, 1000);
+        clampDraftRangeFromInputs();
+      });
+      filterSheet.addEventListener("input", function (event) {
+        var target = event.target;
+
+        if (target.matches("[data-range-input='min'][data-range-prefix='sheet-price']")) {
+          fullFilterState.draft.filters.priceMin = sanitizeRangeValue(target.value, 100, 1000);
+          clampDraftRangeFromInputs();
+          return;
+        }
+
+        if (target.matches("[data-range-input='max'][data-range-prefix='sheet-price']")) {
+          fullFilterState.draft.filters.priceMax = sanitizeRangeValue(target.value, 100, 1000);
+          clampDraftRangeFromInputs();
+          return;
+        }
+
+        if (target.matches("[data-range-slider='min'][data-range-prefix='sheet-price']")) {
+          fullFilterState.draft.filters.priceMin = sanitizeRangeValue(target.value, 100, 1000);
+          clampDraftRangeFromInputs();
+          return;
+        }
+
+        if (target.matches("[data-range-slider='max'][data-range-prefix='sheet-price']")) {
+          fullFilterState.draft.filters.priceMax = sanitizeRangeValue(target.value, 100, 1000);
+          clampDraftRangeFromInputs();
+        }
       });
 
       filterBottomsheetBackdrop.addEventListener("click", closeBottomsheet);
@@ -1437,6 +1482,41 @@
       filterBottomsheetSearchInput.addEventListener("input", function () {
         bottomsheetState.searchQuery = filterBottomsheetSearchInput.value;
         renderBottomsheetList();
+      });
+      filterBottomsheetList.addEventListener("input", function (event) {
+        var target = event.target;
+        var value;
+
+        if (target.matches("[data-range-input='min']")) {
+          bottomsheetState.rangeMin = sanitizeRangeValue(target.value, bottomsheetState.rangeMinBound, bottomsheetState.rangeMaxBound);
+          clampBottomsheetRange("min");
+          renderBottomsheetList();
+          return;
+        }
+
+        if (target.matches("[data-range-input='max']")) {
+          bottomsheetState.rangeMax = sanitizeRangeValue(target.value, bottomsheetState.rangeMinBound, bottomsheetState.rangeMaxBound);
+          clampBottomsheetRange("max");
+          renderBottomsheetList();
+          return;
+        }
+
+        if (target.matches("[data-range-slider='min']")) {
+          value = target.value;
+          bottomsheetState.rangeMin = sanitizeRangeValue(value, bottomsheetState.rangeMinBound, bottomsheetState.rangeMaxBound);
+          bottomsheetState.activeThumb = "min";
+          clampBottomsheetRange("min");
+          renderBottomsheetList();
+          return;
+        }
+
+        if (target.matches("[data-range-slider='max']")) {
+          value = target.value;
+          bottomsheetState.rangeMax = sanitizeRangeValue(value, bottomsheetState.rangeMinBound, bottomsheetState.rangeMaxBound);
+          bottomsheetState.activeThumb = "max";
+          clampBottomsheetRange("max");
+          renderBottomsheetList();
+        }
       });
       filterBottomsheetList.addEventListener("click", function (event) {
         var option = event.target.closest("[data-bottomsheet-option]");
@@ -1456,7 +1536,7 @@
           } else {
             bottomsheetState.draftValues = bottomsheetState.draftValues.concat(value);
           }
-        } else {
+        } else if (bottomsheetState.type === "single") {
           bottomsheetState.draftValue = value;
         }
 
@@ -1471,20 +1551,20 @@
           activeCategoryLabel: "",
           activeCategoryValue: "",
           filters: {
-            seller: "",
+            seller: [],
             condition: [],
             manufacturer: [],
             gift: [],
             urgentSale: [],
             installment: [],
-            currency: "",
+            currency: [],
             price: "",
             priceMin: "",
             priceMax: "",
             delivery: []
           },
-          region: "Все регионы",
-          sort: "date",
+          region: [],
+          sort: "recommended",
           visibleItems: []
         };
       }
@@ -1495,10 +1575,17 @@
           key: "",
           source: "",
           type: "single",
+          searchable: true,
           searchQuery: "",
           draftValue: "",
           draftValues: [],
-          orderedOptions: []
+          orderedOptions: [],
+          rangeMin: "",
+          rangeMax: "",
+          rangeMinBound: 0,
+          rangeMaxBound: 0,
+          rangeStep: 1,
+          activeThumb: ""
         };
       }
 
@@ -1506,16 +1593,16 @@
         return {
           activeCategoryLabel: state.activeCategoryLabel || "",
           activeCategoryValue: state.activeCategoryValue || "",
-          region: state.region || "Все регионы",
-          sort: state.sort || "date",
+          region: (state.region || []).slice(),
+          sort: state.sort || "recommended",
           filters: {
-            seller: state.filters.seller || "",
+            seller: (state.filters.seller || []).slice(),
             condition: (state.filters.condition || []).slice(),
             manufacturer: (state.filters.manufacturer || []).slice(),
             gift: (state.filters.gift || []).slice(),
             urgentSale: (state.filters.urgentSale || []).slice(),
             installment: (state.filters.installment || []).slice(),
-            currency: state.filters.currency || "",
+            currency: (state.filters.currency || []).slice(),
             price: state.filters.price || "",
             priceMin: state.filters.priceMin || "",
             priceMax: state.filters.priceMax || "",
@@ -1796,7 +1883,7 @@
         resultsSearchText.textContent = resultsState.query || "Поиск объявлений";
         resultsSearchTrigger.classList.toggle("results-search-trigger--filled", Boolean(resultsState.query));
         resultsTitle.textContent = getHeaderTitle();
-        regionText.textContent = resultsState.region;
+        regionText.textContent = getRegionSummaryLabel(resultsState.region);
         sortText.textContent = getSortLabel(resultsState.sort);
 
         applyHeaderMode();
@@ -1976,37 +2063,47 @@
         var sellerTabs = [
           { label: "Все", value: "" },
           { label: "Частный", value: "Частное лицо" },
-          { label: "Магазин / бизнес", value: "business" }
+          { label: "Магазин / Бизнес", value: "business" }
         ];
         var conditionTabs = [
           { label: "Все", value: "" },
-          { label: "Новое", value: "Новое" },
-          { label: "Б/у", value: "Б/у" }
+          { label: "Б/у", value: "Б/у" },
+          { label: "Б/у (есть следы носки)", value: "Б/у (есть следы носки)" },
+          { label: "Б/у (есть заметные дефекты)", value: "Б/у (есть заметные дефекты)" },
+          { label: "Новое (с биркой, в упаковке)", value: "Новое (с биркой, в упаковке)" }
         ];
         var currencyTabs = [
-          { label: "Любая", value: "" },
-          { label: "UZS", value: "UZS" },
-          { label: "USD", value: "USD" }
+          { label: "Из объявлений", value: "Из объявлений" },
+          { label: "В сумах", value: "UZS" },
+          { label: "В у.е.", value: "USD" }
         ];
 
         filterSheet.classList.toggle("is-open", fullFilterState.isOpen);
         filterSheet.setAttribute("aria-hidden", fullFilterState.isOpen ? "false" : "true");
         filterSheetCategoryLabel.textContent = fullFilterState.draft.activeCategoryLabel || "Все категории";
-        filterSheetRegionLabel.textContent = fullFilterState.draft.region || "Все регионы";
+        filterSheetRegionLabel.textContent = getRegionSummaryLabel(fullFilterState.draft.region);
         filterSheetSellerCaption.textContent = getSellerSummaryLabel(fullFilterState.draft.filters.seller);
         filterSheetManufacturerValue.textContent = getManufacturerSummaryLabel(fullFilterState.draft.filters.manufacturer);
         filterSheetSortValue.textContent = getSortLabel(fullFilterState.draft.sort);
         filterSheetSellerTabs.innerHTML = sellerTabs.map(function (tab) {
-          return renderSheetTab(tab.label, tab.value, fullFilterState.draft.filters.seller === tab.value, "seller");
+          return renderSheetTab(tab.label, tab.value, tab.value === "" ? !fullFilterState.draft.filters.seller.length : fullFilterState.draft.filters.seller.indexOf(tab.value) !== -1, "seller");
         }).join("");
         filterSheetConditionTabs.innerHTML = conditionTabs.map(function (tab) {
-          return renderSheetTab(tab.label, tab.value, (fullFilterState.draft.filters.condition[0] || "") === tab.value, "condition");
+          return renderSheetTab(tab.label, tab.value, tab.value === "" ? !fullFilterState.draft.filters.condition.length : fullFilterState.draft.filters.condition.indexOf(tab.value) !== -1, "condition");
         }).join("");
         filterSheetCurrencyTabs.innerHTML = currencyTabs.map(function (tab) {
-          return renderSheetTab(tab.label, tab.value, fullFilterState.draft.filters.currency === tab.value, "currency");
+          return renderSheetTab(tab.label, tab.value, fullFilterState.draft.filters.currency.indexOf(tab.value) !== -1, "currency");
         }).join("");
         filterSheetPriceMin.value = fullFilterState.draft.filters.priceMin;
         filterSheetPriceMax.value = fullFilterState.draft.filters.priceMax;
+        filterSheetPriceRange.innerHTML = renderRangeBlockMarkup(
+          "sheet-price",
+          fullFilterState.draft.filters.priceMin || "100",
+          fullFilterState.draft.filters.priceMax || "1000",
+          100,
+          1000,
+          ""
+        );
         filterSheetToggleList.innerHTML = TOGGLE_FILTER_KEYS.map(function (key) {
           return renderSheetToggleRow(key, isDraftFacetSelected(key));
         }).join("");
@@ -2041,15 +2138,90 @@
         ].join("");
       }
 
+      function renderRangeBlockMarkup(prefix, minValue, maxValue, minBound, maxBound, activeThumb) {
+        var min = Number(minValue || minBound);
+        var max = Number(maxValue || maxBound);
+        var startPercent = ((min - minBound) / (maxBound - minBound)) * 100;
+        var endPercent = ((max - minBound) / (maxBound - minBound)) * 100;
+
+        return [
+          '<div class="filter-range__inputs">',
+          '<label class="filter-sheet__price-field"><input class="filter-sheet__price-input" type="text" inputmode="numeric" value="',
+          escapeHtml(String(min)),
+          '" data-range-input="min" data-range-prefix="',
+          escapeHtml(prefix),
+          '" placeholder="От"></label>',
+          '<label class="filter-sheet__price-field"><input class="filter-sheet__price-input" type="text" inputmode="numeric" value="',
+          escapeHtml(String(max)),
+          '" data-range-input="max" data-range-prefix="',
+          escapeHtml(prefix),
+          '" placeholder="До"></label>',
+          '</div>',
+          '<div class="filter-range__slider">',
+          '<div class="filter-range__track">',
+          '<div class="filter-range__fill" style="left:',
+          String(startPercent),
+          '%;width:',
+          String(Math.max(0, endPercent - startPercent)),
+          '%;"></div>',
+          activeThumb === "min" ? '<span class="filter-range__bubble" style="left:' + String(startPercent) + '%;">' + escapeHtml(String(min)) + "</span>" : "",
+          '<span class="filter-range__thumb" style="left:',
+          String(startPercent),
+          '%;"></span>',
+          activeThumb === "max" ? '<span class="filter-range__bubble" style="left:' + String(endPercent) + '%;">' + escapeHtml(String(max)) + "</span>" : "",
+          '<span class="filter-range__thumb" style="left:',
+          String(endPercent),
+          '%;"></span>',
+          '<input class="filter-range__native" type="range" min="',
+          String(minBound),
+          '" max="',
+          String(maxBound),
+          '" step="10" value="',
+          escapeHtml(String(min)),
+          '" data-range-slider="min" data-range-prefix="',
+          escapeHtml(prefix),
+          '">',
+          '<input class="filter-range__native" type="range" min="',
+          String(minBound),
+          '" max="',
+          String(maxBound),
+          '" step="10" value="',
+          escapeHtml(String(max)),
+          '" data-range-slider="max" data-range-prefix="',
+          escapeHtml(prefix),
+          '">',
+          '</div>',
+          '<div class="filter-range__labels"><span>',
+          escapeHtml(String(minBound)),
+          '</span><span>',
+          escapeHtml(String(maxBound)),
+          "</span></div>",
+          "</div>"
+        ].join("");
+      }
+
       function renderBottomsheet() {
         filterBottomsheet.classList.toggle("is-open", bottomsheetState.isOpen);
         filterBottomsheet.setAttribute("aria-hidden", bottomsheetState.isOpen ? "false" : "true");
         filterBottomsheetTitle.textContent = bottomsheetState.title || "Выбор";
+        filterBottomsheetSearch.hidden = bottomsheetState.searchable === false;
         filterBottomsheetSearchInput.value = bottomsheetState.searchQuery;
         renderBottomsheetList();
       }
 
       function renderBottomsheetList() {
+        if (bottomsheetState.type === "range") {
+          filterBottomsheetList.innerHTML = renderRangeBlockMarkup(
+            "bottomsheet-price",
+            bottomsheetState.rangeMin || String(bottomsheetState.rangeMinBound),
+            bottomsheetState.rangeMax || String(bottomsheetState.rangeMaxBound),
+            bottomsheetState.rangeMinBound,
+            bottomsheetState.rangeMaxBound,
+            bottomsheetState.activeThumb === "min"
+          );
+          return;
+        }
+
         var normalizedSearch = normalizeValue(bottomsheetState.searchQuery);
         var orderedOptions = Array.isArray(bottomsheetState.orderedOptions) ? bottomsheetState.orderedOptions : [];
         var options = orderedOptions.filter(function (option) {
@@ -2152,7 +2324,7 @@
         resultsState.activeCategoryValue = fullFilterState.draft.activeCategoryValue;
         resultsState.region = fullFilterState.draft.region;
         resultsState.sort = fullFilterState.draft.sort;
-        resultsState.filters = createFilterDraftFromResults({ activeCategoryLabel: "", activeCategoryValue: "", region: "", sort: "", filters: fullFilterState.draft.filters }).filters;
+        resultsState.filters = createFilterDraftFromResults({ activeCategoryLabel: "", activeCategoryValue: "", region: [], sort: "", filters: fullFilterState.draft.filters }).filters;
         pendingChipKey = "filters";
         closeFullFilterSheet({ silent: true });
         renderResults();
@@ -2171,13 +2343,20 @@
         bottomsheetState.source = source;
         bottomsheetState.type = config.type;
         bottomsheetState.title = config.title;
+        bottomsheetState.searchable = config.searchable !== false;
         bottomsheetState.orderedOptions = getOrderedBottomsheetOptions(key, config.options || [], source);
 
-        if (config.type === "multi") {
+        if (config.type === "range") {
+          bottomsheetState.rangeMinBound = config.min;
+          bottomsheetState.rangeMaxBound = config.max;
+          bottomsheetState.rangeStep = config.step || 10;
+          bottomsheetState.rangeMin = getCurrentRangeMin(source) || String(config.min);
+          bottomsheetState.rangeMax = getCurrentRangeMax(source) || String(config.max);
+        } else if (config.type === "multi") {
           bottomsheetState.draftValues = getSourceMultiValue(source, key).slice();
         } else {
-        bottomsheetState.draftValue = getSourceSingleValue(source, key);
-      }
+          bottomsheetState.draftValue = getSourceSingleValue(source, key);
+        }
 
         renderBottomsheet();
         filterBottomsheetList.scrollTop = 0;
@@ -2224,7 +2403,11 @@
       }
 
       function resetBottomsheetDraft() {
-        if (bottomsheetState.type === "multi") {
+        if (bottomsheetState.type === "range") {
+          bottomsheetState.rangeMin = String(bottomsheetState.rangeMinBound);
+          bottomsheetState.rangeMax = String(bottomsheetState.rangeMaxBound);
+          bottomsheetState.activeThumb = "";
+        } else if (bottomsheetState.type === "multi") {
           bottomsheetState.draftValues = [];
         } else {
           bottomsheetState.draftValue = getDefaultValue(bottomsheetState.key);
@@ -2294,19 +2477,37 @@
       }
 
       function matchesSeller(item) {
-        if (!resultsState.filters.seller) {
+        var selected = resultsState.filters.seller || [];
+
+        if (!selected.length) {
           return true;
         }
 
-        if (resultsState.filters.seller === "business") {
-          return item.seller !== "Частное лицо";
-        }
+        return selected.some(function (value) {
+          if (value === "business") {
+            return item.seller !== "Частное лицо";
+          }
 
-        return item.seller === resultsState.filters.seller;
+          return item.seller === value;
+        });
       }
 
       function matchesCondition(item) {
-        return !resultsState.filters.condition.length || resultsState.filters.condition.indexOf(item.condition) !== -1;
+        return !resultsState.filters.condition.length || resultsState.filters.condition.some(function (value) {
+          if (value === "Новое (с биркой, в упаковке)") {
+            return item.condition === "Новое";
+          }
+
+          if (value === "Б/у (есть следы носки)") {
+            return item.condition === "Б/у" || item.condition === "Как новое";
+          }
+
+          if (value === "Б/у (есть заметные дефекты)") {
+            return item.condition === "После ремонта" || item.condition === "Б/у";
+          }
+
+          return item.condition === value;
+        });
       }
 
       function matchesManufacturer(item) {
@@ -2316,12 +2517,12 @@
       }
 
       function matchesCurrency(item) {
-        return !resultsState.filters.currency || item.currency === resultsState.filters.currency;
+        return !resultsState.filters.currency.length || resultsState.filters.currency.indexOf("Из объявлений") !== -1 || resultsState.filters.currency.indexOf(item.currency) !== -1;
       }
 
       function matchesPrice(item) {
-        var minValue = Number(resultsState.filters.priceMin || "0");
-        var maxValue = Number(resultsState.filters.priceMax || "0");
+        var minValue = Number(resultsState.filters.priceMin || "0") * 1000;
+        var maxValue = Number(resultsState.filters.priceMax || "0") * 1000;
 
         if (minValue && item.priceValue < minValue) {
           return false;
@@ -2329,26 +2530,6 @@
 
         if (maxValue && item.priceValue > maxValue) {
           return false;
-        }
-
-        if (!resultsState.filters.price) {
-          return true;
-        }
-
-        if (resultsState.filters.price === "0-100000") {
-          return item.priceValue <= 100000;
-        }
-
-        if (resultsState.filters.price === "100000-500000") {
-          return item.priceValue >= 100000 && item.priceValue <= 500000;
-        }
-
-        if (resultsState.filters.price === "500000-2000000") {
-          return item.priceValue >= 500000 && item.priceValue <= 2000000;
-        }
-
-        if (resultsState.filters.price === "2000000+") {
-          return item.priceValue >= 2000000;
         }
 
         return true;
@@ -2367,7 +2548,7 @@
       }
 
       function matchesRegion(item) {
-        return resultsState.region === "Все регионы" || item.region === resultsState.region;
+        return !resultsState.region.length || resultsState.region.indexOf(item.region) !== -1;
       }
 
       function sortItems(items) {
@@ -2391,7 +2572,7 @@
           return;
         }
 
-        if (key === "seller" || key === "currency" || key === "price") {
+        if (key === "price") {
           resultsState.filters[key] = "";
           if (key === "price") {
             resultsState.filters.priceMin = "";
@@ -2400,8 +2581,12 @@
           return;
         }
 
-        if (key === "condition" || key === "manufacturer" || isToggleChipKey(key)) {
+        if (key === "seller" || key === "currency" || key === "condition" || key === "manufacturer" || isToggleChipKey(key)) {
           resultsState.filters[key] = [];
+        }
+
+        if (key === "region") {
+          resultsState.region = [];
         }
       }
 
@@ -2411,7 +2596,7 @@
         }
 
         if (key === "seller" || key === "currency") {
-          return Boolean(resultsState.filters[key]);
+          return resultsState.filters[key].length > 0;
         }
 
         if (key === "price") {
@@ -2465,7 +2650,7 @@
       }
 
       function getSortLabel(value) {
-        return getOptionLabel("sort", value || "date") || "По дате";
+        return getOptionLabel("sort", value || "recommended") || "Рекомендованное";
       }
 
       function getChipLabel(key) {
@@ -2473,16 +2658,16 @@
           return resultsState.activeCategoryLabel || "Все категории";
         }
 
-        if (key === "seller" && resultsState.filters.seller) {
+        if (key === "seller" && resultsState.filters.seller.length) {
           return getSellerSummaryLabel(resultsState.filters.seller);
         }
 
         if (key === "condition" && resultsState.filters.condition.length) {
-          return resultsState.filters.condition[0];
+          return resultsState.filters.condition.length === 1 ? resultsState.filters.condition[0] : String(resultsState.filters.condition.length) + " состояния";
         }
 
-        if (key === "currency" && resultsState.filters.currency) {
-          return resultsState.filters.currency;
+        if (key === "currency" && resultsState.filters.currency.length) {
+          return getCurrencySummaryLabel(resultsState.filters.currency);
         }
 
         if (key === "price" && (resultsState.filters.price || resultsState.filters.priceMin || resultsState.filters.priceMax)) {
@@ -2501,12 +2686,40 @@
         return matchedOption ? matchedOption.label : "";
       }
 
-      function getSellerSummaryLabel(value) {
-        if (value === "business") {
-          return "Магазин / бизнес";
+      function getSellerSummaryLabel(values) {
+        if (!values.length) {
+          return "Все";
         }
 
-        return value || "Все";
+        if (values.length === 1) {
+          return values[0] === "business" ? "Магазин / бизнес" : values[0];
+        }
+
+        return String(values.length) + " выбрано";
+      }
+
+      function getCurrencySummaryLabel(values) {
+        if (!values.length) {
+          return "Валюта";
+        }
+
+        if (values.length === 1) {
+          return values[0] === "Из объявлений" ? "Из объявлений" : values[0] === "UZS" ? "В сумах" : values[0] === "USD" ? "В у.е." : values[0];
+        }
+
+        return String(values.length) + " валюты";
+      }
+
+      function getRegionSummaryLabel(values) {
+        if (!values.length) {
+          return "Все регионы";
+        }
+
+        if (values.length === 1) {
+          return values[0];
+        }
+
+        return String(values.length) + " регионов";
       }
 
       function getManufacturerSummaryLabel(values) {
@@ -2567,16 +2780,8 @@
           return state.activeCategoryValue || "";
         }
 
-        if (key === "region") {
-          return state.region || "Все регионы";
-        }
-
         if (key === "sort") {
-          return state.sort || "date";
-        }
-
-        if (key === "condition") {
-          return state.filters.condition[0] || "";
+          return state.sort || "recommended";
         }
 
         return state.filters[key] || "";
@@ -2584,6 +2789,14 @@
 
       function getSourceMultiValue(source, key) {
         var state = source === "full" ? fullFilterState.draft : resultsState;
+
+        if (key === "seller" || key === "currency") {
+          return state.filters[key] || [];
+        }
+
+        if (key === "region") {
+          return state.region || [];
+        }
 
         if (key === "manufacturer") {
           return state.filters.manufacturer || [];
@@ -2602,11 +2815,11 @@
 
       function getDefaultValue(key) {
         if (key === "region") {
-          return "Все регионы";
+          return [];
         }
 
         if (key === "sort") {
-          return "date";
+          return "recommended";
         }
 
         return "";
@@ -2620,17 +2833,17 @@
         }
 
         if (key === "region") {
-          state.region = data.draftValue || "Все регионы";
+          state.region = data.draftValues.slice();
           return;
         }
 
         if (key === "sort") {
-          state.sort = data.draftValue || "date";
+          state.sort = data.draftValue || "recommended";
           return;
         }
 
         if (key === "condition") {
-          state.filters.condition = data.draftValue ? [data.draftValue] : [];
+          state.filters.condition = data.draftValues.slice();
           return;
         }
 
@@ -2640,9 +2853,14 @@
         }
 
         if (key === "price") {
-          state.filters.price = data.draftValue || "";
-          state.filters.priceMin = "";
-          state.filters.priceMax = "";
+          state.filters.price = "";
+          state.filters.priceMin = data.rangeMin || "";
+          state.filters.priceMax = data.rangeMax || "";
+          return;
+        }
+
+        if (key === "seller" || key === "currency") {
+          state.filters[key] = data.draftValues.slice();
           return;
         }
 
@@ -2657,17 +2875,17 @@
         }
 
         if (key === "region") {
-          draft.region = data.draftValue || "Все регионы";
+          draft.region = data.draftValues.slice();
           return;
         }
 
         if (key === "sort") {
-          draft.sort = data.draftValue || "date";
+          draft.sort = data.draftValue || "recommended";
           return;
         }
 
         if (key === "condition") {
-          draft.filters.condition = data.draftValue ? [data.draftValue] : [];
+          draft.filters.condition = data.draftValues.slice();
           return;
         }
 
@@ -2677,17 +2895,77 @@
         }
 
         if (key === "price") {
-          draft.filters.price = data.draftValue || "";
-          draft.filters.priceMin = "";
-          draft.filters.priceMax = "";
+          draft.filters.price = "";
+          draft.filters.priceMin = data.rangeMin || "";
+          draft.filters.priceMax = data.rangeMax || "";
+          return;
+        }
+
+        if (key === "seller" || key === "currency") {
+          draft.filters[key] = data.draftValues.slice();
           return;
         }
 
         draft.filters[key] = data.draftValue || "";
       }
 
-      function setDraftSingleArray(key, value) {
-        fullFilterState.draft.filters[key] = value ? [value] : [];
+      function toggleDraftArrayValue(key, value) {
+        var collection = fullFilterState.draft.filters[key] || [];
+
+        if (collection.indexOf(value) !== -1) {
+          fullFilterState.draft.filters[key] = collection.filter(function (item) {
+            return item !== value;
+          });
+          return;
+        }
+
+        fullFilterState.draft.filters[key] = collection.concat(value);
+      }
+
+      function getCurrentRangeMin(source) {
+        var state = source === "full" ? fullFilterState.draft : resultsState;
+        return state.filters.priceMin || "";
+      }
+
+      function getCurrentRangeMax(source) {
+        var state = source === "full" ? fullFilterState.draft : resultsState;
+        return state.filters.priceMax || "";
+      }
+
+      function sanitizeRangeValue(value, minBound, maxBound) {
+        var digits = String(value || "").replace(/[^\d]/g, "");
+        var numeric = digits ? Number(digits) : 0;
+
+        if (!numeric) {
+          return "";
+        }
+
+        return String(Math.max(minBound, Math.min(maxBound, numeric)));
+      }
+
+      function clampDraftRangeFromInputs() {
+        var min = Number(fullFilterState.draft.filters.priceMin || "100");
+        var max = Number(fullFilterState.draft.filters.priceMax || "1000");
+
+        if (min > max) {
+          fullFilterState.draft.filters.priceMax = String(min);
+          filterSheetPriceMax.value = String(min);
+        }
+
+        renderFullFilterSheet();
+      }
+
+      function clampBottomsheetRange(activeThumb) {
+        var min = Number(bottomsheetState.rangeMin || bottomsheetState.rangeMinBound);
+        var max = Number(bottomsheetState.rangeMax || bottomsheetState.rangeMaxBound);
+
+        if (activeThumb === "min" && min > max) {
+          bottomsheetState.rangeMax = String(min);
+        }
+
+        if (activeThumb === "max" && max < min) {
+          bottomsheetState.rangeMin = String(max);
+        }
       }
 
       function isDraftFacetSelected(key) {

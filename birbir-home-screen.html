@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="prototype-library/birbir-prototype-library.css?v=20260413-seller-badge-center-fix">
+  <link rel="stylesheet" href="prototype-library/birbir-prototype-library.css?v=20260413-filters-v2">
 </head>
 <body>
   <!-- Icon sprite source: prototype-library/birbir-icon-sprite.html -->
@@ -783,8 +783,8 @@
                 </svg>
               </span>
             </button>
-            <h2 class="filter-sheet__title" id="filter-sheet-title">Фильтр</h2>
-            <button class="filter-sheet__reset" type="button">Сбросить</button>
+            <h2 class="filter-sheet__title" id="filter-sheet-title">Фильтры</h2>
+            <span class="filter-sheet__header-spacer" aria-hidden="true"></span>
           </div>
         </div>
 
@@ -872,16 +872,12 @@
           </section>
 
           <section class="filter-sheet__group filter-sheet__group--price">
-            <h3 class="filter-sheet__group-title">Цена</h3>
-            <div class="filter-sheet__tabs" id="filter-sheet-currency-tabs"></div>
-            <div class="filter-sheet__price-row">
-              <label class="filter-sheet__price-field">
-                <input class="filter-sheet__price-input" id="filter-sheet-price-min" type="text" inputmode="numeric" placeholder="От">
-              </label>
-              <label class="filter-sheet__price-field">
-                <input class="filter-sheet__price-input" id="filter-sheet-price-max" type="text" inputmode="numeric" placeholder="До">
-              </label>
+            <div class="filter-sheet__group-head">
+              <h3 class="filter-sheet__group-title">Цена, у.е.</h3>
+              <button class="filter-sheet__group-link filter-sheet__group-link--button" type="button" data-filter-range-reset="price">Сбросить</button>
             </div>
+            <div class="filter-sheet__tabs" id="filter-sheet-currency-tabs"></div>
+            <div class="filter-range" id="filter-sheet-price-range"></div>
           </section>
 
           <section class="filter-sheet__group">
@@ -890,8 +886,9 @@
         </div>
 
         <div class="filter-apply-bar">
-          <div class="filter-apply-bar__inner">
-            <button class="filter-apply-bar__button" type="button">Показать</button>
+          <div class="filter-apply-bar__inner filter-apply-bar__inner--dual">
+            <button class="filter-apply-bar__button filter-apply-bar__button--secondary filter-sheet__footer-reset" type="button">Сбросить</button>
+            <button class="filter-apply-bar__button filter-sheet__footer-apply" type="button">Готово</button>
           </div>
         </div>
       </div>
@@ -902,7 +899,7 @@
       <div class="filter-bottomsheet__panel" role="dialog" aria-modal="true" aria-labelledby="filter-bottomsheet-title">
         <div class="filter-bottomsheet__header">
           <div class="filter-bottomsheet__title-row">
-            <button class="filter-bottomsheet__reset" type="button">Сбросить</button>
+            <span class="filter-bottomsheet__spacer" aria-hidden="true"></span>
             <h2 class="filter-bottomsheet__title" id="filter-bottomsheet-title">Производитель</h2>
             <button class="filter-bottomsheet__close" type="button" aria-label="Закрыть выбор">
               <span class="icon-box icon-box--16 icon-color--primary" aria-hidden="true">
@@ -923,8 +920,9 @@
         </div>
         <div class="filter-bottomsheet__list"></div>
         <div class="filter-apply-bar filter-apply-bar--nested">
-          <div class="filter-apply-bar__inner">
-            <button class="filter-apply-bar__button filter-bottomsheet__apply" type="button">Применить</button>
+          <div class="filter-apply-bar__inner filter-apply-bar__inner--dual">
+            <button class="filter-apply-bar__button filter-apply-bar__button--secondary filter-bottomsheet__reset" type="button">Сбросить</button>
+            <button class="filter-apply-bar__button filter-bottomsheet__apply" type="button">Готово</button>
           </div>
         </div>
       </div>
@@ -1550,6 +1548,6 @@
     </nav>
   </div>
 
-  <script src="prototype-library/birbir-prototype-library.js?v=20260413-seller-badge-center-fix"></script>
+  <script src="prototype-library/birbir-prototype-library.js?v=20260413-filters-v2"></script>
 </body>
 </html>
