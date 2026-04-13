@@ -417,7 +417,7 @@
         var chip = event.target.closest(".chip");
         var label;
 
-        if (!chip || !chip.closest(".categories")) {
+        if (!chip || !chip.closest(".category-strip")) {
           return;
         }
 
