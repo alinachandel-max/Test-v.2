@@ -4666,7 +4666,8 @@
     }
 
     .seller-product-card__promo-row {
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 40px;
       align-items: stretch;
       gap: 6px;
       width: 100%;
@@ -4719,6 +4720,7 @@
       position: relative;
       flex: none;
       width: 40px;
+      min-width: 40px;
       padding: 0;
     }
 
