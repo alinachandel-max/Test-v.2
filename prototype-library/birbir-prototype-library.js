@@ -25,6 +25,8 @@
     };
 
     var RADIO_COMPONENT_CHECKED_SRC = "prototype-library/icon-source-svg/RadioChecked.svg";
+    var RANGE_ERROR_TEXT = 'Значение "От" должно быть меньше "До"';
+    var RANGE_WARNING_TEXT = "Очень узкий диапазон";
 
     var HOME_FEED_PHOTOS = [
       "assets/Photo/karolina-grabowska-1-6q3sT4zuA-unsplash.jpg",
@@ -1216,7 +1218,7 @@
           searchable: false,
           min: 100,
           max: 1000,
-          step: 10
+          step: 50
         },
         region: {
           title: "Регион",
@@ -1251,7 +1253,8 @@
       var resultsState = createDefaultResultsState();
       var fullFilterState = {
         isOpen: false,
-        draft: createFilterDraftFromResults(resultsState)
+        draft: createFilterDraftFromResults(resultsState),
+        initial: createFilterDraftFromResults(resultsState)
       };
       var bottomsheetState = createDefaultBottomsheetState();
       var lastScrollTop = 0;
@@ -1580,16 +1583,12 @@
           draftValue: "",
           draftValues: [],
           orderedOptions: [],
-          rangeMin: "",
-          rangeMax: "",
-          rangeMinBound: 0,
-          rangeMaxBound: 0,
-          rangeStep: 1,
-          activeThumb: ""
+          range: null
         };
       }
 
       function createFilterDraftFromResults(state) {
+        var priceConfig = BOTTOMSHEET_CONFIGS.price;
         return {
           activeCategoryLabel: state.activeCategoryLabel || "",
           activeCategoryValue: state.activeCategoryValue || "",
@@ -1607,8 +1606,122 @@
             priceMin: state.filters.priceMin || "",
             priceMax: state.filters.priceMax || "",
             delivery: (state.filters.delivery || []).slice()
-          }
+          },
+          priceRange: createRangeUiState(state.filters.priceMin, state.filters.priceMax, priceConfig)
         };
+      }
+
+      function createRangeUiState(minValue, maxValue, config) {
+        var defaultMin = Number(config.min);
+        var defaultMax = Number(config.max);
+        var step = Number(config.step || 50);
+        var min = minValue ? snapRangeValue(minValue, defaultMin, defaultMax, step) : defaultMin;
+        var max = maxValue ? snapRangeValue(maxValue, defaultMin, defaultMax, step) : defaultMax;
+
+        return {
+          min: String(min),
+          max: String(max),
+          inputMin: String(min),
+          inputMax: String(max),
+          defaultMin: String(defaultMin),
+          defaultMax: String(defaultMax),
+          initialMin: String(min),
+          initialMax: String(max),
+          minBound: defaultMin,
+          maxBound: defaultMax,
+          step: step,
+          activeThumb: "",
+          lastTouchedThumb: "max"
+        };
+      }
+
+      function cloneRangeUiState(state) {
+        return state ? {
+          min: state.min,
+          max: state.max,
+          inputMin: state.inputMin,
+          inputMax: state.inputMax,
+          defaultMin: state.defaultMin,
+          defaultMax: state.defaultMax,
+          initialMin: state.initialMin,
+          initialMax: state.initialMax,
+          minBound: state.minBound,
+          maxBound: state.maxBound,
+          step: state.step,
+          activeThumb: state.activeThumb || "",
+          lastTouchedThumb: state.lastTouchedThumb || "max"
+        } : null;
+      }
+
+      function snapRangeValue(value, minBound, maxBound, step) {
+        var numeric = Number(String(value || "").replace(/[^\d]/g, ""));
+
+        if (!numeric && numeric !== 0) {
+          return minBound;
+        }
+
+        numeric = Math.max(minBound, Math.min(maxBound, numeric));
+        return Math.round((numeric - minBound) / step) * step + minBound;
+      }
+
+      function getRangeStateFlags(rangeState) {
+        var minValue = Number(rangeState.min || rangeState.defaultMin);
+        var maxValue = Number(rangeState.max || rangeState.defaultMax);
+        var step = Number(rangeState.step || 50);
+
+        return {
+          isDefault: minValue === Number(rangeState.defaultMin) && maxValue === Number(rangeState.defaultMax),
+          isDirty: minValue !== Number(rangeState.initialMin) || maxValue !== Number(rangeState.initialMax),
+          isError: minValue >= maxValue,
+          isWarning: maxValue - minValue === step
+        };
+      }
+
+      function getRangeApplyPayload(rangeState) {
+        var minValue = Number(rangeState.min || rangeState.defaultMin);
+        var maxValue = Number(rangeState.max || rangeState.defaultMax);
+
+        if (minValue === Number(rangeState.defaultMin) && maxValue === Number(rangeState.defaultMax)) {
+          return { price: "", priceMin: "", priceMax: "" };
+        }
+
+        return {
+          price: "",
+          priceMin: String(minValue),
+          priceMax: String(maxValue)
+        };
+      }
+
+      function createDefaultDraftSnapshot() {
+        return createFilterDraftFromResults(createDefaultResultsState());
+      }
+
+      function getFilterComparableSnapshot(state) {
+        return JSON.stringify({
+          activeCategoryValue: state.activeCategoryValue || "",
+          region: (state.region || []).slice(),
+          sort: state.sort || "recommended",
+          filters: {
+            seller: (state.filters.seller || []).slice(),
+            condition: (state.filters.condition || []).slice(),
+            manufacturer: (state.filters.manufacturer || []).slice(),
+            gift: (state.filters.gift || []).slice(),
+            urgentSale: (state.filters.urgentSale || []).slice(),
+            installment: (state.filters.installment || []).slice(),
+            currency: (state.filters.currency || []).slice(),
+            priceMin: state.filters.priceMin || "",
+            priceMax: state.filters.priceMax || "",
+            delivery: (state.filters.delivery || []).slice()
+          }
+        });
+      }
+
+      function isFullFilterDraftDefault() {
+        return getFilterComparableSnapshot(fullFilterState.draft) === getFilterComparableSnapshot(createDefaultDraftSnapshot());
+      }
+
+      function isFullFilterDraftDirty() {
+        return getFilterComparableSnapshot(fullFilterState.draft) !== getFilterComparableSnapshot(fullFilterState.initial);
       }
 
       function extractSeedCardData(card) {
