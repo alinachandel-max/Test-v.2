@@ -3122,9 +3122,7 @@
         }
 
         if (key === "price") {
-          state.filters.price = "";
-          state.filters.priceMin = data.rangeMin || "";
-          state.filters.priceMax = data.rangeMax || "";
+          Object.assign(state.filters, getRangeApplyPayload(data.range));
           return;
         }
 
@@ -3164,9 +3162,8 @@
         }
 
         if (key === "price") {
-          draft.filters.price = "";
-          draft.filters.priceMin = data.rangeMin || "";
-          draft.filters.priceMax = data.rangeMax || "";
+          Object.assign(draft.filters, getRangeApplyPayload(data.range));
+          draft.priceRange = createRangeUiState(draft.filters.priceMin, draft.filters.priceMax, BOTTOMSHEET_CONFIGS.price);
           return;
         }
 
@@ -3201,39 +3198,148 @@
         return state.filters.priceMax || "";
       }
 
-      function sanitizeRangeValue(value, minBound, maxBound) {
-        var digits = String(value || "").replace(/[^\d]/g, "");
-        var numeric = digits ? Number(digits) : 0;
-
-        if (!numeric) {
-          return "";
+      function resetRangeToDefault(rangeState) {
+        if (!rangeState) {
+          return;
         }
 
-        return String(Math.max(minBound, Math.min(maxBound, numeric)));
+        rangeState.min = rangeState.defaultMin;
+        rangeState.max = rangeState.defaultMax;
+        rangeState.inputMin = rangeState.defaultMin;
+        rangeState.inputMax = rangeState.defaultMax;
+        rangeState.activeThumb = "";
       }
 
-      function clampDraftRangeFromInputs() {
-        var min = Number(fullFilterState.draft.filters.priceMin || "100");
-        var max = Number(fullFilterState.draft.filters.priceMax || "1000");
+      function handleRangeTextInput(rangeState, field, input) {
+        var nextValue = input.value;
+        var digits = sanitizeDigits(nextValue);
+        var key = field === "min" ? "inputMin" : "inputMax";
 
-        if (min > max) {
-          fullFilterState.draft.filters.priceMax = String(min);
-          filterSheetPriceMax.value = String(min);
+        if (nextValue && !digits) {
+          input.value = rangeState[key];
+          return;
         }
 
-        renderFullFilterSheet();
+        rangeState[key] = digits;
+        updateRangeFooterForState(rangeState);
       }
 
-      function clampBottomsheetRange(activeThumb) {
-        var min = Number(bottomsheetState.rangeMin || bottomsheetState.rangeMinBound);
-        var max = Number(bottomsheetState.rangeMax || bottomsheetState.rangeMaxBound);
+      function commitRangeTextInput(rangeState, field) {
+        var key = field === "min" ? "inputMin" : "inputMax";
+        var raw = rangeState[key];
+        var fallback = field === "min" ? rangeState.min : rangeState.max;
+        var snapped;
 
-        if (activeThumb === "min" && min > max) {
-          bottomsheetState.rangeMax = String(min);
+        if (!raw) {
+          rangeState[key] = fallback;
+          return;
         }
 
-        if (activeThumb === "max" && max < min) {
-          bottomsheetState.rangeMin = String(max);
+        snapped = snapRangeValue(raw, rangeState.minBound, rangeState.maxBound, rangeState.step);
+        if (field === "min") {
+          rangeState.min = String(snapped);
+          rangeState.inputMin = String(snapped);
+        } else {
+          rangeState.max = String(snapped);
+          rangeState.inputMax = String(snapped);
+        }
+        rangeState.activeThumb = "";
+      }
+
+      function updateRangeFromSlider(rangeState, field, value) {
+        var nextValue = snapRangeValue(value, rangeState.minBound, rangeState.maxBound, rangeState.step);
+        var minValue = Number(rangeState.min || rangeState.defaultMin);
+        var maxValue = Number(rangeState.max || rangeState.defaultMax);
+        var minGap = Number(rangeState.step || 50);
+
+        rangeState.activeThumb = field;
+        rangeState.lastTouchedThumb = field;
+
+        if (field === "min") {
+          minValue = Math.min(nextValue, maxValue - minGap);
+          rangeState.min = String(minValue);
+          rangeState.inputMin = String(minValue);
+        } else {
+          maxValue = Math.max(nextValue, minValue + minGap);
+          rangeState.max = String(maxValue);
+          rangeState.inputMax = String(maxValue);
+        }
+      }
+
+      function handleRangeSliderKeydown(rangeState, target, event) {
+        var field = target.getAttribute("data-range-slider") || "min";
+        var step = Number(rangeState.step || 50);
+        var delta = event.shiftKey ? step * 5 : step;
+        var nextValue;
+
+        if (event.key === "ArrowLeft" || event.key === "ArrowDown") {
+          nextValue = Number(field === "min" ? rangeState.min : rangeState.max) - delta;
+        } else if (event.key === "ArrowRight" || event.key === "ArrowUp") {
+          nextValue = Number(field === "min" ? rangeState.min : rangeState.max) + delta;
+        } else if (event.key === "Home") {
+          nextValue = field === "min" ? rangeState.minBound : Number(rangeState.min || rangeState.defaultMin) + step;
+        } else if (event.key === "End") {
+          nextValue = field === "max" ? rangeState.maxBound : Number(rangeState.max || rangeState.defaultMax) - step;
+        } else {
+          return false;
+        }
+
+        event.preventDefault();
+        updateRangeFromSlider(rangeState, field, String(nextValue));
+        return true;
+      }
+
+      function updateFullFilterFooterState() {
+        var rangeFlags = getRangeStateFlags(fullFilterState.draft.priceRange);
+
+        filterSheetReset.hidden = isFullFilterDraftDefault();
+        filterSheetApply.disabled = !isFullFilterDraftDirty() || rangeFlags.isError;
+      }
+
+      function updateBottomsheetFooterState() {
+        var isDefault = false;
+        var isDirty = false;
+        var hasError = false;
+        var rangeFlags;
+
+        if (!bottomsheetState.isOpen) {
+          filterBottomsheetReset.hidden = true;
+          filterBottomsheetApply.disabled = true;
+          return;
+        }
+
+        if (bottomsheetState.type === "range") {
+          rangeFlags = getRangeStateFlags(bottomsheetState.range);
+          isDefault = rangeFlags.isDefault;
+          isDirty = rangeFlags.isDirty;
+          hasError = rangeFlags.isError;
+        } else if (bottomsheetState.type === "multi") {
+          isDefault = bottomsheetState.draftValues.length === 0;
+          isDirty = JSON.stringify(bottomsheetState.draftValues.slice().sort()) !== JSON.stringify((getSourceMultiValue(bottomsheetState.source, bottomsheetState.key) || []).slice().sort());
+        } else {
+          isDefault = bottomsheetState.draftValue === getDefaultValue(bottomsheetState.key);
+          isDirty = bottomsheetState.draftValue !== getSourceSingleValue(bottomsheetState.source, bottomsheetState.key);
+        }
+
+        filterBottomsheetReset.hidden = isDefault;
+        filterBottomsheetApply.disabled = !isDirty || hasError;
+      }
+
+      function syncFullFilterRangeBlock() {
+        syncRangeBlock(filterSheetPriceRange, fullFilterState.draft.priceRange, "sheet-price");
+        updateFullFilterFooterState();
+      }
+
+      function syncBottomsheetRangeBlock() {
+        syncRangeBlock(filterBottomsheetList, bottomsheetState.range, "bottomsheet-price");
+        updateBottomsheetFooterState();
+      }
+
+      function updateRangeFooterForState(rangeState) {
+        if (rangeState === fullFilterState.draft.priceRange) {
+          updateFullFilterFooterState();
+        } else if (bottomsheetState.range === rangeState) {
+          updateBottomsheetFooterState();
         }
       }
 
