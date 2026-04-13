@@ -1386,6 +1386,9 @@
       filterSheetBack.addEventListener("click", closeFullFilterSheet);
       filterSheetReset.addEventListener("click", function () {
         fullFilterState.draft = createDefaultDraftSnapshot();
+        pendingChipKey = "filters";
+        applyDraftToResultsState();
+        renderResults();
         renderFullFilterSheet();
       });
       filterSheetApply.addEventListener("click", function () {
@@ -1412,6 +1415,9 @@
           } else {
             toggleDraftArrayValue("seller", sellerTab.getAttribute("data-filter-value") || "");
           }
+          applyDraftToResultsState();
+          pendingChipKey = "filters";
+          renderResults();
           renderFullFilterSheet();
           return;
         }
@@ -1422,6 +1428,9 @@
           } else {
             toggleDraftArrayValue("condition", conditionTab.getAttribute("data-filter-value") || "");
           }
+          applyDraftToResultsState();
+          pendingChipKey = "filters";
+          renderResults();
           renderFullFilterSheet();
           return;
         }
@@ -1432,12 +1441,18 @@
           } else {
             fullFilterState.draft.filters.currency = [currencyTab.getAttribute("data-filter-value") || ""];
           }
+          applyDraftToResultsState();
+          pendingChipKey = "filters";
+          renderResults();
           renderFullFilterSheet();
           return;
         }
 
         if (toggleRow && filterSheet.contains(toggleRow)) {
           toggleDraftFacet(toggleRow.getAttribute("data-filter-sheet-toggle"));
+          applyDraftToResultsState();
+          pendingChipKey = "filters";
+          renderResults();
           renderFullFilterSheet();
         }
       });
@@ -1456,12 +1471,18 @@
 
         if (target.matches("[data-range-slider='min'][data-range-prefix='sheet-price']")) {
           updateRangeFromSlider(fullFilterState.draft.priceRange, "min", target.value);
+          applyDraftToResultsState();
+          pendingChipKey = "filters";
+          renderResults();
           syncFullFilterRangeBlock();
           return;
         }
 
         if (target.matches("[data-range-slider='max'][data-range-prefix='sheet-price']")) {
           updateRangeFromSlider(fullFilterState.draft.priceRange, "max", target.value);
+          applyDraftToResultsState();
+          pendingChipKey = "filters";
+          renderResults();
           syncFullFilterRangeBlock();
         }
       });
@@ -1479,6 +1500,9 @@
 
         if (target.matches("[data-range-input][data-range-prefix='sheet-price']")) {
           commitRangeTextInput(fullFilterState.draft.priceRange, target.getAttribute("data-range-input") || "");
+          applyDraftToResultsState();
+          pendingChipKey = "filters";
+          renderResults();
           syncFullFilterRangeBlock();
           return;
         }
@@ -1518,22 +1542,42 @@
 
         if (target.matches("[data-range-input='min'][data-range-prefix='bottomsheet-price']")) {
           handleRangeTextInput(bottomsheetState.range, "min", target);
+          if (bottomsheetState.source === "results") {
+            assignToState(resultsState, bottomsheetState.key, bottomsheetState);
+            pendingChipKey = bottomsheetState.key;
+            renderResults();
+          }
           return;
         }
 
         if (target.matches("[data-range-input='max'][data-range-prefix='bottomsheet-price']")) {
           handleRangeTextInput(bottomsheetState.range, "max", target);
+          if (bottomsheetState.source === "results") {
+            assignToState(resultsState, bottomsheetState.key, bottomsheetState);
+            pendingChipKey = bottomsheetState.key;
+            renderResults();
+          }
           return;
         }
 
         if (target.matches("[data-range-slider='min'][data-range-prefix='bottomsheet-price']")) {
           updateRangeFromSlider(bottomsheetState.range, "min", target.value);
+          if (bottomsheetState.source === "results") {
+            assignToState(resultsState, bottomsheetState.key, bottomsheetState);
+            pendingChipKey = bottomsheetState.key;
+            renderResults();
+          }
           syncBottomsheetRangeBlock();
           return;
         }
 
         if (target.matches("[data-range-slider='max'][data-range-prefix='bottomsheet-price']")) {
           updateRangeFromSlider(bottomsheetState.range, "max", target.value);
+          if (bottomsheetState.source === "results") {
+            assignToState(resultsState, bottomsheetState.key, bottomsheetState);
+            pendingChipKey = bottomsheetState.key;
+            renderResults();
+          }
           syncBottomsheetRangeBlock();
         }
       });
@@ -1551,6 +1595,16 @@
 
         if (target.matches("[data-range-input][data-range-prefix='bottomsheet-price']")) {
           commitRangeTextInput(bottomsheetState.range, target.getAttribute("data-range-input") || "");
+          if (bottomsheetState.source === "results") {
+            assignToState(resultsState, bottomsheetState.key, bottomsheetState);
+            pendingChipKey = bottomsheetState.key;
+            renderResults();
+          } else if (bottomsheetState.source === "full") {
+            assignToDraft(fullFilterState.draft, bottomsheetState.key, bottomsheetState);
+            pendingChipKey = "filters";
+            applyDraftToResultsState();
+            renderResults();
+          }
           syncBottomsheetRangeBlock();
           return;
         }
@@ -1597,6 +1651,17 @@
           }
         } else if (bottomsheetState.type === "single") {
           bottomsheetState.draftValue = value;
+        }
+
+        if (bottomsheetState.source === "results") {
+          assignToState(resultsState, bottomsheetState.key, bottomsheetState);
+          pendingChipKey = bottomsheetState.key;
+          renderResults();
+        } else if (bottomsheetState.source === "full") {
+          assignToDraft(fullFilterState.draft, bottomsheetState.key, bottomsheetState);
+          pendingChipKey = "filters";
+          applyDraftToResultsState();
+          renderResults();
         }
 
         renderBottomsheetList();
@@ -2128,9 +2193,15 @@
       }
 
       function renderFeed(visibleItems) {
+        var shouldShowEmptyState = visibleItems.length === 0 && getNonCategoryActiveCount() > 3;
         var items = visibleItems.length ? visibleItems.slice(0, 30) : resultItems.slice(0, 30);
         var markup = [];
         var usedIds = {};
+
+        if (shouldShowEmptyState) {
+          feedGrid.innerHTML = renderResultsEmptyState();
+          return;
+        }
 
         items.forEach(function (item) {
           usedIds[item.id] = true;
@@ -2155,6 +2226,28 @@
         });
 
         feedGrid.innerHTML = markup.join("");
+      }
+
+      function renderResultsEmptyState() {
+        var recommendations = resultItems.slice(0, 6);
+
+        return [
+          '<section class="results-empty" aria-label="Пустая выдача">',
+          '<div class="results-empty__card">',
+          '<span class="results-empty__icon icon-box icon-box--24" aria-hidden="true"><img class="seller-icon-img" src="prototype-library/icon-source-svg/BoxFill.svg" alt=""></span>',
+          '<p class="results-empty__title">Мы не нашли то, что вы искали</p>',
+          '<p class="results-empty__text">Попробуйте изменить поисковый запрос или расширьте радиус поиска</p>',
+          '</div>',
+          '<section class="results-recommendations" aria-label="Вам может понравиться">',
+          '<h2 class="results-recommendations__title">Вам может понравиться</h2>',
+          '<div class="results-recommendations__grid">',
+          recommendations.map(function (item) {
+            return renderResultsCard(item);
+          }).join(""),
+          '</div>',
+          '</section>',
+          '</section>'
+        ].join("");
       }
 
       function renderResultsBanner() {
@@ -2612,11 +2705,7 @@
 
       function applyFullFilterSheet() {
         Object.assign(fullFilterState.draft.filters, getRangeApplyPayload(fullFilterState.draft.priceRange));
-        resultsState.activeCategoryLabel = fullFilterState.draft.activeCategoryLabel;
-        resultsState.activeCategoryValue = fullFilterState.draft.activeCategoryValue;
-        resultsState.region = fullFilterState.draft.region.slice();
-        resultsState.sort = fullFilterState.draft.sort;
-        resultsState.filters = createFilterDraftFromResults({ activeCategoryLabel: "", activeCategoryValue: "", region: [], sort: "", filters: fullFilterState.draft.filters }).filters;
+        applyDraftToResultsState();
         pendingChipKey = "filters";
         closeFullFilterSheet({ silent: true });
         renderResults();
@@ -2697,6 +2786,17 @@
           bottomsheetState.draftValues = [];
         } else {
           bottomsheetState.draftValue = getDefaultValue(bottomsheetState.key);
+        }
+
+        if (bottomsheetState.source === "results") {
+          assignToState(resultsState, bottomsheetState.key, bottomsheetState);
+          pendingChipKey = bottomsheetState.key;
+          renderResults();
+        } else if (bottomsheetState.source === "full") {
+          assignToDraft(fullFilterState.draft, bottomsheetState.key, bottomsheetState);
+          pendingChipKey = "filters";
+          applyDraftToResultsState();
+          renderResults();
         }
 
         renderBottomsheet();
@@ -3356,6 +3456,25 @@
         } else if (bottomsheetState.range === rangeState) {
           updateBottomsheetFooterState();
         }
+      }
+
+      function applyDraftToResultsState() {
+        Object.assign(fullFilterState.draft.filters, getRangeApplyPayload(fullFilterState.draft.priceRange));
+        resultsState.activeCategoryLabel = fullFilterState.draft.activeCategoryLabel;
+        resultsState.activeCategoryValue = fullFilterState.draft.activeCategoryValue;
+        resultsState.region = fullFilterState.draft.region.slice();
+        resultsState.sort = fullFilterState.draft.sort;
+        resultsState.filters.seller = (fullFilterState.draft.filters.seller || []).slice();
+        resultsState.filters.condition = (fullFilterState.draft.filters.condition || []).slice();
+        resultsState.filters.manufacturer = (fullFilterState.draft.filters.manufacturer || []).slice();
+        resultsState.filters.gift = (fullFilterState.draft.filters.gift || []).slice();
+        resultsState.filters.urgentSale = (fullFilterState.draft.filters.urgentSale || []).slice();
+        resultsState.filters.installment = (fullFilterState.draft.filters.installment || []).slice();
+        resultsState.filters.currency = (fullFilterState.draft.filters.currency || []).slice();
+        resultsState.filters.delivery = (fullFilterState.draft.filters.delivery || []).slice();
+        resultsState.filters.price = fullFilterState.draft.filters.price || "";
+        resultsState.filters.priceMin = fullFilterState.draft.filters.priceMin || "";
+        resultsState.filters.priceMax = fullFilterState.draft.filters.priceMax || "";
       }
 
       function isDraftFacetSelected(key) {

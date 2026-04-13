@@ -326,7 +326,7 @@
     }
 
     .screen {
-      padding-bottom: calc(107px + var(--safe-bottom));
+      padding-bottom: calc(95px + var(--safe-bottom));
     }
 
     .scroll-row {
@@ -780,7 +780,7 @@
       overscroll-behavior-y: contain;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
-      padding-bottom: calc(93px + var(--safe-bottom));
+      padding-bottom: calc(81px + var(--safe-bottom));
     }
 
     .search-results__scroller::-webkit-scrollbar {
@@ -916,7 +916,8 @@
       flex-direction: column;
       gap: 4px;
       border-radius: 16px;
-      overflow: hidden;
+      margin-inline: -16px;
+      overflow: visible;
     }
 
     .results-filter-scroll {
@@ -925,7 +926,6 @@
       scrollbar-width: none;
       -ms-overflow-style: none;
       padding: 0 16px;
-      box-sizing: border-box;
     }
 
     .results-filter-scroll::-webkit-scrollbar {
@@ -1312,6 +1312,78 @@
       min-width: 0;
     }
 
+    .results-empty {
+      display: flex;
+      grid-column: 1 / -1;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .results-empty__card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      min-height: 236px;
+      padding: 40px 20px;
+      border-radius: 16px;
+      background: #ffffff;
+      text-align: center;
+    }
+
+    .results-empty__icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: #f7f7f7;
+    }
+
+    .results-empty__title,
+    .results-empty__text,
+    .results-recommendations__title {
+      margin: 0;
+    }
+
+    .results-empty__title {
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+    }
+
+    .results-empty__text {
+      max-width: 258px;
+      color: var(--muted);
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 17px;
+    }
+
+    .results-recommendations {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .results-recommendations__title {
+      color: var(--text);
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+    }
+
+    .results-recommendations__grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, calc((100% - 8px) / 2)));
+      gap: 24px 8px;
+      align-items: start;
+    }
+
     .results-banner {
       position: relative;
       grid-column: 1 / -1;
@@ -1474,24 +1546,25 @@
       touch-action: none;
     }
 
+    .filter-sheet__backdrop {
+      display: none;
+      background: transparent;
+      pointer-events: none;
+    }
+
     .filter-sheet__panel {
-      position: absolute;
+      position: fixed;
       inset: 0;
       display: flex;
       flex-direction: column;
       min-height: 0;
       background: #f2f2f2;
-      border-top-left-radius: 24px;
-      border-top-right-radius: 24px;
+      border-radius: 0;
       overflow: hidden;
-      transform: translateY(24px);
-      transition: transform 220ms ease;
+      transform: none;
+      transition: none;
       pointer-events: auto;
       overscroll-behavior: contain;
-    }
-
-    .filter-sheet.is-open .filter-sheet__panel {
-      transform: translateY(0);
     }
 
     .filter-bottomsheet__panel {
@@ -1805,7 +1878,7 @@
     .filter-range {
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 0;
       width: 100%;
     }
 
@@ -1866,7 +1939,8 @@
     .filter-range__slider {
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 4px;
+      margin-top: 4px;
       width: 100%;
     }
 
@@ -1966,7 +2040,7 @@
 
     .filter-range__bubble {
       position: absolute;
-      top: -4px;
+      top: 4px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -4189,7 +4263,7 @@
       bottom: 0;
       z-index: 50;
       width: 100%;
-      height: calc(91px + var(--safe-bottom));
+      height: calc(79px + var(--safe-bottom));
       border-top: 1px solid var(--tab-border);
       background: #ffffff;
     }
