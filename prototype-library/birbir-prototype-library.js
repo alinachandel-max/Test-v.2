@@ -1724,6 +1724,8 @@
           type: "single",
           searchable: true,
           searchQuery: "",
+          initialDraftValue: "",
+          initialDraftValues: [],
           draftValue: "",
           draftValues: [],
           orderedOptions: [],
@@ -2730,9 +2732,11 @@
         if (config.type === "range") {
           bottomsheetState.range = createRangeUiState(getCurrentRangeMin(source), getCurrentRangeMax(source), config);
         } else if (config.type === "multi") {
-          bottomsheetState.draftValues = getSourceMultiValue(source, key).slice();
+          bottomsheetState.initialDraftValues = getSourceMultiValue(source, key).slice();
+          bottomsheetState.draftValues = bottomsheetState.initialDraftValues.slice();
         } else {
-          bottomsheetState.draftValue = getSourceSingleValue(source, key);
+          bottomsheetState.initialDraftValue = getSourceSingleValue(source, key);
+          bottomsheetState.draftValue = bottomsheetState.initialDraftValue;
         }
 
         renderBottomsheet();
@@ -3430,10 +3434,10 @@
           hasError = rangeFlags.isError;
         } else if (bottomsheetState.type === "multi") {
           isDefault = bottomsheetState.draftValues.length === 0;
-          isDirty = JSON.stringify(bottomsheetState.draftValues.slice().sort()) !== JSON.stringify((getSourceMultiValue(bottomsheetState.source, bottomsheetState.key) || []).slice().sort());
+          isDirty = JSON.stringify(bottomsheetState.draftValues.slice().sort()) !== JSON.stringify((bottomsheetState.initialDraftValues || []).slice().sort());
         } else {
           isDefault = bottomsheetState.draftValue === getDefaultValue(bottomsheetState.key);
-          isDirty = bottomsheetState.draftValue !== getSourceSingleValue(bottomsheetState.source, bottomsheetState.key);
+          isDirty = bottomsheetState.draftValue !== bottomsheetState.initialDraftValue;
         }
 
         filterBottomsheetReset.hidden = isDefault;

@@ -1072,6 +1072,8 @@
       gap: 12px;
       width: 100%;
       height: 28px;
+      padding: 0 16px;
+      box-sizing: border-box;
       overflow: hidden;
       transition: max-height 180ms ease, opacity 180ms ease, margin 180ms ease;
     }
@@ -1572,7 +1574,7 @@
       left: 0;
       right: 0;
       top: 49px;
-      bottom: auto;
+      bottom: 0;
       display: flex;
       flex-direction: column;
       height: auto;
@@ -1599,8 +1601,10 @@
     }
 
     .filter-sheet__header {
-      padding: calc(48px + var(--safe-top)) 16px 8px;
+      padding: calc(24px + var(--safe-top)) 16px 8px;
       background: #ffffff;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
       border-bottom-left-radius: 16px;
       border-bottom-right-radius: 16px;
     }
@@ -1946,7 +1950,7 @@
 
     .filter-range__track {
       position: relative;
-      height: 44px;
+      height: 40px;
       width: 100%;
       overflow: visible;
     }
@@ -1955,7 +1959,7 @@
       position: absolute;
       left: 16px;
       right: 16px;
-      top: 20.5px;
+      top: 18.5px;
       height: 3px;
       border-radius: 4px;
       background: #e0e0e0;
@@ -1964,7 +1968,7 @@
 
     .filter-range__fill {
       position: absolute;
-      top: 20.5px;
+      top: 18.5px;
       height: 3px;
       border-radius: 4px;
       background: var(--accent);
@@ -1974,9 +1978,9 @@
       position: absolute;
       left: 16px;
       right: 16px;
-      top: -6px;
+      top: -14px;
       width: auto;
-      height: 56px;
+      height: 72px;
       margin: 0;
       background: transparent;
       pointer-events: none;
@@ -1985,8 +1989,8 @@
     }
 
     .filter-range__native::-webkit-slider-thumb {
-      width: 56px;
-      height: 56px;
+      width: 72px;
+      height: 72px;
       border: 0;
       border-radius: 50%;
       background: transparent;
@@ -1999,8 +2003,8 @@
     }
 
     .filter-range__native::-moz-range-thumb {
-      width: 56px;
-      height: 56px;
+      width: 72px;
+      height: 72px;
       border: 0;
       border-radius: 50%;
       background: transparent;
@@ -2020,7 +2024,7 @@
 
     .filter-range__thumb {
       position: absolute;
-      top: 8px;
+      top: 6px;
       width: 28px;
       height: 28px;
       border-radius: 50%;
