@@ -1385,10 +1385,14 @@
       filterSheetBackdrop.addEventListener("click", closeFullFilterSheet);
       filterSheetBack.addEventListener("click", closeFullFilterSheet);
       filterSheetReset.addEventListener("click", function () {
-        fullFilterState.draft = createFilterDraftFromResults(createDefaultResultsState());
+        fullFilterState.draft = createDefaultDraftSnapshot();
         renderFullFilterSheet();
       });
-      filterSheetApply.addEventListener("click", applyFullFilterSheet);
+      filterSheetApply.addEventListener("click", function () {
+        if (!filterSheetApply.disabled) {
+          applyFullFilterSheet();
+        }
+      });
 
       filterSheet.addEventListener("click", function (event) {
         var button = event.target.closest("[data-filter-sheet-open]");
@@ -1396,18 +1400,9 @@
         var conditionTab = event.target.closest('[data-filter-sheet-tab="condition"]');
         var currencyTab = event.target.closest('[data-filter-sheet-tab="currency"]');
         var toggleRow = event.target.closest("[data-filter-sheet-toggle]");
-        var rangeReset = event.target.closest("[data-filter-range-reset]");
 
         if (button && filterSheet.contains(button)) {
           openBottomsheet(button.getAttribute("data-filter-sheet-open"), "full");
-          return;
-        }
-
-        if (rangeReset && filterSheet.contains(rangeReset)) {
-          fullFilterState.draft.filters.price = "";
-          fullFilterState.draft.filters.priceMin = "";
-          fullFilterState.draft.filters.priceMax = "";
-          renderFullFilterSheet();
           return;
         }
 
@@ -1442,40 +1437,68 @@
           renderFullFilterSheet();
         }
       });
-
-      filterSheetPriceMin.addEventListener("input", function () {
-        fullFilterState.draft.filters.priceMin = sanitizeRangeValue(filterSheetPriceMin.value, 100, 1000);
-        clampDraftRangeFromInputs();
-      });
-
-      filterSheetPriceMax.addEventListener("input", function () {
-        fullFilterState.draft.filters.priceMax = sanitizeRangeValue(filterSheetPriceMax.value, 100, 1000);
-        clampDraftRangeFromInputs();
-      });
       filterSheet.addEventListener("input", function (event) {
         var target = event.target;
 
         if (target.matches("[data-range-input='min'][data-range-prefix='sheet-price']")) {
-          fullFilterState.draft.filters.priceMin = sanitizeRangeValue(target.value, 100, 1000);
-          clampDraftRangeFromInputs();
+          handleRangeTextInput(fullFilterState.draft.priceRange, "min", target);
           return;
         }
 
         if (target.matches("[data-range-input='max'][data-range-prefix='sheet-price']")) {
-          fullFilterState.draft.filters.priceMax = sanitizeRangeValue(target.value, 100, 1000);
-          clampDraftRangeFromInputs();
+          handleRangeTextInput(fullFilterState.draft.priceRange, "max", target);
           return;
         }
 
         if (target.matches("[data-range-slider='min'][data-range-prefix='sheet-price']")) {
-          fullFilterState.draft.filters.priceMin = sanitizeRangeValue(target.value, 100, 1000);
-          clampDraftRangeFromInputs();
+          updateRangeFromSlider(fullFilterState.draft.priceRange, "min", target.value);
+          syncFullFilterRangeBlock();
           return;
         }
 
         if (target.matches("[data-range-slider='max'][data-range-prefix='sheet-price']")) {
-          fullFilterState.draft.filters.priceMax = sanitizeRangeValue(target.value, 100, 1000);
-          clampDraftRangeFromInputs();
+          updateRangeFromSlider(fullFilterState.draft.priceRange, "max", target.value);
+          syncFullFilterRangeBlock();
+        }
+      });
+      filterSheet.addEventListener("focusin", function (event) {
+        var target = event.target;
+
+        if (target.matches("[data-range-slider][data-range-prefix='sheet-price']")) {
+          fullFilterState.draft.priceRange.activeThumb = target.getAttribute("data-range-slider") || "";
+          fullFilterState.draft.priceRange.lastTouchedThumb = fullFilterState.draft.priceRange.activeThumb;
+          syncFullFilterRangeBlock();
+        }
+      });
+      filterSheet.addEventListener("focusout", function (event) {
+        var target = event.target;
+
+        if (target.matches("[data-range-input][data-range-prefix='sheet-price']")) {
+          commitRangeTextInput(fullFilterState.draft.priceRange, target.getAttribute("data-range-input") || "");
+          syncFullFilterRangeBlock();
+          return;
+        }
+
+        if (target.matches("[data-range-slider][data-range-prefix='sheet-price']")) {
+          fullFilterState.draft.priceRange.activeThumb = "";
+          syncFullFilterRangeBlock();
+        }
+      });
+      filterSheet.addEventListener("change", function (event) {
+        var target = event.target;
+
+        if (target.matches("[data-range-slider][data-range-prefix='sheet-price']")) {
+          fullFilterState.draft.priceRange.activeThumb = "";
+          syncFullFilterRangeBlock();
+        }
+      });
+      filterSheet.addEventListener("keydown", function (event) {
+        var target = event.target;
+
+        if (target.matches("[data-range-slider][data-range-prefix='sheet-price']")) {
+          if (handleRangeSliderKeydown(fullFilterState.draft.priceRange, target, event)) {
+            syncFullFilterRangeBlock();
+          }
         }
       });
 
@@ -1488,37 +1511,66 @@
       });
       filterBottomsheetList.addEventListener("input", function (event) {
         var target = event.target;
-        var value;
 
-        if (target.matches("[data-range-input='min']")) {
-          bottomsheetState.rangeMin = sanitizeRangeValue(target.value, bottomsheetState.rangeMinBound, bottomsheetState.rangeMaxBound);
-          clampBottomsheetRange("min");
-          renderBottomsheetList();
+        if (target.matches("[data-range-input='min'][data-range-prefix='bottomsheet-price']")) {
+          handleRangeTextInput(bottomsheetState.range, "min", target);
           return;
         }
 
-        if (target.matches("[data-range-input='max']")) {
-          bottomsheetState.rangeMax = sanitizeRangeValue(target.value, bottomsheetState.rangeMinBound, bottomsheetState.rangeMaxBound);
-          clampBottomsheetRange("max");
-          renderBottomsheetList();
+        if (target.matches("[data-range-input='max'][data-range-prefix='bottomsheet-price']")) {
+          handleRangeTextInput(bottomsheetState.range, "max", target);
           return;
         }
 
-        if (target.matches("[data-range-slider='min']")) {
-          value = target.value;
-          bottomsheetState.rangeMin = sanitizeRangeValue(value, bottomsheetState.rangeMinBound, bottomsheetState.rangeMaxBound);
-          bottomsheetState.activeThumb = "min";
-          clampBottomsheetRange("min");
-          renderBottomsheetList();
+        if (target.matches("[data-range-slider='min'][data-range-prefix='bottomsheet-price']")) {
+          updateRangeFromSlider(bottomsheetState.range, "min", target.value);
+          syncBottomsheetRangeBlock();
           return;
         }
 
-        if (target.matches("[data-range-slider='max']")) {
-          value = target.value;
-          bottomsheetState.rangeMax = sanitizeRangeValue(value, bottomsheetState.rangeMinBound, bottomsheetState.rangeMaxBound);
-          bottomsheetState.activeThumb = "max";
-          clampBottomsheetRange("max");
-          renderBottomsheetList();
+        if (target.matches("[data-range-slider='max'][data-range-prefix='bottomsheet-price']")) {
+          updateRangeFromSlider(bottomsheetState.range, "max", target.value);
+          syncBottomsheetRangeBlock();
+        }
+      });
+      filterBottomsheetList.addEventListener("focusin", function (event) {
+        var target = event.target;
+
+        if (target.matches("[data-range-slider][data-range-prefix='bottomsheet-price']")) {
+          bottomsheetState.range.activeThumb = target.getAttribute("data-range-slider") || "";
+          bottomsheetState.range.lastTouchedThumb = bottomsheetState.range.activeThumb;
+          syncBottomsheetRangeBlock();
+        }
+      });
+      filterBottomsheetList.addEventListener("focusout", function (event) {
+        var target = event.target;
+
+        if (target.matches("[data-range-input][data-range-prefix='bottomsheet-price']")) {
+          commitRangeTextInput(bottomsheetState.range, target.getAttribute("data-range-input") || "");
+          syncBottomsheetRangeBlock();
+          return;
+        }
+
+        if (target.matches("[data-range-slider][data-range-prefix='bottomsheet-price']")) {
+          bottomsheetState.range.activeThumb = "";
+          syncBottomsheetRangeBlock();
+        }
+      });
+      filterBottomsheetList.addEventListener("change", function (event) {
+        var target = event.target;
+
+        if (target.matches("[data-range-slider][data-range-prefix='bottomsheet-price']")) {
+          bottomsheetState.range.activeThumb = "";
+          syncBottomsheetRangeBlock();
+        }
+      });
+      filterBottomsheetList.addEventListener("keydown", function (event) {
+        var target = event.target;
+
+        if (target.matches("[data-range-slider][data-range-prefix='bottomsheet-price']")) {
+          if (handleRangeSliderKeydown(bottomsheetState.range, target, event)) {
+            syncBottomsheetRangeBlock();
+          }
         }
       });
       filterBottomsheetList.addEventListener("click", function (event) {
@@ -1545,7 +1597,30 @@
 
         renderBottomsheetList();
       });
-      filterBottomsheetApply.addEventListener("click", applyBottomsheet);
+      filterBottomsheetApply.addEventListener("click", function () {
+        if (!filterBottomsheetApply.disabled) {
+          applyBottomsheet();
+        }
+      });
+      document.addEventListener("keydown", function (event) {
+        if (event.key !== "Escape") {
+          return;
+        }
+
+        if (filterBottomsheet.classList.contains("is-open")) {
+          closeBottomsheet();
+          return;
+        }
+
+        if (categorySheet.classList.contains("is-open")) {
+          closeCategorySheet();
+          return;
+        }
+
+        if (filterSheet.classList.contains("is-open")) {
+          closeFullFilterSheet();
+        }
+      });
 
       function createDefaultResultsState() {
         return {
@@ -2190,6 +2265,11 @@
           { label: "В сумах", value: "UZS" },
           { label: "В у.е.", value: "USD" }
         ];
+        var rangeState = fullFilterState.draft.priceRange || createRangeUiState(fullFilterState.draft.filters.priceMin, fullFilterState.draft.filters.priceMax, BOTTOMSHEET_CONFIGS.price);
+        var rangeFlags;
+
+        fullFilterState.draft.priceRange = rangeState;
+        rangeFlags = getRangeStateFlags(rangeState);
 
         filterSheet.classList.toggle("is-open", fullFilterState.isOpen);
         filterSheet.setAttribute("aria-hidden", fullFilterState.isOpen ? "false" : "true");
@@ -2207,19 +2287,13 @@
         filterSheetCurrencyTabs.innerHTML = currencyTabs.map(function (tab) {
           return renderSheetTab(tab.label, tab.value, fullFilterState.draft.filters.currency.indexOf(tab.value) !== -1, "currency");
         }).join("");
-        filterSheetPriceMin.value = fullFilterState.draft.filters.priceMin;
-        filterSheetPriceMax.value = fullFilterState.draft.filters.priceMax;
-        filterSheetPriceRange.innerHTML = renderRangeBlockMarkup(
-          "sheet-price",
-          fullFilterState.draft.filters.priceMin || "100",
-          fullFilterState.draft.filters.priceMax || "1000",
-          100,
-          1000,
-          ""
-        );
+        filterSheetPriceRange.innerHTML = renderRangeBlockMarkup("sheet-price");
+        syncRangeBlock(filterSheetPriceRange, rangeState, "sheet-price");
         filterSheetToggleList.innerHTML = TOGGLE_FILTER_KEYS.map(function (key) {
           return renderSheetToggleRow(key, isDraftFacetSelected(key));
         }).join("");
+        filterSheetReset.hidden = isFullFilterDraftDefault();
+        filterSheetApply.disabled = !isFullFilterDraftDirty() || rangeFlags.isError;
       }
 
       function renderSheetTab(label, value, isSelected, group) {
@@ -2251,66 +2325,156 @@
         ].join("");
       }
 
-      function renderRangeBlockMarkup(prefix, minValue, maxValue, minBound, maxBound, activeThumb) {
-        var min = Number(minValue || minBound);
-        var max = Number(maxValue || maxBound);
-        var startPercent = ((min - minBound) / (maxBound - minBound)) * 100;
-        var endPercent = ((max - minBound) / (maxBound - minBound)) * 100;
-
+      function renderRangeBlockMarkup(prefix) {
         return [
           '<div class="filter-range__inputs">',
-          '<label class="filter-sheet__price-field"><input class="filter-sheet__price-input" type="text" inputmode="numeric" value="',
-          escapeHtml(String(min)),
-          '" data-range-input="min" data-range-prefix="',
+          '<label class="filter-sheet__price-field"><input class="filter-sheet__price-input" type="text" inputmode="numeric" data-range-input="min" data-range-prefix="',
           escapeHtml(prefix),
           '" placeholder="От"></label>',
-          '<label class="filter-sheet__price-field"><input class="filter-sheet__price-input" type="text" inputmode="numeric" value="',
-          escapeHtml(String(max)),
-          '" data-range-input="max" data-range-prefix="',
+          '<label class="filter-sheet__price-field"><input class="filter-sheet__price-input" type="text" inputmode="numeric" data-range-input="max" data-range-prefix="',
           escapeHtml(prefix),
           '" placeholder="До"></label>',
           '</div>',
+          '<p class="filter-range__message" hidden></p>',
           '<div class="filter-range__slider">',
           '<div class="filter-range__track">',
-          '<div class="filter-range__fill" style="left:',
-          String(startPercent),
-          '%;width:',
-          String(Math.max(0, endPercent - startPercent)),
-          '%;"></div>',
-          activeThumb === "min" ? '<span class="filter-range__bubble" style="left:' + String(startPercent) + '%;">' + escapeHtml(String(min)) + "</span>" : "",
-          '<span class="filter-range__thumb" style="left:',
-          String(startPercent),
-          '%;"></span>',
-          activeThumb === "max" ? '<span class="filter-range__bubble" style="left:' + String(endPercent) + '%;">' + escapeHtml(String(max)) + "</span>" : "",
-          '<span class="filter-range__thumb" style="left:',
-          String(endPercent),
-          '%;"></span>',
-          '<input class="filter-range__native" type="range" min="',
-          String(minBound),
-          '" max="',
-          String(maxBound),
-          '" step="10" value="',
-          escapeHtml(String(min)),
-          '" data-range-slider="min" data-range-prefix="',
+          '<div class="filter-range__fill" data-range-role="fill"></div>',
+          '<span class="filter-range__bubble" data-range-role="bubble-min" hidden></span>',
+          '<span class="filter-range__thumb" data-range-role="thumb-min"></span>',
+          '<span class="filter-range__bubble" data-range-role="bubble-max" hidden></span>',
+          '<span class="filter-range__thumb" data-range-role="thumb-max"></span>',
+          '<input class="filter-range__native filter-range__native--min" type="range" data-range-slider="min" data-range-prefix="',
           escapeHtml(prefix),
           '">',
-          '<input class="filter-range__native" type="range" min="',
-          String(minBound),
-          '" max="',
-          String(maxBound),
-          '" step="10" value="',
-          escapeHtml(String(max)),
-          '" data-range-slider="max" data-range-prefix="',
+          '<input class="filter-range__native filter-range__native--max" type="range" data-range-slider="max" data-range-prefix="',
           escapeHtml(prefix),
           '">',
           '</div>',
-          '<div class="filter-range__labels"><span>',
-          escapeHtml(String(minBound)),
-          '</span><span>',
-          escapeHtml(String(maxBound)),
+          '<div class="filter-range__labels"><span data-range-role="label-min"></span><span data-range-role="label-max"></span>',
           "</span></div>",
           "</div>"
         ].join("");
+      }
+
+      function syncRangeBlock(root, rangeState, prefix) {
+        var minInput;
+        var maxInput;
+        var minSlider;
+        var maxSlider;
+        var fill;
+        var thumbMin;
+        var thumbMax;
+        var bubbleMin;
+        var bubbleMax;
+        var labelMin;
+        var labelMax;
+        var message;
+        var flags;
+        var minValue;
+        var maxValue;
+        var startPercent;
+        var endPercent;
+        var fillLeft;
+        var fillWidth;
+
+        if (!root || !rangeState) {
+          return;
+        }
+
+        minInput = root.querySelector('[data-range-input="min"][data-range-prefix="' + prefix + '"]');
+        maxInput = root.querySelector('[data-range-input="max"][data-range-prefix="' + prefix + '"]');
+        minSlider = root.querySelector('[data-range-slider="min"][data-range-prefix="' + prefix + '"]');
+        maxSlider = root.querySelector('[data-range-slider="max"][data-range-prefix="' + prefix + '"]');
+        fill = root.querySelector('[data-range-role="fill"]');
+        thumbMin = root.querySelector('[data-range-role="thumb-min"]');
+        thumbMax = root.querySelector('[data-range-role="thumb-max"]');
+        bubbleMin = root.querySelector('[data-range-role="bubble-min"]');
+        bubbleMax = root.querySelector('[data-range-role="bubble-max"]');
+        labelMin = root.querySelector('[data-range-role="label-min"]');
+        labelMax = root.querySelector('[data-range-role="label-max"]');
+        message = root.querySelector(".filter-range__message");
+        flags = getRangeStateFlags(rangeState);
+        minValue = Number(rangeState.min || rangeState.defaultMin);
+        maxValue = Number(rangeState.max || rangeState.defaultMax);
+        startPercent = ((minValue - rangeState.minBound) / (rangeState.maxBound - rangeState.minBound)) * 100;
+        endPercent = ((maxValue - rangeState.minBound) / (rangeState.maxBound - rangeState.minBound)) * 100;
+        fillLeft = Math.min(startPercent, endPercent);
+        fillWidth = Math.max(0, Math.abs(endPercent - startPercent));
+
+        if (minInput) {
+          minInput.value = rangeState.inputMin;
+          minInput.classList.toggle("is-error", flags.isError);
+        }
+
+        if (maxInput) {
+          maxInput.value = rangeState.inputMax;
+          maxInput.classList.toggle("is-error", flags.isError);
+        }
+
+        if (minSlider) {
+          minSlider.min = String(rangeState.minBound);
+          minSlider.max = String(rangeState.maxBound);
+          minSlider.step = String(rangeState.step);
+          minSlider.value = String(minValue);
+          minSlider.style.zIndex = rangeState.lastTouchedThumb === "min" ? "3" : "2";
+        }
+
+        if (maxSlider) {
+          maxSlider.min = String(rangeState.minBound);
+          maxSlider.max = String(rangeState.maxBound);
+          maxSlider.step = String(rangeState.step);
+          maxSlider.value = String(maxValue);
+          maxSlider.style.zIndex = rangeState.lastTouchedThumb === "max" ? "3" : "2";
+        }
+
+        if (fill) {
+          fill.style.left = fillLeft + "%";
+          fill.style.width = fillWidth + "%";
+        }
+
+        if (thumbMin) {
+          thumbMin.style.left = startPercent + "%";
+        }
+
+        if (thumbMax) {
+          thumbMax.style.left = endPercent + "%";
+        }
+
+        if (bubbleMin) {
+          bubbleMin.textContent = String(minValue);
+          bubbleMin.style.left = startPercent + "%";
+          bubbleMin.hidden = rangeState.activeThumb !== "min";
+        }
+
+        if (bubbleMax) {
+          bubbleMax.textContent = String(maxValue);
+          bubbleMax.style.left = endPercent + "%";
+          bubbleMax.hidden = rangeState.activeThumb !== "max";
+        }
+
+        if (labelMin) {
+          labelMin.textContent = String(rangeState.minBound);
+        }
+
+        if (labelMax) {
+          labelMax.textContent = String(rangeState.maxBound);
+        }
+
+        if (message) {
+          if (flags.isError) {
+            message.hidden = false;
+            message.textContent = RANGE_ERROR_TEXT;
+            message.className = "filter-range__message is-error";
+          } else if (flags.isWarning) {
+            message.hidden = false;
+            message.textContent = RANGE_WARNING_TEXT;
+            message.className = "filter-range__message is-warning";
+          } else {
+            message.hidden = true;
+            message.textContent = "";
+            message.className = "filter-range__message";
+          }
+        }
       }
 
       function renderBottomsheet() {
@@ -2319,19 +2483,15 @@
         filterBottomsheetTitle.textContent = bottomsheetState.title || "Выбор";
         filterBottomsheetSearch.hidden = bottomsheetState.searchable === false;
         filterBottomsheetSearchInput.value = bottomsheetState.searchQuery;
+        updateBottomsheetFooterState();
         renderBottomsheetList();
       }
 
       function renderBottomsheetList() {
         if (bottomsheetState.type === "range") {
-          filterBottomsheetList.innerHTML = renderRangeBlockMarkup(
-            "bottomsheet-price",
-            bottomsheetState.rangeMin || String(bottomsheetState.rangeMinBound),
-            bottomsheetState.rangeMax || String(bottomsheetState.rangeMaxBound),
-            bottomsheetState.rangeMinBound,
-            bottomsheetState.rangeMaxBound,
-            bottomsheetState.activeThumb === "min"
-          );
+          filterBottomsheetList.innerHTML = renderRangeBlockMarkup("bottomsheet-price");
+          syncRangeBlock(filterBottomsheetList, bottomsheetState.range, "bottomsheet-price");
+          updateBottomsheetFooterState();
           return;
         }
 
@@ -2369,6 +2529,7 @@
             "</button>"
           ].join("");
         }).join("");
+        updateBottomsheetFooterState();
       }
 
       function renderBottomsheetControl(type) {
@@ -2414,6 +2575,7 @@
       function openFullFilterSheet() {
         fullFilterState.isOpen = true;
         fullFilterState.draft = createFilterDraftFromResults(resultsState);
+        fullFilterState.initial = createFilterDraftFromResults(resultsState);
         closeBottomsheet({ silent: true });
         closeCategorySheet({ silent: true });
         renderFullFilterSheet();
@@ -2435,7 +2597,7 @@
       function applyFullFilterSheet() {
         resultsState.activeCategoryLabel = fullFilterState.draft.activeCategoryLabel;
         resultsState.activeCategoryValue = fullFilterState.draft.activeCategoryValue;
-        resultsState.region = fullFilterState.draft.region;
+        resultsState.region = fullFilterState.draft.region.slice();
         resultsState.sort = fullFilterState.draft.sort;
         resultsState.filters = createFilterDraftFromResults({ activeCategoryLabel: "", activeCategoryValue: "", region: [], sort: "", filters: fullFilterState.draft.filters }).filters;
         pendingChipKey = "filters";
@@ -2460,11 +2622,7 @@
         bottomsheetState.orderedOptions = getOrderedBottomsheetOptions(key, config.options || [], source);
 
         if (config.type === "range") {
-          bottomsheetState.rangeMinBound = config.min;
-          bottomsheetState.rangeMaxBound = config.max;
-          bottomsheetState.rangeStep = config.step || 10;
-          bottomsheetState.rangeMin = getCurrentRangeMin(source) || String(config.min);
-          bottomsheetState.rangeMax = getCurrentRangeMax(source) || String(config.max);
+          bottomsheetState.range = createRangeUiState(getCurrentRangeMin(source), getCurrentRangeMax(source), config);
         } else if (config.type === "multi") {
           bottomsheetState.draftValues = getSourceMultiValue(source, key).slice();
         } else {
@@ -2517,16 +2675,14 @@
 
       function resetBottomsheetDraft() {
         if (bottomsheetState.type === "range") {
-          bottomsheetState.rangeMin = String(bottomsheetState.rangeMinBound);
-          bottomsheetState.rangeMax = String(bottomsheetState.rangeMaxBound);
-          bottomsheetState.activeThumb = "";
+          resetRangeToDefault(bottomsheetState.range);
         } else if (bottomsheetState.type === "multi") {
           bottomsheetState.draftValues = [];
         } else {
           bottomsheetState.draftValue = getDefaultValue(bottomsheetState.key);
         }
 
-        renderBottomsheetList();
+        renderBottomsheet();
       }
 
       function openCategorySheet() {
