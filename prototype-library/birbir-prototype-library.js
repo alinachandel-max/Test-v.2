@@ -8,6 +8,16 @@
       initSellerCabinet();
     });
 
+    var SELLER_CARD_ICON_SRC = {
+      more: "https://www.figma.com/api/mcp/asset/a0ee0bad-0507-4e2b-8943-b68982cdd460",
+      coin: "https://www.figma.com/api/mcp/asset/d6af9d77-6303-4765-aba0-5c415103e3fe",
+      eye: "https://www.figma.com/api/mcp/asset/61801e08-c005-4061-8fec-398bd5a3cdc1",
+      heart: "https://www.figma.com/api/mcp/asset/aefc0aa0-2d94-4fc7-9169-12bc83a9a1c0",
+      phone: "https://www.figma.com/api/mcp/asset/ee4c72c6-d1f3-4f0e-bbf5-1922486d8c4e",
+      rocketFill: "https://www.figma.com/api/mcp/asset/5812dc4f-bf13-4340-aa05-fbc217c88539",
+      rocketStroke: "https://www.figma.com/api/mcp/asset/1019846b-f19f-4be9-9cd3-3d52e10af129"
+    };
+
     function createIconMarkup(config) {
       var size = config.size || 24;
       var colorClass = config.colorClass ? " " + config.colorClass : "";
@@ -25,6 +35,40 @@
         config.symbolId,
         '"></use></svg></span>'
       ].join("");
+    }
+
+    function renderSellerAssetIcon(src, size, className) {
+      return [
+        '<span class="icon-box icon-box--',
+        String(size),
+        className ? " " + className : "",
+        '" aria-hidden="true"><img class="seller-icon-img',
+        className ? " " + className : "",
+        '" src="',
+        src,
+        '" alt=""></span>'
+      ].join("");
+    }
+
+    function renderSellerRocketIcon() {
+      return [
+        '<span class="seller-rocket-icon" aria-hidden="true">',
+        '<img class="seller-rocket-icon__fill" src="',
+        SELLER_CARD_ICON_SRC.rocketFill,
+        '" alt="">',
+        '<img class="seller-rocket-icon__stroke" src="',
+        SELLER_CARD_ICON_SRC.rocketStroke,
+        '" alt="">',
+        "</span>"
+      ].join("");
+    }
+
+    function resolveSellerActionIcon(icon) {
+      if (icon && icon.indexOf("UpAdFill.svg") !== -1) {
+        return renderSellerRocketIcon();
+      }
+
+      return icon ? renderSellerAssetIcon(icon, 16) : "";
     }
 
     function getBadgeIconConfig(badge) {
@@ -1751,7 +1795,8 @@
 
       function renderBottomsheetList() {
         var normalizedSearch = normalizeValue(bottomsheetState.searchQuery);
-        var options = bottomsheetState.orderedOptions.filter(function (option) {
+        var orderedOptions = Array.isArray(bottomsheetState.orderedOptions) ? bottomsheetState.orderedOptions : [];
+        var options = orderedOptions.filter(function (option) {
           return !normalizedSearch || normalizeValue(option.label).indexOf(normalizedSearch) !== -1;
         });
 
@@ -3161,7 +3206,7 @@
           '<p class="seller-product-card__price">',
           escapeHtml(card.price),
           "</p>",
-          '<span class="seller-product-card__installment icon-box icon-box--16" aria-hidden="true"><img class="seller-icon-img" src="prototype-library/icon-source-svg/CoinFill.svg" alt=""></span>',
+          renderSellerAssetIcon(SELLER_CARD_ICON_SRC.coin, 16, "seller-product-card__installment"),
           "</div>",
           card.oldPrice ? [
             '<div class="seller-product-card__old"><s>',
@@ -3175,7 +3220,9 @@
           "</p>",
           "</div>",
           '<button class="seller-product-card__menu" type="button" aria-label="Действия с объявлением">',
-          '<span class="icon-box icon-box--16" aria-hidden="true"><img class="seller-icon-img" src="prototype-library/icon-source-svg/More.svg" alt=""></span>',
+          '<img class="seller-product-card__menu-icon" src="',
+          SELLER_CARD_ICON_SRC.more,
+          '" alt="">',
           "</button>",
           "</div>",
           card.stats ? renderStats(card) : "",
@@ -3234,9 +3281,9 @@
           '<button class="seller-product-card__stats" type="button" data-seller-card-stats="',
           card.id,
           '">',
-          renderStat("prototype-library/icon-source-svg/Eye.svg", card.stats.views),
-          renderStat("prototype-library/icon-source-svg/HeartEmpty.svg", card.stats.favorites),
-          renderStat("prototype-library/icon-source-svg/Phone.svg", card.stats.calls),
+          renderStat(SELLER_CARD_ICON_SRC.eye, card.stats.views),
+          renderStat(SELLER_CARD_ICON_SRC.heart, card.stats.favorites),
+          renderStat(SELLER_CARD_ICON_SRC.phone, card.stats.calls),
           "</button>"
         ].join("");
       }
@@ -3281,7 +3328,7 @@
               '"',
               action.notificationKey ? ' data-seller-notification-key="' + action.notificationKey + '"' : "",
               '>',
-              action.icon ? '<span class="icon-box icon-box--16" aria-hidden="true"><img class="seller-icon-img" src="' + action.icon + '" alt=""></span>' : "",
+              action.icon ? resolveSellerActionIcon(action.icon) : "",
               "<span>",
               escapeHtml(action.label),
               "</span></button>"
@@ -3304,9 +3351,8 @@
           promo.id,
           '" data-seller-card-id="',
           card.id,
-          '"><span class="icon-box icon-box--18" aria-hidden="true"><img class="seller-icon-img" src="',
-          promo.icon || "prototype-library/icon-source-svg/UpAdFill.svg",
-          '" alt=""></span>',
+          '">',
+          resolveSellerActionIcon(promo.icon || "prototype-library/icon-source-svg/UpAdFill.svg"),
           promo.dot ? '<span class="seller-product-card__promo-dot"></span>' : "",
           "</button></div>"
         ].join("");
@@ -3364,6 +3410,7 @@
 
       function renderBottomsheet() {
         var sheetState = state.bottomsheetState;
+        var rows;
 
         if (!sheetState) {
           bottomsheet.classList.remove("is-open");
@@ -3376,7 +3423,14 @@
         bottomsheetTitle.textContent = sheetState.title;
         bottomsheetPrimary.textContent = sheetState.primaryLabel || "Понятно";
         bottomsheetSecondary.hidden = true;
-        bottomsheetContent.innerHTML = sheetState.rows.map(function (row) {
+        rows = Array.isArray(sheetState.rows) ? sheetState.rows : [];
+
+        if (!rows.length) {
+          bottomsheetContent.innerHTML = '<div class="seller-bottomsheet__row"><div class="seller-bottomsheet__row-copy"><p class="seller-bottomsheet__row-title">Нет данных</p><p class="seller-bottomsheet__row-text">Содержимое появится после обновления состояния.</p></div></div>';
+          return;
+        }
+
+        bottomsheetContent.innerHTML = rows.map(function (row) {
           return [
             '<div class="seller-bottomsheet__row"><span class="seller-bottomsheet__row-icon"><span class="icon-box icon-box--20" aria-hidden="true"><img class="seller-icon-img" src="',
             row.icon,
