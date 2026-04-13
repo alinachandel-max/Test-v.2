@@ -2022,7 +2022,7 @@
       background: transparent;
       box-shadow: none;
       opacity: 0;
-      pointer-events: none;
+      pointer-events: auto;
       -webkit-appearance: none;
       appearance: none;
       cursor: pointer;
@@ -2036,7 +2036,7 @@
       background: transparent;
       box-shadow: none;
       opacity: 0;
-      pointer-events: none;
+      pointer-events: auto;
       appearance: none;
       cursor: pointer;
     }
@@ -2089,18 +2089,6 @@
       z-index: 4;
     }
 
-    .filter-range__gesture {
-      position: absolute;
-      left: -16px;
-      right: -16px;
-      top: -14px;
-      height: 72px;
-      background: transparent;
-      z-index: 2;
-      touch-action: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
     .filter-range__bubble[hidden] {
       display: none;
     }
@@ -2136,10 +2124,6 @@
 
     .filter-range__message.is-error {
       color: var(--error);
-    }
-
-    .filter-range__message.is-warning {
-      color: #9a7600;
     }
 
     .filter-sheet__list-rows {

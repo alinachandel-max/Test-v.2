@@ -26,7 +26,6 @@
 
     var RADIO_COMPONENT_CHECKED_SRC = "prototype-library/icon-source-svg/RadioChecked.svg";
     var RANGE_ERROR_TEXT = 'Значение "От" должно быть меньше "До"';
-    var RANGE_WARNING_TEXT = "Очень узкий диапазон";
 
     var HOME_FEED_PHOTOS = [
       "assets/Photo/2a9ddec28868becbf08a7f918ab0.webp",
@@ -244,7 +243,7 @@
       }
 
       if (badge.classList.contains("badge--business")) {
-        return { symbolId: "icon-business-fill", size: isOld ? 10 : 12, colorClass: "icon-color--on-dark" };
+        return { symbolId: "icon-check-circle-fill", size: isOld ? 10 : 12, colorClass: "icon-color--on-dark" };
       }
 
       if (badge.classList.contains("badge--delivery")) {
@@ -264,10 +263,10 @@
       }
 
       if (isNew) {
-        return { symbolId: "icon-business-fill", size: 12, colorClass: "icon-color--on-dark" };
+        return { symbolId: "icon-check-circle-fill", size: 12, colorClass: "icon-color--on-dark" };
       }
 
-      return { symbolId: "icon-business-fill", size: 10, colorClass: "icon-color--on-dark" };
+      return { symbolId: "icon-check-circle-fill", size: 10, colorClass: "icon-color--on-dark" };
     }
 
     function upgradeLegacyIcons() {
@@ -1279,7 +1278,6 @@
       var lastScrollTop = 0;
       var scrollDirection = "up";
       var pendingChipKey = "";
-      var activeRangeGesture = null;
 
       if (!resultsScreen || !resultsScroller || !titleBackButton || !resultsBackButton || !resultsTitle || !resultsSearchTrigger || !resultsSearchText || !filterRow || !filterScroll || !regionButton || !regionText || !sortButton || !sortText || !feedGrid || !feedSurface || !filterSheet || !filterSheetBackdrop || !filterSheetBack || !filterSheetReset || !filterSheetApply || !filterSheetCategoryLabel || !filterSheetRegionLabel || !filterSheetSellerCaption || !filterSheetSellerTabs || !filterSheetConditionTabs || !filterSheetManufacturerValue || !filterSheetSortValue || !filterSheetCurrencyTabs || !filterSheetPriceRange || !filterSheetToggleList || !filterBottomsheet || !filterBottomsheetBackdrop || !filterBottomsheetReset || !filterBottomsheetClose || !filterBottomsheetTitle || !filterBottomsheetSearch || !filterBottomsheetSearchInput || !filterBottomsheetList || !filterBottomsheetApply || !categorySheet || !categorySheetBackdrop || !categorySheetClose || !categorySheetList || !categorySheetAll) {
         return;
@@ -1640,33 +1638,6 @@
           }
         }
       });
-      document.addEventListener("pointermove", function (event) {
-        handleRangeGestureMove(event);
-      });
-      document.addEventListener("pointerup", function (event) {
-        handleRangeGestureEnd(event);
-      });
-      document.addEventListener("pointercancel", function (event) {
-        handleRangeGestureEnd(event);
-      });
-      filterSheet.addEventListener("pointerdown", function (event) {
-        var gesture = event.target.closest("[data-range-gesture]");
-
-        if (!gesture || !filterSheet.contains(gesture)) {
-          return;
-        }
-
-        startRangeGesture(gesture, event);
-      });
-      filterBottomsheetList.addEventListener("pointerdown", function (event) {
-        var gesture = event.target.closest("[data-range-gesture]");
-
-        if (!gesture || !filterBottomsheetList.contains(gesture)) {
-          return;
-        }
-
-        startRangeGesture(gesture, event);
-      });
       filterBottomsheetList.addEventListener("click", function (event) {
         var option = event.target.closest("[data-bottomsheet-option]");
         var value;
@@ -1844,10 +1815,6 @@
         return Math.round(numeric);
       }
 
-      function clampRangeValue(value, min, max) {
-        return Math.max(min, Math.min(max, value));
-      }
-
       function getRangeStateFlags(rangeState) {
         var minValue = Number(rangeState.min || rangeState.defaultMin);
         var maxValue = Number(rangeState.max || rangeState.defaultMax);
@@ -1855,8 +1822,7 @@
         return {
           isDefault: minValue === Number(rangeState.defaultMin) && maxValue === Number(rangeState.defaultMax),
           isDirty: minValue !== Number(rangeState.initialMin) || maxValue !== Number(rangeState.initialMax),
-          isError: minValue >= maxValue,
-          isWarning: ! (minValue >= maxValue) && maxValue - minValue <= 1
+          isError: minValue > maxValue
         };
       }
 
@@ -1955,7 +1921,7 @@
 
       function renderHomeBadge(item) {
         var iconType = item.type || "business";
-        var symbolId = "icon-business-fill";
+        var symbolId = "icon-check-circle-fill";
         var label = item.label || "";
 
         if (iconType === "premium") {
@@ -1971,7 +1937,7 @@
           symbolId = "icon-agency-fill";
           label = label || "Агентство";
         } else {
-          label = label || "Магазин";
+          label = "PRO";
         }
 
         return [
@@ -2508,27 +2474,10 @@
           '">',
           '<input class="filter-range__native filter-range__native--max" type="range" data-range-slider="max" data-range-prefix="',
           escapeHtml(prefix),
-          '">',
-          '<span class="filter-range__gesture" data-range-gesture="',
-          escapeHtml(prefix),
-          '" aria-hidden="true"></span>',
-          '</div>',
+          '"></div>',
           '<div class="filter-range__labels"><span data-range-role="label-min"></span><span data-range-role="label-max"></span></div>',
           "</div>"
         ].join("");
-      }
-
-      function getRangeTrackMetrics(root) {
-        var track = root ? root.querySelector(".filter-range__track") : null;
-        var trackWidth = track ? track.clientWidth : 0;
-        var visualInset = 16;
-
-        return {
-          track: track,
-          trackWidth: trackWidth,
-          visualInset: visualInset,
-          usableWidth: Math.max(0, trackWidth - (visualInset * 2))
-        };
       }
 
       function syncRangeBlock(root, rangeState, prefix) {
@@ -2547,7 +2496,9 @@
         var flags;
         var minValue;
         var maxValue;
-        var metrics;
+        var trackRect;
+        var trackWidth;
+        var usableWidth;
         var startRatio;
         var endRatio;
         var startX;
@@ -2573,11 +2524,13 @@
         flags = getRangeStateFlags(rangeState);
         minValue = Number(rangeState.min || rangeState.defaultMin);
         maxValue = Number(rangeState.max || rangeState.defaultMax);
-        metrics = getRangeTrackMetrics(root);
+        trackRect = root.querySelector(".filter-range__track");
+        trackWidth = trackRect ? trackRect.clientWidth : 0;
+        usableWidth = Math.max(0, trackWidth - 32);
         startRatio = (minValue - rangeState.minBound) / (rangeState.maxBound - rangeState.minBound);
         endRatio = (maxValue - rangeState.minBound) / (rangeState.maxBound - rangeState.minBound);
-        startX = metrics.visualInset + (metrics.usableWidth * startRatio);
-        endX = metrics.visualInset + (metrics.usableWidth * endRatio);
+        startX = 16 + (usableWidth * startRatio);
+        endX = 16 + (usableWidth * endRatio);
         fillWidth = Math.max(0, Math.abs(endX - startX));
 
         if (minInput) {
@@ -2644,10 +2597,6 @@
             message.hidden = false;
             message.textContent = RANGE_ERROR_TEXT;
             message.className = "filter-range__message is-error";
-          } else if (flags.isWarning) {
-            message.hidden = false;
-            message.textContent = RANGE_WARNING_TEXT;
-            message.className = "filter-range__message is-warning";
           } else {
             message.hidden = true;
             message.textContent = "";
@@ -3437,176 +3386,19 @@
         var nextValue = snapRangeValue(value, rangeState.minBound, rangeState.maxBound, rangeState.step);
         var minValue = Number(rangeState.min || rangeState.defaultMin);
         var maxValue = Number(rangeState.max || rangeState.defaultMax);
-        var minGap = Number(rangeState.step || 50);
 
         rangeState.activeThumb = field;
         rangeState.lastTouchedThumb = field;
 
         if (field === "min") {
-          minValue = Math.min(nextValue, maxValue - minGap);
+          minValue = Math.min(nextValue, maxValue);
           rangeState.min = String(minValue);
           rangeState.inputMin = String(minValue);
         } else {
-          maxValue = Math.max(nextValue, minValue + minGap);
+          maxValue = Math.max(nextValue, minValue);
           rangeState.max = String(maxValue);
           rangeState.inputMax = String(maxValue);
         }
-      }
-
-      function getRangeGestureContext(prefix) {
-        if (prefix === "sheet-price") {
-          return {
-            root: filterSheetPriceRange,
-            rangeState: fullFilterState.draft.priceRange,
-            source: "full",
-            key: "price",
-            sync: syncFullFilterRangeBlock
-          };
-        }
-
-        if (prefix === "bottomsheet-price" && bottomsheetState.type === "range") {
-          return {
-            root: filterBottomsheetList,
-            rangeState: bottomsheetState.range,
-            source: bottomsheetState.source,
-            key: bottomsheetState.key,
-            sync: syncBottomsheetRangeBlock
-          };
-        }
-
-        return null;
-      }
-
-      function getRangeVisualPosition(rangeState, value, metrics) {
-        var ratio;
-
-        if (!metrics.usableWidth || rangeState.maxBound === rangeState.minBound) {
-          return metrics.visualInset;
-        }
-
-        ratio = (value - rangeState.minBound) / (rangeState.maxBound - rangeState.minBound);
-        return metrics.visualInset + (metrics.usableWidth * ratio);
-      }
-
-      function getRangeValueFromClientX(context, clientX) {
-        var metrics = getRangeTrackMetrics(context.root);
-        var trackRect = metrics.track ? metrics.track.getBoundingClientRect() : null;
-        var relativeX;
-        var visualX;
-        var ratio;
-        var rawValue;
-
-        if (!trackRect || !metrics.trackWidth) {
-          return Number(context.rangeState.min || context.rangeState.defaultMin);
-        }
-
-        relativeX = clientX - trackRect.left;
-        visualX = clampRangeValue(relativeX, metrics.visualInset, metrics.trackWidth - metrics.visualInset);
-
-        if (!metrics.usableWidth) {
-          return context.rangeState.minBound;
-        }
-
-        ratio = (visualX - metrics.visualInset) / metrics.usableWidth;
-        rawValue = context.rangeState.minBound + (ratio * (context.rangeState.maxBound - context.rangeState.minBound));
-        return snapRangeValue(String(rawValue), context.rangeState.minBound, context.rangeState.maxBound, context.rangeState.step);
-      }
-
-      function applyRangeGestureValue(context, field, nextValue) {
-        if (!context || !context.rangeState) {
-          return;
-        }
-
-        updateRangeFromSlider(context.rangeState, field, String(nextValue));
-
-        if (context.source === "results") {
-          assignToState(resultsState, context.key, { range: context.rangeState });
-          renderResults({ skipFullFilterSheet: true, preserveChipScroll: true });
-        } else {
-          applyDraftToResultsState();
-          renderResults({ skipFullFilterSheet: true, preserveChipScroll: true });
-        }
-
-        context.sync();
-      }
-
-      function startRangeGesture(gesture, event) {
-        var prefix = gesture.getAttribute("data-range-gesture") || "";
-        var context = getRangeGestureContext(prefix);
-        var metrics;
-        var trackRect;
-        var minValue;
-        var maxValue;
-        var minX;
-        var maxX;
-        var relativeX;
-        var field;
-
-        if (!context || !context.rangeState) {
-          return;
-        }
-
-        metrics = getRangeTrackMetrics(context.root);
-        trackRect = metrics.track ? metrics.track.getBoundingClientRect() : null;
-
-        if (!trackRect) {
-          return;
-        }
-
-        minValue = Number(context.rangeState.min || context.rangeState.defaultMin);
-        maxValue = Number(context.rangeState.max || context.rangeState.defaultMax);
-        minX = getRangeVisualPosition(context.rangeState, minValue, metrics);
-        maxX = getRangeVisualPosition(context.rangeState, maxValue, metrics);
-        relativeX = event.clientX - trackRect.left;
-        field = Math.abs(relativeX - minX) <= Math.abs(relativeX - maxX) ? "min" : "max";
-
-        activeRangeGesture = {
-          pointerId: event.pointerId,
-          gesture: gesture,
-          context: context,
-          field: field
-        };
-
-        context.rangeState.activeThumb = field;
-        context.rangeState.lastTouchedThumb = field;
-        if (gesture.setPointerCapture) {
-          gesture.setPointerCapture(event.pointerId);
-        }
-        event.preventDefault();
-        applyRangeGestureValue(context, field, getRangeValueFromClientX(context, event.clientX));
-      }
-
-      function handleRangeGestureMove(event) {
-        if (!activeRangeGesture || activeRangeGesture.pointerId !== event.pointerId) {
-          return;
-        }
-
-        event.preventDefault();
-        applyRangeGestureValue(
-          activeRangeGesture.context,
-          activeRangeGesture.field,
-          getRangeValueFromClientX(activeRangeGesture.context, event.clientX)
-        );
-      }
-
-      function handleRangeGestureEnd(event) {
-        var gesture = activeRangeGesture ? activeRangeGesture.gesture : null;
-        var context = activeRangeGesture ? activeRangeGesture.context : null;
-
-        if (!activeRangeGesture || activeRangeGesture.pointerId !== event.pointerId) {
-          return;
-        }
-
-        if (gesture && gesture.releasePointerCapture && gesture.hasPointerCapture && gesture.hasPointerCapture(event.pointerId)) {
-          gesture.releasePointerCapture(event.pointerId);
-        }
-
-        if (context && context.rangeState) {
-          context.rangeState.activeThumb = "";
-          context.sync();
-        }
-
-        activeRangeGesture = null;
       }
 
       function handleRangeSliderKeydown(rangeState, target, event) {

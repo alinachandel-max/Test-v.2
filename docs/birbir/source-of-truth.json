@@ -1,0 +1,250 @@
+{
+  "version": 1,
+  "product": "BirBir App",
+  "files": {
+    "birbir_app": {
+      "file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "name": "BirBir-App"
+    },
+    "general_library": {
+      "file_key": "AUYmz4Daj3yFLfK13Q5pM4",
+      "name": "General-library"
+    }
+  },
+  "page_contract": {
+    "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+    "page_id": "56932:78348",
+    "target_page_name": "BirBir / Source of Truth",
+    "sections": [
+      "00 Foundations",
+      "10 Canonical Components",
+      "20 Screen Patterns",
+      "90 Reference Only"
+    ]
+  },
+  "contracts": [
+    {
+      "component_key": "safe_area_top_strip",
+      "display_name": "Safe area / top white strip",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": null,
+      "library_source": "BirBir screen pattern",
+      "state_name": "default",
+      "code_owner": "prototype-library",
+      "binding_status": "needs_figma_binding",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.css::--top-strip-height"
+      ]
+    },
+    {
+      "component_key": "search_header_shell",
+      "display_name": "Search header shell",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": null,
+      "library_source": "BirBir screen pattern",
+      "state_name": "base_filled_sticky",
+      "code_owner": "prototype-library",
+      "binding_status": "needs_figma_binding",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.css::.results-header",
+        "birbir-home-screen.html::.search-overlay / .search-results"
+      ]
+    },
+    {
+      "component_key": "results_filter_chips_row",
+      "display_name": "Results filter chips row",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": null,
+      "library_source": "BirBir screen pattern",
+      "state_name": "base_compact_selected",
+      "code_owner": "prototype-library",
+      "binding_status": "needs_figma_binding",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.css::.results-filter-chip*",
+        "prototype-library/birbir-prototype-library.js::renderFilterChip"
+      ]
+    },
+    {
+      "component_key": "results_secondary_row",
+      "display_name": "Results secondary row",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": null,
+      "library_source": "BirBir screen pattern",
+      "state_name": "region_sort",
+      "code_owner": "prototype-library",
+      "binding_status": "needs_figma_binding",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.css::.results-secondary-row"
+      ]
+    },
+    {
+      "component_key": "full_filters_page_shell",
+      "display_name": "Full-screen filters page",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": null,
+      "library_source": "BirBir screen pattern",
+      "state_name": "filters_full_page",
+      "code_owner": "prototype-library",
+      "binding_status": "needs_figma_binding",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.css::.filter-sheet*",
+        "birbir-home-screen.html::.filter-sheet"
+      ]
+    },
+    {
+      "component_key": "filter_bottomsheet_shell",
+      "display_name": "Filter bottomsheet shell",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": null,
+      "library_source": "BirBir screen pattern",
+      "state_name": "bottom_attached_searchable_dual_footer",
+      "code_owner": "prototype-library",
+      "binding_status": "needs_figma_binding",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.css::.filter-bottomsheet*",
+        "birbir-home-screen.html::.filter-bottomsheet"
+      ]
+    },
+    {
+      "component_key": "filter_tabs",
+      "display_name": "Filter tabs / chips",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": null,
+      "library_source": "General Library variant adapted for BirBir",
+      "state_name": "default_selected",
+      "code_owner": "prototype-library",
+      "binding_status": "needs_figma_binding",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.css::.filter-sheet__tab"
+      ]
+    },
+    {
+      "component_key": "filter_range_picker",
+      "display_name": "Filter range picker",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": null,
+      "library_source": "BirBir interaction pattern",
+      "state_name": "default_active_warning_error",
+      "code_owner": "prototype-library",
+      "binding_status": "needs_figma_binding",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.css::.filter-range*",
+        "prototype-library/birbir-prototype-library.js::syncRangeBlock",
+        "prototype-library/birbir-prototype-library.js::updateRangeFromSlider"
+      ]
+    },
+    {
+      "component_key": "filter_action_buttons",
+      "display_name": "Filter action buttons",
+      "figma_file_key": "AUYmz4Daj3yFLfK13Q5pM4",
+      "node_id": null,
+      "library_source": "General Library button variants",
+      "state_name": "primary_secondary_footer",
+      "code_owner": "prototype-library",
+      "binding_status": "needs_figma_binding",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.css::.filter-apply-bar__button"
+      ]
+    },
+    {
+      "component_key": "filter_radio",
+      "display_name": "Filter radio control",
+      "figma_file_key": "AUYmz4Daj3yFLfK13Q5pM4",
+      "node_id": "6007:1041",
+      "library_source": "General Library",
+      "state_name": "default_selected",
+      "code_owner": "prototype-library",
+      "binding_status": "bound",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.css::.filter-bottomsheet__control--radio",
+        "prototype-library/birbir-prototype-library.js::renderBottomsheetControl"
+      ]
+    },
+    {
+      "component_key": "filter_checkbox",
+      "display_name": "Filter checkbox control",
+      "figma_file_key": "AUYmz4Daj3yFLfK13Q5pM4",
+      "node_id": null,
+      "library_source": "General Library",
+      "state_name": "default_selected",
+      "code_owner": "prototype-library",
+      "binding_status": "needs_figma_binding",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.css::.filter-sheet__list-row-control",
+        "prototype-library/birbir-prototype-library.css::.filter-bottomsheet__control--checkbox"
+      ]
+    },
+    {
+      "component_key": "preview_badges",
+      "display_name": "Preview badges / PRO contract",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": "55604:127307",
+      "library_source": "BirBir card preview pattern",
+      "state_name": "first_badge_with_text",
+      "code_owner": "prototype-library",
+      "binding_status": "bound",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.js::renderHomeBadge",
+        "prototype-library/birbir-prototype-library.js::renderHomeBadgesMarkup"
+      ]
+    },
+    {
+      "component_key": "detail_seller_tags",
+      "display_name": "Detail seller tags",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": "55604:127305",
+      "library_source": "BirBir detail seller pattern",
+      "state_name": "id_verified_pro",
+      "code_owner": "detail-static-html",
+      "binding_status": "bound",
+      "current_code_refs": [
+        "birbir-home-screen.html::.detail-seller__tags",
+        "prototype-library/birbir-prototype-library.css::.detail-seller__tag*"
+      ]
+    },
+    {
+      "component_key": "results_empty_state",
+      "display_name": "Results empty state",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": "52134:114648",
+      "library_source": "BirBir screen pattern",
+      "state_name": "no_results_with_recommendations",
+      "code_owner": "prototype-library",
+      "binding_status": "bound",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.js::renderResultsEmptyState",
+        "prototype-library/birbir-prototype-library.css::.results-empty*",
+        "prototype-library/birbir-prototype-library.css::.results-recommendations*"
+      ]
+    },
+    {
+      "component_key": "results_product_card",
+      "display_name": "Results product card",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": "55604:127307",
+      "library_source": "BirBir card preview pattern",
+      "state_name": "default_discount_badges_installment",
+      "code_owner": "prototype-library",
+      "binding_status": "bound",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.js::renderResultsCard",
+        "prototype-library/birbir-prototype-library.css::.results-card*"
+      ]
+    },
+    {
+      "component_key": "old_price_crossed",
+      "display_name": "Old price / crossed-out price",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": "55604:127307",
+      "library_source": "BirBir card preview pattern",
+      "state_name": "with_old_price",
+      "code_owner": "prototype-library",
+      "binding_status": "bound",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.css::.results-card__old s",
+        "prototype-library/birbir-prototype-library.css::.card__old s",
+        "prototype-library/birbir-prototype-library.js::renderResultsCard"
+      ]
+    }
+  ]
+}
