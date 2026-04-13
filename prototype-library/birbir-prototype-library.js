@@ -9,11 +9,11 @@
     });
 
     var SELLER_CARD_ICON_SRC = {
-      more: "https://www.figma.com/api/mcp/asset/a0ee0bad-0507-4e2b-8943-b68982cdd460",
-      coin: "https://www.figma.com/api/mcp/asset/d6af9d77-6303-4765-aba0-5c415103e3fe",
-      eye: "https://www.figma.com/api/mcp/asset/61801e08-c005-4061-8fec-398bd5a3cdc1",
-      heart: "https://www.figma.com/api/mcp/asset/aefc0aa0-2d94-4fc7-9169-12bc83a9a1c0",
-      phone: "https://www.figma.com/api/mcp/asset/ee4c72c6-d1f3-4f0e-bbf5-1922486d8c4e",
+      more: "prototype-library/icon-source-svg/More.svg",
+      coin: "prototype-library/icon-source-svg/CoinFill.svg",
+      eye: "prototype-library/icon-source-svg/Eye.svg",
+      heart: "prototype-library/icon-source-svg/HeartEmpty.svg",
+      phone: "prototype-library/icon-source-svg/PhoneFill.svg",
       rocketFill: "https://www.figma.com/api/mcp/asset/5812dc4f-bf13-4340-aa05-fbc217c88539",
       rocketStroke: "https://www.figma.com/api/mcp/asset/1019846b-f19f-4be9-9cd3-3d52e10af129"
     };
@@ -1118,6 +1118,7 @@
       resultItems = buildResultItemsSeed();
       renderResults();
       renderFullFilterSheet();
+      renderCategorySheet();
       renderBottomsheet();
 
       window.addEventListener("birbir:open-results", function (event) {
@@ -1915,7 +1916,7 @@
         bottomsheetState.source = source;
         bottomsheetState.type = config.type;
         bottomsheetState.title = config.title;
-        bottomsheetState.orderedOptions = getOrderedBottomsheetOptions(key, config.options, source);
+        bottomsheetState.orderedOptions = getOrderedBottomsheetOptions(key, config.options || [], source);
 
         if (config.type === "multi") {
           bottomsheetState.draftValues = getSourceMultiValue(source, key).slice();
@@ -3043,6 +3044,7 @@
       state.activeTab = state.activeTab || "active";
       state.notificationKey = null;
       state.bottomsheetState = null;
+      bottomsheetContent.innerHTML = '<div class="seller-bottomsheet__row"><div class="seller-bottomsheet__row-copy"><p class="seller-bottomsheet__row-title">Выберите действие</p><p class="seller-bottomsheet__row-text">Детали услуги или статистики появятся здесь.</p></div></div>';
 
       render();
 
