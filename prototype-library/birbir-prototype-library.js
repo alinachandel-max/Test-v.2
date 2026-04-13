@@ -14,8 +14,8 @@
       eye: "prototype-library/icon-source-svg/Eye.svg",
       heart: "prototype-library/icon-source-svg/HeartEmpty.svg",
       phone: "prototype-library/icon-source-svg/PhoneFill.svg",
-      rocketFill: "https://www.figma.com/api/mcp/asset/5812dc4f-bf13-4340-aa05-fbc217c88539",
-      rocketStroke: "https://www.figma.com/api/mcp/asset/1019846b-f19f-4be9-9cd3-3d52e10af129"
+      rocketFill: "prototype-library/icon-source-svg/UpAdFill.svg",
+      rocketStroke: "prototype-library/icon-source-svg/UpAdFill.svg"
     };
 
     function createIconMarkup(config) {
@@ -220,7 +220,7 @@
       var categoryCard = searchOverlay.querySelector(".search-card--categories");
       var categoryList = searchOverlay.querySelector(".search-category-list");
       var favoriteToast = document.querySelector(".favorite-toast");
-      var RADIO_COMPONENT_CHECKED_SRC = "https://www.figma.com/api/mcp/asset/0289f64b-0412-496b-9d3e-65351fcadf8f";
+      var RADIO_COMPONENT_CHECKED_SRC = "prototype-library/icon-source-svg/RadioChecked.svg";
       var STORAGE_KEY = "birbir-search-history-v1";
       var SEARCH_HISTORY_SEED = [
         { label: "ррр", caption: "" },
@@ -980,7 +980,7 @@
       var categorySheetList = categorySheet ? categorySheet.querySelector(".category-sheet__list") : null;
       var categorySheetAll = categorySheet ? categorySheet.querySelector(".category-sheet__all") : null;
       var favoriteToast = document.querySelector(".favorite-toast");
-      var BANNER_IMAGE_SRC = "https://www.figma.com/api/mcp/asset/412f7d4a-62bc-42d1-a511-a0a2e3cd7bae";
+      var BANNER_IMAGE_SRC = "assets/detail/BirBir delivery.png";
       var FILTER_TOOLTIP_KEY = "birbir-results-tooltip-dismissed";
       var BASELINE_FILTER_KEYS = ["category", "price", "currency"];
       var FILTER_ORDER = ["filters", "category", "seller", "condition", "gift", "urgentSale", "installment", "currency", "price", "delivery"];
@@ -2883,7 +2883,7 @@
       var favoriteToastTitle = favoriteToast ? favoriteToast.querySelector(".favorite-toast__title") : null;
       var favoriteToastText = favoriteToast ? favoriteToast.querySelector(".favorite-toast__text") : null;
       var favoriteToastTimer = null;
-      var fallbackToastImage = "https://www.figma.com/api/mcp/asset/89a9155d-5371-4b9c-a2a9-00e4928faafb";
+      var fallbackToastImage = "assets/collections/1.png";
       var likeBurstPreset = [
         { x: -42, y: -56, scale: 1.28, rotate: "-28deg", delay: 0 },
         { x: -24, y: -76, scale: 1.08, rotate: "-16deg", delay: 35 },
