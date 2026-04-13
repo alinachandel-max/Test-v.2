@@ -2,6 +2,7 @@
       --bg: #ffffff;
       --text: #292929;
       --muted: #858585;
+      --error: #d34848;
       --border: #ededed;
       --tab-border: #e0e0e0;
       --chip-bg: #f2f2f2;
@@ -923,6 +924,8 @@
       overscroll-behavior-x: contain;
       scrollbar-width: none;
       -ms-overflow-style: none;
+      padding: 0 16px;
+      box-sizing: border-box;
     }
 
     .results-filter-scroll::-webkit-scrollbar {
@@ -935,6 +938,7 @@
       gap: 6px;
       min-width: 100%;
       width: max-content;
+      padding-right: 16px;
       padding-bottom: 1px;
     }
 
@@ -1477,6 +1481,9 @@
       flex-direction: column;
       min-height: 0;
       background: #f2f2f2;
+      border-top-left-radius: 24px;
+      border-top-right-radius: 24px;
+      overflow: hidden;
       transform: translateY(24px);
       transition: transform 220ms ease;
       pointer-events: auto;
@@ -1519,8 +1526,10 @@
     }
 
     .filter-sheet__header {
-      padding: calc(48px + var(--safe-top)) 16px 0;
+      padding: calc(48px + var(--safe-top)) 16px 8px;
       background: #ffffff;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
     }
 
     .filter-bottomsheet__header {
@@ -1571,6 +1580,13 @@
       line-height: 19px;
     }
 
+    .filter-sheet__header-spacer {
+      display: inline-flex;
+      flex: none;
+      width: 40px;
+      height: 40px;
+    }
+
     .filter-sheet__title,
     .filter-bottomsheet__title {
       position: absolute;
@@ -1597,7 +1613,7 @@
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       scrollbar-width: none;
-      padding: 12px 16px calc(108px + 16px + var(--safe-bottom));
+      padding: 4px 0 calc(94px + var(--safe-bottom));
       background: #f2f2f2;
     }
 
@@ -1610,13 +1626,11 @@
       display: flex;
       flex-direction: column;
       gap: 12px;
+      width: 100%;
+      box-sizing: border-box;
       padding: 16px;
       border-radius: 16px;
       background: #ffffff;
-    }
-
-    .filter-sheet__group:first-child {
-      padding-top: 16px;
     }
 
     .filter-sheet__group-title {
@@ -1679,7 +1693,7 @@
       align-items: center;
       justify-content: center;
       flex: none;
-      width: 20px;
+      width: 16px;
       height: 20px;
       line-height: 0;
     }
@@ -1687,6 +1701,12 @@
     .filter-sheet__field-trailing,
     .filter-sheet__dropdown-trailing {
       color: var(--muted);
+      margin-left: 8px;
+    }
+
+    .filter-sheet__field-trailing .icon-svg,
+    .filter-sheet__dropdown-trailing .icon-svg {
+      inset: 0 !important;
     }
 
     .filter-sheet__field-label {
@@ -1742,7 +1762,7 @@
     .filter-sheet__dropdown-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 8px;
       width: 100%;
       height: 44px;
       padding: 0;
@@ -1771,8 +1791,10 @@
     }
 
     .filter-sheet__dropdown-value {
+      margin-left: auto;
       color: #858585;
       font-weight: 400;
+      text-align: right;
       white-space: nowrap;
     }
 
@@ -1783,7 +1805,32 @@
     .filter-range {
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .filter-bottomsheet__list > .filter-range,
+    .filter-bottomsheet__list > .filter-range__inputs,
+    .filter-bottomsheet__list > .filter-range__message,
+    .filter-bottomsheet__list > .filter-range__slider,
+    .filter-bottomsheet__list > .filter-range__labels {
+      padding-left: 16px;
+      padding-right: 16px;
+      box-sizing: border-box;
+    }
+
+    .filter-bottomsheet__list > .filter-range .filter-range__inputs,
+    .filter-bottomsheet__list > .filter-range .filter-range__slider,
+    .filter-bottomsheet__list > .filter-range .filter-range__labels,
+    .filter-bottomsheet__list > .filter-range .filter-range__track,
+    .filter-bottomsheet__list > .filter-range__slider .filter-range__track {
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    .filter-range__inputs {
+      display: flex;
+      gap: 6px;
       width: 100%;
     }
 
@@ -1819,21 +1866,22 @@
     .filter-range__slider {
       display: flex;
       flex-direction: column;
-      gap: 4px;
+      gap: 8px;
       width: 100%;
     }
 
     .filter-range__track {
       position: relative;
-      height: 28px;
+      height: 44px;
       width: 100%;
+      overflow: visible;
     }
 
     .filter-range__track::before {
       position: absolute;
-      left: 0;
-      right: 0;
-      top: 12.5px;
+      left: 16px;
+      right: 16px;
+      top: 20.5px;
       height: 3px;
       border-radius: 4px;
       background: #e0e0e0;
@@ -1842,7 +1890,7 @@
 
     .filter-range__fill {
       position: absolute;
-      top: 12.5px;
+      top: 20.5px;
       height: 3px;
       border-radius: 4px;
       background: var(--accent);
@@ -1850,10 +1898,11 @@
 
     .filter-range__native {
       position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      height: 28px;
+      left: 16px;
+      right: 16px;
+      top: -6px;
+      width: auto;
+      height: 56px;
       margin: 0;
       background: transparent;
       pointer-events: none;
@@ -1862,8 +1911,8 @@
     }
 
     .filter-range__native::-webkit-slider-thumb {
-      width: 28px;
-      height: 28px;
+      width: 56px;
+      height: 56px;
       border: 0;
       border-radius: 50%;
       background: transparent;
@@ -1874,8 +1923,8 @@
     }
 
     .filter-range__native::-moz-range-thumb {
-      width: 28px;
-      height: 28px;
+      width: 56px;
+      height: 56px;
       border: 0;
       border-radius: 50%;
       background: transparent;
@@ -1893,7 +1942,7 @@
 
     .filter-range__thumb {
       position: absolute;
-      top: 0;
+      top: 8px;
       width: 28px;
       height: 28px;
       border-radius: 50%;
@@ -1930,6 +1979,10 @@
       pointer-events: none;
     }
 
+    .filter-range__bubble[hidden] {
+      display: none;
+    }
+
     .filter-range__labels {
       display: flex;
       align-items: center;
@@ -1943,6 +1996,28 @@
     .filter-sheet__price-input:focus,
     .filter-bottomsheet__search-input:focus {
       outline: none;
+    }
+
+    .filter-sheet__price-input.is-error {
+      border-color: #f18e8e;
+      background: #fff8f8;
+      color: var(--error);
+    }
+
+    .filter-range__message {
+      margin: 2px 0 0;
+      color: #858585;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 15px;
+    }
+
+    .filter-range__message.is-error {
+      color: var(--error);
+    }
+
+    .filter-range__message.is-warning {
+      color: #9a7600;
     }
 
     .filter-sheet__list-rows {
@@ -2003,14 +2078,14 @@
 
     .filter-sheet__list-row.is-selected .filter-sheet__list-row-control::after {
       position: absolute;
-      left: 9px;
-      top: 6px;
+      left: 50%;
+      top: 50%;
       width: 5px;
       height: 9px;
       border-right: 2px solid #ffffff;
       border-bottom: 2px solid #ffffff;
       content: "";
-      transform: rotate(45deg);
+      transform: translate(-50%, -58%) rotate(45deg);
     }
 
     .filter-apply-bar {
@@ -2021,12 +2096,16 @@
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      background: #ffffff;
+      padding: 0;
+      background: transparent;
       z-index: 2;
     }
 
     .filter-apply-bar__inner {
-      padding: 12px 16px 8px;
+      padding: 16px 16px calc(12px + var(--safe-bottom));
+      border-top-left-radius: 16px;
+      border-top-right-radius: 16px;
+      background: #ffffff;
     }
 
     .filter-apply-bar__inner--dual {
@@ -2038,6 +2117,7 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
+      flex: 1 1 auto;
       width: 100%;
       height: 50px;
       border: 1px solid var(--accent);
@@ -2052,6 +2132,12 @@
       -webkit-appearance: none;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
+    }
+
+    .filter-apply-bar__button:disabled {
+      border-color: #ededed;
+      background: #e7e7e7;
+      color: #949494;
     }
 
     .filter-apply-bar__button--secondary {
@@ -2133,8 +2219,8 @@
       align-items: center;
       gap: 12px;
       width: 100%;
-      height: 44px;
-      padding: 0 16px;
+      min-height: 44px;
+      padding: 12px 16px;
       border: 0;
       background: #ffffff;
       color: inherit;
@@ -2149,13 +2235,11 @@
     .filter-bottomsheet__option-label {
       flex: 1 0 0;
       min-width: 0;
-      overflow: hidden;
       color: #292929;
       font-size: 16px;
       font-weight: 400;
       line-height: 19px;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      white-space: normal;
     }
 
     .filter-bottomsheet__control {
@@ -2190,24 +2274,25 @@
 
     .filter-bottomsheet__option.is-selected .filter-bottomsheet__control--checkbox::after {
       position: absolute;
-      left: 9px;
-      top: 6px;
+      left: 50%;
+      top: 50%;
       width: 5px;
       height: 9px;
       border-right: 2px solid #ffffff;
       border-bottom: 2px solid #ffffff;
       content: "";
-      transform: rotate(45deg);
+      transform: translate(-50%, -58%) rotate(45deg);
     }
 
     .filter-bottomsheet__radio-image {
       position: absolute;
-      left: 2px;
-      top: 2px;
+      left: 50%;
+      top: 50%;
       display: none;
       width: 20px;
       height: 20px;
       max-width: none;
+      transform: translate(-50%, -50%);
     }
 
     .filter-bottomsheet__option.is-selected .filter-bottomsheet__control--radio .filter-bottomsheet__control-face {

@@ -1094,7 +1094,7 @@
       var filterSheet = document.querySelector(".filter-sheet");
       var filterSheetBackdrop = filterSheet ? filterSheet.querySelector(".filter-sheet__backdrop") : null;
       var filterSheetBack = filterSheet ? filterSheet.querySelector(".filter-sheet__back") : null;
-      var filterSheetReset = filterSheet ? filterSheet.querySelector(".filter-sheet__footer-reset") : null;
+      var filterSheetReset = filterSheet ? filterSheet.querySelector(".filter-sheet__reset") : null;
       var filterSheetApply = filterSheet ? filterSheet.querySelector(".filter-sheet__footer-apply") : null;
       var filterSheetCategoryLabel = filterSheet ? filterSheet.querySelector("#filter-sheet-category-label") : null;
       var filterSheetRegionLabel = filterSheet ? filterSheet.querySelector("#filter-sheet-region-label") : null;
@@ -1204,7 +1204,7 @@
         },
         currency: {
           title: "Валюта",
-          type: "multi",
+          type: "single",
           searchable: false,
           options: [
             { label: "Из объявлений", value: "Из объявлений" },
@@ -1218,7 +1218,7 @@
           searchable: false,
           min: 100,
           max: 1000,
-          step: 50
+          step: 1
         },
         region: {
           title: "Регион",
@@ -1427,7 +1427,11 @@
         }
 
         if (currencyTab && filterSheet.contains(currencyTab)) {
-          toggleDraftArrayValue("currency", currencyTab.getAttribute("data-filter-value") || "");
+          if ((currencyTab.getAttribute("data-filter-value") || "") === "Из объявлений") {
+            fullFilterState.draft.filters.currency = [];
+          } else {
+            fullFilterState.draft.filters.currency = [currencyTab.getAttribute("data-filter-value") || ""];
+          }
           renderFullFilterSheet();
           return;
         }
@@ -1689,7 +1693,7 @@
       function createRangeUiState(minValue, maxValue, config) {
         var defaultMin = Number(config.min);
         var defaultMax = Number(config.max);
-        var step = Number(config.step || 50);
+        var step = Number(config.step || 1);
         var min = minValue ? snapRangeValue(minValue, defaultMin, defaultMax, step) : defaultMin;
         var max = maxValue ? snapRangeValue(maxValue, defaultMin, defaultMax, step) : defaultMax;
 
@@ -1736,19 +1740,18 @@
         }
 
         numeric = Math.max(minBound, Math.min(maxBound, numeric));
-        return Math.round((numeric - minBound) / step) * step + minBound;
+        return Math.round(numeric);
       }
 
       function getRangeStateFlags(rangeState) {
         var minValue = Number(rangeState.min || rangeState.defaultMin);
         var maxValue = Number(rangeState.max || rangeState.defaultMax);
-        var step = Number(rangeState.step || 50);
 
         return {
           isDefault: minValue === Number(rangeState.defaultMin) && maxValue === Number(rangeState.defaultMax),
           isDirty: minValue !== Number(rangeState.initialMin) || maxValue !== Number(rangeState.initialMax),
           isError: minValue >= maxValue,
-          isWarning: maxValue - minValue === step
+          isWarning: ! (minValue >= maxValue) && maxValue - minValue <= 1
         };
       }
 
@@ -1772,6 +1775,11 @@
       }
 
       function getFilterComparableSnapshot(state) {
+        var pricePayload = state.priceRange ? getRangeApplyPayload(state.priceRange) : {
+          priceMin: state.filters.priceMin || "",
+          priceMax: state.filters.priceMax || ""
+        };
+
         return JSON.stringify({
           activeCategoryValue: state.activeCategoryValue || "",
           region: (state.region || []).slice(),
@@ -1784,8 +1792,8 @@
             urgentSale: (state.filters.urgentSale || []).slice(),
             installment: (state.filters.installment || []).slice(),
             currency: (state.filters.currency || []).slice(),
-            priceMin: state.filters.priceMin || "",
-            priceMax: state.filters.priceMax || "",
+            priceMin: pricePayload.priceMin || "",
+            priceMax: pricePayload.priceMax || "",
             delivery: (state.filters.delivery || []).slice()
           }
         });
@@ -2227,12 +2235,6 @@
         parts.push(escapeHtml(label));
         parts.push("</span>");
 
-        if (isSelected && isMulti && resultsState.filters.condition.length > 1) {
-          parts.push('<span class="results-filter-chip__counter">');
-          parts.push(String(resultsState.filters.condition.length));
-          parts.push("</span>");
-        }
-
         if (!isSelected && !isCategory && !isToggle) {
           parts.push('<span class="results-filter-chip__chevron-box icon-color--primary" aria-hidden="true"><svg class="icon-svg icon--chevron-down" viewBox="0 0 24 24"><use href="#icon-chevron-down"></use></svg></span>');
         }
@@ -2285,7 +2287,14 @@
           return renderSheetTab(tab.label, tab.value, tab.value === "" ? !fullFilterState.draft.filters.condition.length : fullFilterState.draft.filters.condition.indexOf(tab.value) !== -1, "condition");
         }).join("");
         filterSheetCurrencyTabs.innerHTML = currencyTabs.map(function (tab) {
-          return renderSheetTab(tab.label, tab.value, fullFilterState.draft.filters.currency.indexOf(tab.value) !== -1, "currency");
+          return renderSheetTab(
+            tab.label,
+            tab.value,
+            tab.value === "Из объявлений"
+              ? !fullFilterState.draft.filters.currency.length
+              : fullFilterState.draft.filters.currency.indexOf(tab.value) !== -1,
+            "currency"
+          );
         }).join("");
         filterSheetPriceRange.innerHTML = renderRangeBlockMarkup("sheet-price");
         syncRangeBlock(filterSheetPriceRange, rangeState, "sheet-price");
@@ -2350,8 +2359,7 @@
           escapeHtml(prefix),
           '">',
           '</div>',
-          '<div class="filter-range__labels"><span data-range-role="label-min"></span><span data-range-role="label-max"></span>',
-          "</span></div>",
+          '<div class="filter-range__labels"><span data-range-role="label-min"></span><span data-range-role="label-max"></span></div>',
           "</div>"
         ].join("");
       }
@@ -2372,9 +2380,13 @@
         var flags;
         var minValue;
         var maxValue;
-        var startPercent;
-        var endPercent;
-        var fillLeft;
+        var trackRect;
+        var trackWidth;
+        var usableWidth;
+        var startRatio;
+        var endRatio;
+        var startX;
+        var endX;
         var fillWidth;
 
         if (!root || !rangeState) {
@@ -2396,10 +2408,14 @@
         flags = getRangeStateFlags(rangeState);
         minValue = Number(rangeState.min || rangeState.defaultMin);
         maxValue = Number(rangeState.max || rangeState.defaultMax);
-        startPercent = ((minValue - rangeState.minBound) / (rangeState.maxBound - rangeState.minBound)) * 100;
-        endPercent = ((maxValue - rangeState.minBound) / (rangeState.maxBound - rangeState.minBound)) * 100;
-        fillLeft = Math.min(startPercent, endPercent);
-        fillWidth = Math.max(0, Math.abs(endPercent - startPercent));
+        trackRect = root.querySelector(".filter-range__track");
+        trackWidth = trackRect ? trackRect.clientWidth : 0;
+        usableWidth = Math.max(0, trackWidth - 32);
+        startRatio = (minValue - rangeState.minBound) / (rangeState.maxBound - rangeState.minBound);
+        endRatio = (maxValue - rangeState.minBound) / (rangeState.maxBound - rangeState.minBound);
+        startX = 16 + (usableWidth * startRatio);
+        endX = 16 + (usableWidth * endRatio);
+        fillWidth = Math.max(0, Math.abs(endX - startX));
 
         if (minInput) {
           minInput.value = rangeState.inputMin;
@@ -2428,27 +2444,27 @@
         }
 
         if (fill) {
-          fill.style.left = fillLeft + "%";
-          fill.style.width = fillWidth + "%";
+          fill.style.left = Math.min(startX, endX) + "px";
+          fill.style.width = fillWidth + "px";
         }
 
         if (thumbMin) {
-          thumbMin.style.left = startPercent + "%";
+          thumbMin.style.left = startX + "px";
         }
 
         if (thumbMax) {
-          thumbMax.style.left = endPercent + "%";
+          thumbMax.style.left = endX + "px";
         }
 
         if (bubbleMin) {
           bubbleMin.textContent = String(minValue);
-          bubbleMin.style.left = startPercent + "%";
+          bubbleMin.style.left = startX + "px";
           bubbleMin.hidden = rangeState.activeThumb !== "min";
         }
 
         if (bubbleMax) {
           bubbleMax.textContent = String(maxValue);
-          bubbleMax.style.left = endPercent + "%";
+          bubbleMax.style.left = endX + "px";
           bubbleMax.hidden = rangeState.activeThumb !== "max";
         }
 
@@ -2488,6 +2504,11 @@
       }
 
       function renderBottomsheetList() {
+        if (!bottomsheetState.isOpen) {
+          filterBottomsheetList.innerHTML = "";
+          return;
+        }
+
         if (bottomsheetState.type === "range") {
           filterBottomsheetList.innerHTML = renderRangeBlockMarkup("bottomsheet-price");
           syncRangeBlock(filterBottomsheetList, bottomsheetState.range, "bottomsheet-price");
@@ -2500,11 +2521,6 @@
         var options = orderedOptions.filter(function (option) {
           return !normalizedSearch || normalizeValue(option.label).indexOf(normalizedSearch) !== -1;
         });
-
-        if (!bottomsheetState.isOpen) {
-          filterBottomsheetList.innerHTML = "";
-          return;
-        }
 
         if (!options.length) {
           filterBottomsheetList.innerHTML = '<div class="filter-bottomsheet__option"><span class="filter-bottomsheet__option-label">Ничего не найдено</span></div>';
@@ -2595,6 +2611,7 @@
       }
 
       function applyFullFilterSheet() {
+        Object.assign(fullFilterState.draft.filters, getRangeApplyPayload(fullFilterState.draft.priceRange));
         resultsState.activeCategoryLabel = fullFilterState.draft.activeCategoryLabel;
         resultsState.activeCategoryValue = fullFilterState.draft.activeCategoryValue;
         resultsState.region = fullFilterState.draft.region.slice();
@@ -2923,26 +2940,6 @@
       }
 
       function getChipLabel(key) {
-        if (key === "category") {
-          return resultsState.activeCategoryLabel || "Все категории";
-        }
-
-        if (key === "seller" && resultsState.filters.seller.length) {
-          return getSellerSummaryLabel(resultsState.filters.seller);
-        }
-
-        if (key === "condition" && resultsState.filters.condition.length) {
-          return resultsState.filters.condition.length === 1 ? resultsState.filters.condition[0] : String(resultsState.filters.condition.length) + " состояния";
-        }
-
-        if (key === "currency" && resultsState.filters.currency.length) {
-          return getCurrencySummaryLabel(resultsState.filters.currency);
-        }
-
-        if (key === "price" && (resultsState.filters.price || resultsState.filters.priceMin || resultsState.filters.priceMax)) {
-          return getPriceSummaryLabel(resultsState.filters);
-        }
-
         return CHIP_LABELS[key];
       }
 
@@ -3049,6 +3046,10 @@
           return state.activeCategoryValue || "";
         }
 
+        if (key === "currency") {
+          return (state.filters.currency && state.filters.currency[0]) || "Из объявлений";
+        }
+
         if (key === "sort") {
           return state.sort || "recommended";
         }
@@ -3059,7 +3060,7 @@
       function getSourceMultiValue(source, key) {
         var state = source === "full" ? fullFilterState.draft : resultsState;
 
-        if (key === "seller" || key === "currency") {
+        if (key === "seller") {
           return state.filters[key] || [];
         }
 
@@ -3085,6 +3086,10 @@
       function getDefaultValue(key) {
         if (key === "region") {
           return [];
+        }
+
+        if (key === "currency") {
+          return "Из объявлений";
         }
 
         if (key === "sort") {
@@ -3126,8 +3131,13 @@
           return;
         }
 
-        if (key === "seller" || key === "currency") {
+        if (key === "seller") {
           state.filters[key] = data.draftValues.slice();
+          return;
+        }
+
+        if (key === "currency") {
+          state.filters.currency = data.draftValue && data.draftValue !== "Из объявлений" ? [data.draftValue] : [];
           return;
         }
 
@@ -3167,8 +3177,13 @@
           return;
         }
 
-        if (key === "seller" || key === "currency") {
+        if (key === "seller") {
           draft.filters[key] = data.draftValues.slice();
+          return;
+        }
+
+        if (key === "currency") {
+          draft.filters.currency = data.draftValue && data.draftValue !== "Из объявлений" ? [data.draftValue] : [];
           return;
         }
 
@@ -3190,12 +3205,12 @@
 
       function getCurrentRangeMin(source) {
         var state = source === "full" ? fullFilterState.draft : resultsState;
-        return state.filters.priceMin || "";
+        return state.priceRange ? state.priceRange.min : (state.filters.priceMin || "");
       }
 
       function getCurrentRangeMax(source) {
         var state = source === "full" ? fullFilterState.draft : resultsState;
-        return state.filters.priceMax || "";
+        return state.priceRange ? state.priceRange.max : (state.filters.priceMax || "");
       }
 
       function resetRangeToDefault(rangeState) {
@@ -3268,7 +3283,7 @@
 
       function handleRangeSliderKeydown(rangeState, target, event) {
         var field = target.getAttribute("data-range-slider") || "min";
-        var step = Number(rangeState.step || 50);
+        var step = Number(rangeState.step || 1);
         var delta = event.shiftKey ? step * 5 : step;
         var nextValue;
 
@@ -3292,7 +3307,7 @@
       function updateFullFilterFooterState() {
         var rangeFlags = getRangeStateFlags(fullFilterState.draft.priceRange);
 
-        filterSheetReset.hidden = isFullFilterDraftDefault();
+        filterSheetReset.hidden = false;
         filterSheetApply.disabled = !isFullFilterDraftDirty() || rangeFlags.isError;
       }
 
