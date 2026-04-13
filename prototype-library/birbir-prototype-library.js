@@ -206,7 +206,8 @@
         symbolId: symbolId,
         size: 10,
         colorClass: "icon-color--on-dark",
-        viewBox: viewBox
+        viewBox: viewBox,
+        iconClass: " icon--seller-badge-glyph"
       });
     }
 

@@ -173,6 +173,10 @@
       inset: 8.33%;
     }
 
+    .icon--seller-badge-glyph {
+      inset: 0;
+    }
+
     .icon--heart-transparent,
     .icon--heart-transparent-fill,
     .icon--heart-empty {
