@@ -10,6 +10,7 @@
       --premium: #f3b517;
       --success: #19b333;
       --shadow-badge: rgba(41, 41, 41, 0.6);
+      --top-strip-height: calc(48px + var(--safe-top));
       --safe-top: env(safe-area-inset-top, 0px);
       --safe-bottom: env(safe-area-inset-bottom, 0px);
     }
@@ -433,7 +434,7 @@
       position: absolute;
       inset: 0;
       z-index: 60;
-      background: #f2f2f2;
+      background: linear-gradient(to bottom, #ffffff 0 var(--top-strip-height), #f2f2f2 var(--top-strip-height) 100%);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
@@ -759,7 +760,7 @@
       height: 100vh;
       margin: 0;
       z-index: 45;
-      background: #f2f2f2;
+      background: linear-gradient(to bottom, #ffffff 0 var(--top-strip-height), #f2f2f2 var(--top-strip-height) 100%);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
@@ -1560,7 +1561,7 @@
       display: flex;
       flex-direction: column;
       min-height: 0;
-      background: #f2f2f2;
+      background: linear-gradient(to bottom, #ffffff 0 var(--top-strip-height), #f2f2f2 var(--top-strip-height) 100%);
       border-radius: 0;
       overflow: hidden;
       transform: none;
@@ -2779,7 +2780,7 @@
       height: 100vh;
       margin: 0;
       z-index: 65;
-      background: #f2f2f2;
+      background: linear-gradient(to bottom, #ffffff 0 var(--top-strip-height), #f2f2f2 var(--top-strip-height) 100%);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
@@ -4498,12 +4499,12 @@
     }
 
     .seller-cabinet-app {
-      background: #f2f2f2;
+      background: linear-gradient(to bottom, #ffffff 0 var(--top-strip-height), #f2f2f2 var(--top-strip-height) 100%);
     }
 
     .seller-cabinet-page {
       padding-bottom: calc(167px + var(--safe-bottom));
-      background: #f2f2f2;
+      background: transparent;
     }
 
     .seller-cabinet-header {
