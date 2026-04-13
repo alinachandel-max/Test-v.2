@@ -1203,7 +1203,7 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
-      padding: 0 16px;
+      padding: 0;
     }
 
     .results-card {
@@ -1628,8 +1628,8 @@
       background: #ffffff;
       border-top-left-radius: 0;
       border-top-right-radius: 0;
-      border-bottom-left-radius: 16px;
-      border-bottom-right-radius: 16px;
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
     }
 
     .filter-bottomsheet__header {
@@ -1824,6 +1824,8 @@
     .filter-sheet__tabs {
       display: flex;
       gap: 6px;
+      margin: 0 -16px;
+      padding: 0 16px;
       overflow-x: auto;
       scrollbar-width: none;
     }
@@ -1844,7 +1846,7 @@
       color: #292929;
       font-family: inherit;
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 400;
       line-height: 17px;
       white-space: nowrap;
       appearance: none;
@@ -2007,6 +2009,7 @@
       margin: 0;
       background: transparent;
       pointer-events: none;
+      z-index: 1;
       -webkit-appearance: none;
       appearance: none;
     }
@@ -2019,7 +2022,7 @@
       background: transparent;
       box-shadow: none;
       opacity: 0;
-      pointer-events: auto;
+      pointer-events: none;
       -webkit-appearance: none;
       appearance: none;
       cursor: pointer;
@@ -2033,7 +2036,7 @@
       background: transparent;
       box-shadow: none;
       opacity: 0;
-      pointer-events: auto;
+      pointer-events: none;
       appearance: none;
       cursor: pointer;
     }
@@ -2054,6 +2057,7 @@
       background: var(--accent);
       transform: translateX(-50%);
       pointer-events: none;
+      z-index: 3;
       box-shadow: 0 0 0 1px #ffffff inset;
     }
 
@@ -2082,6 +2086,19 @@
       line-height: 15px;
       transform: translate(-50%, -100%);
       pointer-events: none;
+      z-index: 4;
+    }
+
+    .filter-range__gesture {
+      position: absolute;
+      left: -16px;
+      right: -16px;
+      top: -14px;
+      height: 72px;
+      background: transparent;
+      z-index: 2;
+      touch-action: none;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .filter-range__bubble[hidden] {

@@ -29,24 +29,42 @@
     var RANGE_WARNING_TEXT = "Очень узкий диапазон";
 
     var HOME_FEED_PHOTOS = [
-      "assets/Photo/karolina-grabowska-1-6q3sT4zuA-unsplash.jpg",
-      "assets/Photo/3b6ce1f096e72287f6d7c2933f26.webp",
+      "assets/Photo/2a9ddec28868becbf08a7f918ab0.webp",
       "assets/Photo/32b509cedd2580cc76395a051202.webp",
+      "assets/Photo/3b6ce1f096e72287f6d7c2933f26.webp",
+      "assets/Photo/3c8ba0b52ef4b055440d94b94d57.webp",
       "assets/Photo/429d19915775cea9a9275fa633dd.webp",
       "assets/Photo/6e921e0fc482b4eace9c2be9f1f1.webp",
-      "assets/Photo/karolina-grabowska-4A8N12Dl0Us-unsplash.jpg",
-      "assets/Photo/karolina-grabowska-6JJkzi-3TQM-unsplash.jpg",
-      "assets/Photo/c9015e7d3f066b6b163b9c0babbe.webp",
-      "assets/Photo/2a9ddec28868becbf08a7f918ab0.webp",
-      "assets/Photo/3c8ba0b52ef4b055440d94b94d57.webp",
       "assets/Photo/994253a58d8fb94a9dafd9f8fe82.webp",
-      "assets/Photo/photo-1636831990680-0d088e4cd83c.avif",
-      "assets/Photo/photo-1676325826380-16232d9fb5d8.avif",
+      "assets/Photo/c9015e7d3f066b6b163b9c0babbe.webp",
+      "assets/Photo/cf897c293769fbea79f5339c4484.webp",
+      "assets/Photo/karolina-grabowska-1-6q3sT4zuA-unsplash.jpg",
+      "assets/Photo/karolina-grabowska-4A8N12Dl0Us-unsplash.jpg",
       "assets/Photo/karolina-grabowska-5VTLDmr3_DA-unsplash.jpg",
+      "assets/Photo/karolina-grabowska-6JJkzi-3TQM-unsplash.jpg",
       "assets/Photo/karolina-grabowska-9gZ0KgcHInc-unsplash.jpg",
       "assets/Photo/karolina-grabowska-FbFz1moR894-unsplash.jpg",
       "assets/Photo/karolina-grabowska-g4ve1q1gQxM-unsplash.jpg",
-      "assets/Photo/cf897c293769fbea79f5339c4484.webp"
+      "assets/Photo/photo-1484632152040-840235adc262.avif",
+      "assets/Photo/photo-1506439773649-6e0eb8cfb237.avif",
+      "assets/Photo/photo-1540932239986-30128078f3c5.avif",
+      "assets/Photo/photo-1585128792020-803d29415281.avif",
+      "assets/Photo/photo-1586809914056-8e1bab814aa8.avif",
+      "assets/Photo/photo-1594213114663-d94db9b17125.avif",
+      "assets/Photo/photo-1598300042247-d088f8ab3a91.avif",
+      "assets/Photo/photo-1601049413574-214d105b26e4.avif",
+      "assets/Photo/photo-1608248543803-ba4f8c70ae0b.avif",
+      "assets/Photo/photo-1612372606404-0ab33e7187ee.avif",
+      "assets/Photo/photo-1617214922084-5db8d3c3df5a.avif",
+      "assets/Photo/photo-1628066961967-de52104e87a4.avif",
+      "assets/Photo/photo-1628673319607-9da65024f527.avif",
+      "assets/Photo/photo-1636831990680-0d088e4cd83c.avif",
+      "assets/Photo/photo-1653310561412-ffee1fa56d88.avif",
+      "assets/Photo/photo-1676325826380-16232d9fb5d8.avif",
+      "assets/Photo/photo-1716541424893-734612ddcabb.avif",
+      "assets/Photo/photo-1726499181696-02ba803347f1.avif",
+      "assets/Photo/premium_photo-1673356301514-2cad91907f74.avif",
+      "assets/Photo/premium_photo-1714943972607-6c9eb56e9245.avif"
     ];
 
     var HOME_FEED_BLUEPRINTS = [
@@ -1261,6 +1279,7 @@
       var lastScrollTop = 0;
       var scrollDirection = "up";
       var pendingChipKey = "";
+      var activeRangeGesture = null;
 
       if (!resultsScreen || !resultsScroller || !titleBackButton || !resultsBackButton || !resultsTitle || !resultsSearchTrigger || !resultsSearchText || !filterRow || !filterScroll || !regionButton || !regionText || !sortButton || !sortText || !feedGrid || !feedSurface || !filterSheet || !filterSheetBackdrop || !filterSheetBack || !filterSheetReset || !filterSheetApply || !filterSheetCategoryLabel || !filterSheetRegionLabel || !filterSheetSellerCaption || !filterSheetSellerTabs || !filterSheetConditionTabs || !filterSheetManufacturerValue || !filterSheetSortValue || !filterSheetCurrencyTabs || !filterSheetPriceRange || !filterSheetToggleList || !filterBottomsheet || !filterBottomsheetBackdrop || !filterBottomsheetReset || !filterBottomsheetClose || !filterBottomsheetTitle || !filterBottomsheetSearch || !filterBottomsheetSearchInput || !filterBottomsheetList || !filterBottomsheetApply || !categorySheet || !categorySheetBackdrop || !categorySheetClose || !categorySheetList || !categorySheetAll) {
         return;
@@ -1471,8 +1490,7 @@
         if (target.matches("[data-range-slider='min'][data-range-prefix='sheet-price']")) {
           updateRangeFromSlider(fullFilterState.draft.priceRange, "min", target.value);
           applyDraftToResultsState();
-          pendingChipKey = "filters";
-          renderResults();
+          renderResults({ skipFullFilterSheet: true, preserveChipScroll: true });
           syncFullFilterRangeBlock();
           return;
         }
@@ -1480,8 +1498,7 @@
         if (target.matches("[data-range-slider='max'][data-range-prefix='sheet-price']")) {
           updateRangeFromSlider(fullFilterState.draft.priceRange, "max", target.value);
           applyDraftToResultsState();
-          pendingChipKey = "filters";
-          renderResults();
+          renderResults({ skipFullFilterSheet: true, preserveChipScroll: true });
           syncFullFilterRangeBlock();
         }
       });
@@ -1500,8 +1517,7 @@
         if (target.matches("[data-range-input][data-range-prefix='sheet-price']")) {
           commitRangeTextInput(fullFilterState.draft.priceRange, target.getAttribute("data-range-input") || "");
           applyDraftToResultsState();
-          pendingChipKey = "filters";
-          renderResults();
+          renderResults({ skipFullFilterSheet: true, preserveChipScroll: true });
           syncFullFilterRangeBlock();
           return;
         }
@@ -1543,8 +1559,7 @@
           handleRangeTextInput(bottomsheetState.range, "min", target);
           if (bottomsheetState.source === "results") {
             assignToState(resultsState, bottomsheetState.key, bottomsheetState);
-            pendingChipKey = bottomsheetState.key;
-            renderResults();
+            renderResults({ skipFullFilterSheet: true, preserveChipScroll: true });
           }
           return;
         }
@@ -1553,8 +1568,7 @@
           handleRangeTextInput(bottomsheetState.range, "max", target);
           if (bottomsheetState.source === "results") {
             assignToState(resultsState, bottomsheetState.key, bottomsheetState);
-            pendingChipKey = bottomsheetState.key;
-            renderResults();
+            renderResults({ skipFullFilterSheet: true, preserveChipScroll: true });
           }
           return;
         }
@@ -1563,8 +1577,7 @@
           updateRangeFromSlider(bottomsheetState.range, "min", target.value);
           if (bottomsheetState.source === "results") {
             assignToState(resultsState, bottomsheetState.key, bottomsheetState);
-            pendingChipKey = bottomsheetState.key;
-            renderResults();
+            renderResults({ skipFullFilterSheet: true, preserveChipScroll: true });
           }
           syncBottomsheetRangeBlock();
           return;
@@ -1574,8 +1587,7 @@
           updateRangeFromSlider(bottomsheetState.range, "max", target.value);
           if (bottomsheetState.source === "results") {
             assignToState(resultsState, bottomsheetState.key, bottomsheetState);
-            pendingChipKey = bottomsheetState.key;
-            renderResults();
+            renderResults({ skipFullFilterSheet: true, preserveChipScroll: true });
           }
           syncBottomsheetRangeBlock();
         }
@@ -1596,13 +1608,11 @@
           commitRangeTextInput(bottomsheetState.range, target.getAttribute("data-range-input") || "");
           if (bottomsheetState.source === "results") {
             assignToState(resultsState, bottomsheetState.key, bottomsheetState);
-            pendingChipKey = bottomsheetState.key;
-            renderResults();
+            renderResults({ skipFullFilterSheet: true, preserveChipScroll: true });
           } else if (bottomsheetState.source === "full") {
             assignToDraft(fullFilterState.draft, bottomsheetState.key, bottomsheetState);
-            pendingChipKey = "filters";
             applyDraftToResultsState();
-            renderResults();
+            renderResults({ skipFullFilterSheet: true, preserveChipScroll: true });
           }
           syncBottomsheetRangeBlock();
           return;
@@ -1629,6 +1639,33 @@
             syncBottomsheetRangeBlock();
           }
         }
+      });
+      document.addEventListener("pointermove", function (event) {
+        handleRangeGestureMove(event);
+      });
+      document.addEventListener("pointerup", function (event) {
+        handleRangeGestureEnd(event);
+      });
+      document.addEventListener("pointercancel", function (event) {
+        handleRangeGestureEnd(event);
+      });
+      filterSheet.addEventListener("pointerdown", function (event) {
+        var gesture = event.target.closest("[data-range-gesture]");
+
+        if (!gesture || !filterSheet.contains(gesture)) {
+          return;
+        }
+
+        startRangeGesture(gesture, event);
+      });
+      filterBottomsheetList.addEventListener("pointerdown", function (event) {
+        var gesture = event.target.closest("[data-range-gesture]");
+
+        if (!gesture || !filterBottomsheetList.contains(gesture)) {
+          return;
+        }
+
+        startRangeGesture(gesture, event);
       });
       filterBottomsheetList.addEventListener("click", function (event) {
         var option = event.target.closest("[data-bottomsheet-option]");
@@ -1807,6 +1844,10 @@
         return Math.round(numeric);
       }
 
+      function clampRangeValue(value, min, max) {
+        return Math.max(min, Math.min(max, value));
+      }
+
       function getRangeStateFlags(rangeState) {
         var minValue = Number(rangeState.min || rangeState.defaultMin);
         var maxValue = Number(rangeState.max || rangeState.defaultMax);
@@ -1948,13 +1989,21 @@
       }
 
       function renderHomeBadgesMarkup(items) {
+        var normalizedItems;
+
         if (!items || !items.length) {
           return "";
         }
 
+        normalizedItems = items.map(function (item, index) {
+          return Object.assign({}, item, {
+            iconOnly: index === 0 ? false : true
+          });
+        });
+
         return [
           '<div class="card__badges">',
-          items.map(renderHomeBadge).join(""),
+          normalizedItems.map(renderHomeBadge).join(""),
           "</div>"
         ].join("");
       }
@@ -2136,7 +2185,8 @@
         closeCategorySheet({ silent: true });
       }
 
-      function renderResults() {
+      function renderResults(options) {
+        options = options || {};
         var visibleItems = getVisibleItems();
 
         resultsState.visibleItems = visibleItems;
@@ -2149,10 +2199,14 @@
         applyHeaderMode();
         renderFilterRow();
         renderFeed(visibleItems);
-        renderFullFilterSheet();
+        if (!options.skipFullFilterSheet) {
+          renderFullFilterSheet();
+        }
 
-        if (pendingChipKey) {
+        if (pendingChipKey && !options.preserveChipScroll) {
           scrollChipIntoView(pendingChipKey);
+          pendingChipKey = "";
+        } else if (options.preserveChipScroll) {
           pendingChipKey = "";
         }
 
@@ -2455,10 +2509,26 @@
           '<input class="filter-range__native filter-range__native--max" type="range" data-range-slider="max" data-range-prefix="',
           escapeHtml(prefix),
           '">',
+          '<span class="filter-range__gesture" data-range-gesture="',
+          escapeHtml(prefix),
+          '" aria-hidden="true"></span>',
           '</div>',
           '<div class="filter-range__labels"><span data-range-role="label-min"></span><span data-range-role="label-max"></span></div>',
           "</div>"
         ].join("");
+      }
+
+      function getRangeTrackMetrics(root) {
+        var track = root ? root.querySelector(".filter-range__track") : null;
+        var trackWidth = track ? track.clientWidth : 0;
+        var visualInset = 16;
+
+        return {
+          track: track,
+          trackWidth: trackWidth,
+          visualInset: visualInset,
+          usableWidth: Math.max(0, trackWidth - (visualInset * 2))
+        };
       }
 
       function syncRangeBlock(root, rangeState, prefix) {
@@ -2477,9 +2547,7 @@
         var flags;
         var minValue;
         var maxValue;
-        var trackRect;
-        var trackWidth;
-        var usableWidth;
+        var metrics;
         var startRatio;
         var endRatio;
         var startX;
@@ -2505,13 +2573,11 @@
         flags = getRangeStateFlags(rangeState);
         minValue = Number(rangeState.min || rangeState.defaultMin);
         maxValue = Number(rangeState.max || rangeState.defaultMax);
-        trackRect = root.querySelector(".filter-range__track");
-        trackWidth = trackRect ? trackRect.clientWidth : 0;
-        usableWidth = Math.max(0, trackWidth - 32);
+        metrics = getRangeTrackMetrics(root);
         startRatio = (minValue - rangeState.minBound) / (rangeState.maxBound - rangeState.minBound);
         endRatio = (maxValue - rangeState.minBound) / (rangeState.maxBound - rangeState.minBound);
-        startX = 16 + (usableWidth * startRatio);
-        endX = 16 + (usableWidth * endRatio);
+        startX = metrics.visualInset + (metrics.usableWidth * startRatio);
+        endX = metrics.visualInset + (metrics.usableWidth * endRatio);
         fillWidth = Math.max(0, Math.abs(endX - startX));
 
         if (minInput) {
@@ -3385,6 +3451,162 @@
           rangeState.max = String(maxValue);
           rangeState.inputMax = String(maxValue);
         }
+      }
+
+      function getRangeGestureContext(prefix) {
+        if (prefix === "sheet-price") {
+          return {
+            root: filterSheetPriceRange,
+            rangeState: fullFilterState.draft.priceRange,
+            source: "full",
+            key: "price",
+            sync: syncFullFilterRangeBlock
+          };
+        }
+
+        if (prefix === "bottomsheet-price" && bottomsheetState.type === "range") {
+          return {
+            root: filterBottomsheetList,
+            rangeState: bottomsheetState.range,
+            source: bottomsheetState.source,
+            key: bottomsheetState.key,
+            sync: syncBottomsheetRangeBlock
+          };
+        }
+
+        return null;
+      }
+
+      function getRangeVisualPosition(rangeState, value, metrics) {
+        var ratio;
+
+        if (!metrics.usableWidth || rangeState.maxBound === rangeState.minBound) {
+          return metrics.visualInset;
+        }
+
+        ratio = (value - rangeState.minBound) / (rangeState.maxBound - rangeState.minBound);
+        return metrics.visualInset + (metrics.usableWidth * ratio);
+      }
+
+      function getRangeValueFromClientX(context, clientX) {
+        var metrics = getRangeTrackMetrics(context.root);
+        var trackRect = metrics.track ? metrics.track.getBoundingClientRect() : null;
+        var relativeX;
+        var visualX;
+        var ratio;
+        var rawValue;
+
+        if (!trackRect || !metrics.trackWidth) {
+          return Number(context.rangeState.min || context.rangeState.defaultMin);
+        }
+
+        relativeX = clientX - trackRect.left;
+        visualX = clampRangeValue(relativeX, metrics.visualInset, metrics.trackWidth - metrics.visualInset);
+
+        if (!metrics.usableWidth) {
+          return context.rangeState.minBound;
+        }
+
+        ratio = (visualX - metrics.visualInset) / metrics.usableWidth;
+        rawValue = context.rangeState.minBound + (ratio * (context.rangeState.maxBound - context.rangeState.minBound));
+        return snapRangeValue(String(rawValue), context.rangeState.minBound, context.rangeState.maxBound, context.rangeState.step);
+      }
+
+      function applyRangeGestureValue(context, field, nextValue) {
+        if (!context || !context.rangeState) {
+          return;
+        }
+
+        updateRangeFromSlider(context.rangeState, field, String(nextValue));
+
+        if (context.source === "results") {
+          assignToState(resultsState, context.key, { range: context.rangeState });
+          renderResults({ skipFullFilterSheet: true, preserveChipScroll: true });
+        } else {
+          applyDraftToResultsState();
+          renderResults({ skipFullFilterSheet: true, preserveChipScroll: true });
+        }
+
+        context.sync();
+      }
+
+      function startRangeGesture(gesture, event) {
+        var prefix = gesture.getAttribute("data-range-gesture") || "";
+        var context = getRangeGestureContext(prefix);
+        var metrics;
+        var trackRect;
+        var minValue;
+        var maxValue;
+        var minX;
+        var maxX;
+        var relativeX;
+        var field;
+
+        if (!context || !context.rangeState) {
+          return;
+        }
+
+        metrics = getRangeTrackMetrics(context.root);
+        trackRect = metrics.track ? metrics.track.getBoundingClientRect() : null;
+
+        if (!trackRect) {
+          return;
+        }
+
+        minValue = Number(context.rangeState.min || context.rangeState.defaultMin);
+        maxValue = Number(context.rangeState.max || context.rangeState.defaultMax);
+        minX = getRangeVisualPosition(context.rangeState, minValue, metrics);
+        maxX = getRangeVisualPosition(context.rangeState, maxValue, metrics);
+        relativeX = event.clientX - trackRect.left;
+        field = Math.abs(relativeX - minX) <= Math.abs(relativeX - maxX) ? "min" : "max";
+
+        activeRangeGesture = {
+          pointerId: event.pointerId,
+          gesture: gesture,
+          context: context,
+          field: field
+        };
+
+        context.rangeState.activeThumb = field;
+        context.rangeState.lastTouchedThumb = field;
+        if (gesture.setPointerCapture) {
+          gesture.setPointerCapture(event.pointerId);
+        }
+        event.preventDefault();
+        applyRangeGestureValue(context, field, getRangeValueFromClientX(context, event.clientX));
+      }
+
+      function handleRangeGestureMove(event) {
+        if (!activeRangeGesture || activeRangeGesture.pointerId !== event.pointerId) {
+          return;
+        }
+
+        event.preventDefault();
+        applyRangeGestureValue(
+          activeRangeGesture.context,
+          activeRangeGesture.field,
+          getRangeValueFromClientX(activeRangeGesture.context, event.clientX)
+        );
+      }
+
+      function handleRangeGestureEnd(event) {
+        var gesture = activeRangeGesture ? activeRangeGesture.gesture : null;
+        var context = activeRangeGesture ? activeRangeGesture.context : null;
+
+        if (!activeRangeGesture || activeRangeGesture.pointerId !== event.pointerId) {
+          return;
+        }
+
+        if (gesture && gesture.releasePointerCapture && gesture.hasPointerCapture && gesture.hasPointerCapture(event.pointerId)) {
+          gesture.releasePointerCapture(event.pointerId);
+        }
+
+        if (context && context.rangeState) {
+          context.rangeState.activeThumb = "";
+          context.sync();
+        }
+
+        activeRangeGesture = null;
       }
 
       function handleRangeSliderKeydown(rangeState, target, event) {
