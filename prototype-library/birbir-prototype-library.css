@@ -1572,7 +1572,7 @@
       left: 0;
       right: 0;
       top: 49px;
-      bottom: 0;
+      bottom: auto;
       display: flex;
       flex-direction: column;
       height: auto;
@@ -2281,14 +2281,23 @@
 
     .filter-bottomsheet__list {
       display: block;
-      flex: 1 0 0;
+      flex: 1 1 auto;
       min-height: 0;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
-      padding: 8px 0 calc(108px + 8px + var(--safe-bottom));
+      padding: 8px 0;
       scrollbar-width: none;
       background: #ffffff;
       overflow-anchor: none;
+    }
+
+    .filter-bottomsheet .filter-apply-bar {
+      position: relative;
+      left: auto;
+      right: auto;
+      bottom: auto;
+      margin-top: auto;
+      flex: none;
     }
 
     .filter-bottomsheet__option {
