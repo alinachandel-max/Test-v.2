@@ -1624,12 +1624,14 @@
     }
 
     .filter-sheet__header {
-      padding: calc(24px + var(--safe-top)) 16px 8px;
+      padding: calc(8px + var(--safe-top)) 16px 4px;
       background: #ffffff;
       border-top-left-radius: 0;
       border-top-right-radius: 0;
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 16px;
+      border-bottom-right-radius: 16px;
+      box-shadow: none;
+      transition: box-shadow 180ms ease;
     }
 
     .filter-bottomsheet__header {
@@ -1645,7 +1647,18 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
+    }
+
+    .filter-sheet__title-row {
+      min-height: 50px;
+    }
+
+    .filter-bottomsheet__title-row {
       min-height: 40px;
+    }
+
+    .filter-sheet.filter-sheet--has-shadow .filter-sheet__header {
+      box-shadow: 0 4px 40px rgba(39, 56, 63, 0.1);
     }
 
     .filter-sheet__back,
@@ -2212,6 +2225,10 @@
       border-top-left-radius: 16px;
       border-top-right-radius: 16px;
       background: #ffffff;
+    }
+
+    .filter-sheet .filter-apply-bar__inner {
+      box-shadow: 0 -4px 40px rgba(39, 56, 63, 0.1);
     }
 
     .filter-apply-bar__inner--dual {

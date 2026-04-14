@@ -1124,6 +1124,7 @@
       var filterSheetCurrencyTabs = filterSheet ? filterSheet.querySelector("#filter-sheet-currency-tabs") : null;
       var filterSheetPriceRange = filterSheet ? filterSheet.querySelector("#filter-sheet-price-range") : null;
       var filterSheetToggleList = filterSheet ? filterSheet.querySelector("#filter-sheet-toggle-list") : null;
+      var filterSheetScroll = filterSheet ? filterSheet.querySelector(".filter-sheet__scroll") : null;
       var filterBottomsheet = document.querySelector(".filter-bottomsheet");
       var filterBottomsheetBackdrop = filterBottomsheet ? filterBottomsheet.querySelector(".filter-bottomsheet__backdrop") : null;
       var filterBottomsheetReset = filterBottomsheet ? filterBottomsheet.querySelector(".filter-bottomsheet__reset") : null;
@@ -1279,7 +1280,7 @@
       var scrollDirection = "up";
       var pendingChipKey = "";
 
-      if (!resultsScreen || !resultsScroller || !titleBackButton || !resultsBackButton || !resultsTitle || !resultsSearchTrigger || !resultsSearchText || !filterRow || !filterScroll || !regionButton || !regionText || !sortButton || !sortText || !feedGrid || !feedSurface || !filterSheet || !filterSheetBackdrop || !filterSheetBack || !filterSheetReset || !filterSheetApply || !filterSheetCategoryLabel || !filterSheetRegionLabel || !filterSheetSellerCaption || !filterSheetSellerTabs || !filterSheetConditionTabs || !filterSheetManufacturerValue || !filterSheetSortValue || !filterSheetCurrencyTabs || !filterSheetPriceRange || !filterSheetToggleList || !filterBottomsheet || !filterBottomsheetBackdrop || !filterBottomsheetReset || !filterBottomsheetClose || !filterBottomsheetTitle || !filterBottomsheetSearch || !filterBottomsheetSearchInput || !filterBottomsheetList || !filterBottomsheetApply || !categorySheet || !categorySheetBackdrop || !categorySheetClose || !categorySheetList || !categorySheetAll) {
+      if (!resultsScreen || !resultsScroller || !titleBackButton || !resultsBackButton || !resultsTitle || !resultsSearchTrigger || !resultsSearchText || !filterRow || !filterScroll || !regionButton || !regionText || !sortButton || !sortText || !feedGrid || !feedSurface || !filterSheet || !filterSheetBackdrop || !filterSheetBack || !filterSheetReset || !filterSheetApply || !filterSheetCategoryLabel || !filterSheetRegionLabel || !filterSheetSellerCaption || !filterSheetSellerTabs || !filterSheetConditionTabs || !filterSheetManufacturerValue || !filterSheetSortValue || !filterSheetCurrencyTabs || !filterSheetPriceRange || !filterSheetToggleList || !filterSheetScroll || !filterBottomsheet || !filterBottomsheetBackdrop || !filterBottomsheetReset || !filterBottomsheetClose || !filterBottomsheetTitle || !filterBottomsheetSearch || !filterBottomsheetSearchInput || !filterBottomsheetList || !filterBottomsheetApply || !categorySheet || !categorySheetBackdrop || !categorySheetClose || !categorySheetList || !categorySheetAll) {
         return;
       }
 
@@ -1324,6 +1325,10 @@
 
         lastScrollTop = nextTop;
         applyHeaderMode();
+      });
+
+      filterSheetScroll.addEventListener("scroll", function () {
+        updateFilterSheetShadowState();
       });
 
       filterRow.addEventListener("click", function (event) {
@@ -2420,6 +2425,7 @@
         }).join("");
         filterSheetReset.hidden = isFullFilterDraftDefault();
         filterSheetApply.disabled = !isFullFilterDraftDirty() || rangeFlags.isError;
+        updateFilterSheetShadowState();
       }
 
       function renderSheetTab(label, value, isSelected, group) {
@@ -2708,11 +2714,13 @@
         closeCategorySheet({ silent: true });
         renderFullFilterSheet();
         updateTooltipVisibility();
+        window.requestAnimationFrame(updateFilterSheetShadowState);
       }
 
       function closeFullFilterSheet(options) {
         options = options || {};
         fullFilterState.isOpen = false;
+        filterSheet.classList.remove("filter-sheet--has-shadow");
         if (!options.silent) {
           renderFullFilterSheet();
         } else {
@@ -3448,6 +3456,10 @@
 
         filterBottomsheetReset.hidden = isDefault;
         filterBottomsheetApply.disabled = false;
+      }
+
+      function updateFilterSheetShadowState() {
+        filterSheet.classList.toggle("filter-sheet--has-shadow", fullFilterState.isOpen && filterSheetScroll.scrollTop > 2);
       }
 
       function syncFullFilterRangeBlock() {
