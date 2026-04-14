@@ -185,6 +185,10 @@
       inset: 12.5% 8.33% 13.91% 8.33%;
     }
 
+    .icon--profile-favorite {
+      inset: 6.25% 4.17% 7.81% 4.17%;
+    }
+
     .icon--heart-filled-detail {
       inset: 15% 6.67% 11.41% 10%;
     }
@@ -4387,7 +4391,7 @@
       display: flex;
       flex-direction: column;
       gap: 8px;
-      padding: calc(8px + var(--top-strip-height)) 0 8px;
+      padding: calc(8px + var(--safe-top)) 0 8px;
       background: #ffffff;
       border-bottom-left-radius: 16px;
       border-bottom-right-radius: 16px;
@@ -4494,6 +4498,13 @@
       font-weight: 400;
       line-height: 19px;
       text-align: center;
+    }
+
+    .profile-hero__phone a,
+    .profile-hero__phone a[x-apple-data-detectors] {
+      color: inherit;
+      text-decoration: none;
+      pointer-events: none;
     }
 
     .profile-link-row {
