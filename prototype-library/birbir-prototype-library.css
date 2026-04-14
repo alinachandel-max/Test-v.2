@@ -4397,7 +4397,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 40px;
+      min-height: 50px;
       padding: 0 16px;
     }
 
@@ -4480,13 +4480,11 @@
       width: 20px;
       height: 20px;
       flex: none;
+      color: #292929;
     }
 
-    .profile-hero__edit img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
+    .icon--profile-edit {
+      inset: 10.19% 10.2% 12.5% 12.49%;
     }
 
     .profile-hero__phone {
@@ -4559,12 +4557,44 @@
       border-color: #fdddf2;
     }
 
+    .profile-menu-item__icon-box--round {
+      border-radius: 999px;
+    }
+
     .profile-menu-item__icon-image {
       display: block;
       width: 16px;
       height: 16px;
       object-fit: contain;
       flex: none;
+    }
+
+    .profile-menu-item__icon-svg {
+      display: block;
+      width: 16px;
+      height: 16px;
+      flex: none;
+      color: #292929;
+    }
+
+    .icon--profile-settings {
+      inset: 9.27% 12.5% 9.28% 12.5%;
+    }
+
+    .icon--profile-my-ads {
+      inset: 8.33% 12.5%;
+    }
+
+    .icon--profile-my-orders {
+      inset: 12.5% 12.77%;
+    }
+
+    .icon--profile-business {
+      inset: 8.72% 8.33% 8.33% 8.33%;
+    }
+
+    .icon--profile-support {
+      inset: 17.97% 8.92% 10.49% 7.33%;
     }
 
     .profile-menu-item__icon-image--cover {
