@@ -4197,6 +4197,7 @@
           return;
         }
         favoriteToast.classList.remove("is-visible");
+        favoriteToast.removeAttribute("data-similar-query");
       }
 
       function showFavoriteToast(card) {
