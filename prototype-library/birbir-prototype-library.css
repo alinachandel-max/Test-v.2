@@ -3020,6 +3020,12 @@
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       font: inherit;
+      transition: width 220ms ease, padding 220ms ease, border-radius 220ms ease;
+    }
+
+    .detail-similar-badge--compact {
+      width: 30px;
+      padding: 0;
     }
 
     .detail-similar-badge:focus-visible {
@@ -3050,8 +3056,16 @@
       font-size: 14px;
       font-weight: 500;
       line-height: 19px;
+      opacity: 1;
       text-overflow: ellipsis;
       white-space: nowrap;
+      transition: width 200ms ease, padding 200ms ease, opacity 140ms ease;
+    }
+
+    .detail-similar-badge--compact .detail-similar-badge__label {
+      width: 0;
+      padding: 0;
+      opacity: 0;
     }
 
     .detail-hero__badge {
