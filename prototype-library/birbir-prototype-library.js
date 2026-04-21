@@ -3709,6 +3709,8 @@
         "Этот товар пользуется спросом"
       ];
       var detailHeroBadgeTimer = null;
+      var detailSimilarOpenCount = 0;
+      var detailSimilarCollapseTimer = null;
 
       if (!detailScreen || !detailScroller || !detailBack || !detailHeroImage || !detailHeroBadge || !detailHeroPrice || !detailHeroOld || !detailHeroOldValue || !detailHeroDiscount || !detailHeroTitle || !detailHeroBadges || !detailCharacteristics || !detailDescription || !detailOfferInput || !detailOfferChips || !detailQuestionInput || !detailQuestionChips || !detailSimilarTrack || !detailSellerTrack) {
         return;
@@ -3774,6 +3776,7 @@
       function openDetail(card) {
         assignSourceCardOrdinals();
         populateDetail(card);
+        updateDetailSimilarBadge();
         detailScreen.classList.add("is-open");
         detailScreen.setAttribute("aria-hidden", "false");
         detailScroller.scrollTop = 0;
@@ -3781,10 +3784,27 @@
 
       function closeDetail() {
         window.clearTimeout(detailHeroBadgeTimer);
+        window.clearTimeout(detailSimilarCollapseTimer);
         detailHeroBadge.classList.remove("is-visible", "is-leaving");
         detailHeroBadge.hidden = true;
         detailScreen.classList.remove("is-open");
         detailScreen.setAttribute("aria-hidden", "true");
+      }
+
+      function updateDetailSimilarBadge() {
+        if (!detailSimilarBadge) {
+          return;
+        }
+
+        detailSimilarOpenCount += 1;
+        window.clearTimeout(detailSimilarCollapseTimer);
+        detailSimilarBadge.classList.toggle("detail-similar-badge--compact", detailSimilarOpenCount > 2);
+
+        if (detailSimilarOpenCount <= 2) {
+          detailSimilarCollapseTimer = window.setTimeout(function () {
+            detailSimilarBadge.classList.add("detail-similar-badge--compact");
+          }, 1400);
+        }
       }
 
       function populateDetail(card) {
