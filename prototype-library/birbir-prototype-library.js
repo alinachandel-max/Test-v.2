@@ -4236,7 +4236,7 @@
         }
 
         favoriteToast.classList.add("is-visible");
-        favoriteToastTimer = window.setTimeout(hideFavoriteToast, 1500);
+        favoriteToastTimer = window.setTimeout(hideFavoriteToast, 4000);
       }
 
       if (favoriteToast) {
