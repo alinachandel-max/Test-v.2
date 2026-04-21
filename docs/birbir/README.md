@@ -21,3 +21,29 @@ Figma page уже создана:
 
 Правило:
 - если reusable contract не описан здесь, он не должен silently появляться в коде как новый one-off variant
+
+## Hard Stop: No Figma, No Visual Guessing
+
+Если target node из Figma не читается, визуальная реализация должна останавливаться.
+
+Что делать обязательно:
+1. Попробовать получить `metadata`, `screenshot` и `design context` exact node
+2. Если node не читается или инструменты стабильно падают по timeout/error, сразу сообщить об этом пользователю
+3. Не придумывать новый экран, visual hierarchy, spacing, уникальные блоки или copy по памяти
+4. Попросить screenshot/export exact frame или восстановить доступ к Figma node
+
+Что разрешено до восстановления доступа:
+- wiring
+- navigation
+- persist state
+- non-visual helpers
+- безопасные правки существующих canonical contracts, если они уже подтверждены другим source of truth
+
+Что запрещено:
+- собирать `screen-specific` layout "примерно как должно быть"
+- подменять target frame соседним frame без явного подтверждения
+- выдавать guessed fallback за реализацию по макету
+
+Текущий важный reference example:
+- file: `BirBir-App` (`BPlqeBZM6wfvNTTeMDcu9f`)
+- target node example: `56138:98770`

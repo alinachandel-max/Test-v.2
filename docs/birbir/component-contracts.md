@@ -40,13 +40,19 @@
 Перед сборкой любого нового экрана или большого изменения:
 
 1. Зафиксировать target node и убедиться, что это не legacy
-2. Разложить экран на contracts
-3. Для каждого contract найти binding в `source-of-truth.json`
-4. Если binding нет:
+2. Подтвердить, что target node реально читается через Figma inspection tools
+3. Если target node не читается:
+   - немедленно остановить visual implementation
+   - сообщить пользователю, что Figma недоступна
+   - не придумывать layout, spacing, copy или screen-specific blocks
+   - запросить screenshot/export exact frame или восстановление доступа
+4. Разложить экран на contracts
+5. Для каждого contract найти binding в `source-of-truth.json`
+6. Если binding нет:
    - сначала добавить canonical variant в Figma page
    - потом добавить entry в `source-of-truth.json`
    - только потом собирать экран
-5. Классифицировать изменение:
+7. Классифицировать изменение:
    - `screen-specific`
    - `component-contract`
    - `token/foundation`
@@ -54,6 +60,11 @@
 
 Правило эскалации:
 - если правка повторяется хотя бы на 2 экранах, она не должна жить как локальный override
+
+Hard-stop rule:
+- unreadable Figma node never authorizes guessed UI
+- `screen-specific` visual work without readable source of truth запрещён
+- допустимы только non-visual технические изменения, пока source of truth не восстановлен
 
 ## Breakage Clusters We Already Know
 Это повторяющиеся типы поломок, которые нужно проверять в первую очередь:
@@ -116,6 +127,7 @@
 - не менять reusable behavior в одном screen handler, не обновив контракт
 - при затрагивании filters, badges, cards, empty-state и seller tags сначала обновлять contract, потом код
 - при любом touch-driven компоненте обязательна Safari проверка
+- если target Figma frame недоступен, сначала эскалировать проблему пользователю, а не делать guessed fallback
 
 ## QA Checklist
 ### Contract QA
@@ -138,4 +150,3 @@
 - results product cards
 - detail seller tags
 - preview badges across home / results / detail
-

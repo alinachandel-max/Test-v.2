@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>BirBir Home V2</title>
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+      c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+      t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+      y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "waigjf60td");
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="prototype-library/birbir-prototype-library.css?v=20260414-home-v2">
+  <style>
+    .home-v2-app {
+      background:
+        radial-gradient(circle at top left, rgba(255, 224, 201, 0.95), transparent 36%),
+        radial-gradient(circle at top right, rgba(214, 241, 255, 0.85), transparent 28%),
+        linear-gradient(180deg, #fffdf7 0%, #f2f2f2 42%, #f2f2f2 100%);
+    }
+
+    .home-v2-page {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: calc(12px + var(--safe-top)) 16px calc(128px + var(--safe-bottom));
+      background: transparent;
+    }
+
+    .home-v2-surface {
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: 0 10px 30px rgba(41, 41, 41, 0.06);
+    }
+
+    .home-v2-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 18px;
+      background:
+        radial-gradient(circle at 85% 20%, rgba(255, 208, 119, 0.45), transparent 22%),
+        linear-gradient(135deg, #ffffff 0%, #fff6ee 48%, #eff9ff 100%);
+    }
+
+    .home-v2-hero__eyebrow {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: rgba(184, 5, 125, 0.08);
+      color: #b8057d;
+      font-size: 12px;
+      font-weight: 600;
+      line-height: 15px;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .home-v2-hero__content {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 116px;
+      gap: 12px;
+      align-items: end;
+      margin-top: 14px;
+    }
+
+    .home-v2-hero__title {
+      margin: 0;
+      color: #292929;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 31px;
+      letter-spacing: -0.03em;
+    }
+
+    .home-v2-hero__text {
+      margin: 10px 0 0;
+      color: #5c5c5c;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 19px;
+    }
+
+    .home-v2-hero__media {
+      position: relative;
+      height: 128px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #ffd8ea 0%, #fff2f9 100%);
+    }
+
+    .home-v2-hero__media img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .home-v2-hero__meta {
+      display: flex;
+      gap: 8px;
+      margin-top: 14px;
+      flex-wrap: wrap;
+    }
+
+    .home-v2-hero__pill {
+      display: inline-flex;
+      align-items: center;
+      min-height: 32px;
+      padding: 0 12px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #292929;
+      font-size: 13px;
+      font-weight: 500;
+      line-height: 16px;
+      box-shadow: inset 0 0 0 1px #ededed;
+    }
+
+    .home-v2-quick-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .home-v2-quick-card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      min-height: 124px;
+      padding: 14px;
+      border-radius: 20px;
+      background: #ffffff;
+      color: #292929;
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(41, 41, 41, 0.06);
+    }
+
+    .home-v2-quick-card__icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      background: #f8f3f9;
+    }
+
+    .home-v2-quick-card__title {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 18px;
+    }
+
+    .home-v2-quick-card__text {
+      margin: 0;
+      color: #6b6b6b;
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 16px;
+    }
+
+    .home-v2-section {
+      padding: 16px;
+    }
+
+    .home-v2-section__head {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .home-v2-section__title {
+      margin: 0;
+      color: #292929;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+    }
+
+    .home-v2-section__text {
+      margin: 4px 0 0;
+      color: #6b6b6b;
+      font-size: 13px;
+      font-weight: 400;
+      line-height: 17px;
+    }
+
+    .home-v2-section__tag {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: #f5f5f5;
+      color: #5c5c5c;
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 15px;
+      white-space: nowrap;
+    }
+
+    .home-v2-search-surface {
+      padding: 10px 12px 12px;
+    }
+
+    .home-v2-search-surface .search {
+      padding: 0;
+    }
+
+    .home-v2-search-surface .search-field,
+    .home-v2-search-surface .location {
+      box-shadow: inset 0 0 0 1px rgba(41, 41, 41, 0.06);
+    }
+
+    .home-v2-banners .banners {
+      padding: 0;
+    }
+
+    .home-v2-banners .banner {
+      width: 248px;
+    }
+
+    .home-v2-categories .category-strip {
+      margin: 0 -4px;
+    }
+
+    .home-v2-feed {
+      padding-bottom: 18px;
+    }
+
+    .home-v2-feed .cards {
+      margin-top: 0;
+    }
+
+    @media (max-width: 389px) {
+      .home-v2-hero__content {
+        grid-template-columns: 1fr;
+      }
+
+      .home-v2-quick-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <svg class="icon-sprite" aria-hidden="true" focusable="false">
+    <symbol id="icon-search" viewBox="0 0 24 24">
+      <path d="M16.031 14.617l4.676 4.676-1.414 1.414-4.676-4.676A7 7 0 1 1 16.031 14.617ZM5 10a5 5 0 1 0 10 0A5 5 0 0 0 5 10Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-heart-empty" viewBox="0 0 24 24">
+      <path d="M12 20.6l-1.08-.98C5.64 14.86 2 11.56 2 7.5 2 4.46 4.42 2 7.5 2c1.74 0 3.41.81 4.5 2.09A6 6 0 0 1 16.5 2C19.58 2 22 4.46 22 7.5c0 4.06-3.64 7.36-8.92 12.12L12 20.6Zm-3.96-3.93.03.03L12 20.29l3.93-3.58.03-.03C20.81 12.23 22 9.86 22 7.5 22 5 20 3 17.5 3c-1.54 0-3.04.81-3.96 2.09h-1.08C11.54 3.81 10.04 3 8.5 3 6 3 4 5 4 7.5c0 2.36 1.19 4.73 4.04 9.17Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-chat" viewBox="0 0 24 24">
+      <path d="M4 4h16a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H8.83L4 20.83V6a2 2 0 0 1 2-2Zm0 2v9.17L8 13h12V6H4Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-user" viewBox="0 0 24 24">
+      <path d="M12 12a5 5 0 1 1 0-10 5 5 0 0 1 0 10Zm0-2a3 3 0 1 0 0-6 3 3 0 0 0 0 6Zm0 3c4.42 0 8 2.24 8 5v2H4v-2c0-2.76 3.58-5 8-5Zm0 2c-3.31 0-6 1.57-6 3v.5h12V18c0-1.43-2.69-3-6-3Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-add-circle-fill" viewBox="0 0 24 24">
+      <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm1 5h-2v4H7v2h4v4h2v-4h4v-2h-4V7Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-navigation-fill" viewBox="0 0 24 24">
+      <path d="M12 2 4 21l8-3 8 3L12 2Zm0 4.78 4.69 10.31-4.11-1.54-.58-.22-.58.22-4.11 1.54L12 6.78Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-heart-transparent-fill" viewBox="0 0 24 24">
+      <path d="M12 20.6l-1.08-.98C5.64 14.86 2 11.56 2 7.5 2 4.46 4.42 2 7.5 2c1.74 0 3.41.81 4.5 2.09A6 6 0 0 1 16.5 2C19.58 2 22 4.46 22 7.5c0 4.06-3.64 7.36-8.92 12.12L12 20.6Z" fill="#ffffff"/>
+      <path d="M12 18.29 15.87 14.76C18.65 12.24 20 10.2 20 7.5 20 5.57 18.43 4 16.5 4c-1.24 0-2.57.71-3.38 1.82L12 7.27l-1.12-1.45C10.07 4.71 8.74 4 7.5 4 5.57 4 4 5.57 4 7.5c0 2.7 1.35 4.74 4.13 7.26L12 18.29Z" fill="#B8057D"/>
+    </symbol>
+    <symbol id="icon-heart-transparent" viewBox="0 0 24 24">
+      <path d="M12 20.6l-1.08-.98C5.64 14.86 2 11.56 2 7.5 2 4.46 4.42 2 7.5 2c1.74 0 3.41.81 4.5 2.09A6 6 0 0 1 16.5 2C19.58 2 22 4.46 22 7.5c0 4.06-3.64 7.36-8.92 12.12L12 20.6Zm-3.96-3.93L12 20.29l3.96-3.62C18.81 14.08 20 12.18 20 9.5 20 7.57 18.43 6 16.5 6c-1.54 0-3.04.81-3.96 2.09h-1.08C10.54 6.81 9.04 6 7.5 6 5.57 6 4 7.57 4 9.5c0 2.68 1.19 4.58 4.04 7.17Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-crown-fill" viewBox="0 0 24 24">
+      <path d="M3 8.5 7.5 11 12 5l4.5 6L21 8.5l-2.1 10.3a2 2 0 0 1-1.96 1.6H7.06a2 2 0 0 1-1.96-1.6L3 8.5Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-track-fill" viewBox="0 0 24 24">
+      <path d="M3 5h11a2 2 0 0 1 2 2v1h2.7a2 2 0 0 1 1.56.75l1.97 2.46c.5.62.77 1.39.77 2.19V16a2 2 0 0 1-2 2h-1.1a3.4 3.4 0 0 1-6.8 0H9.9a3.4 3.4 0 0 1-6.8 0H3a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Zm3.5 14.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Zm10 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-lightning-fill" viewBox="0 0 24 24">
+      <path d="M13.4 2 5.8 13h4.8L9.9 22 18.2 10.6h-4.83L13.4 2Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-check-circle-fill" viewBox="0 0 24 24">
+      <path d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20Zm4.54 6.46L10.5 14.5l-3.04-3.04-1.42 1.42 4.46 4.46 7.46-7.46-1.42-1.42Z" fill="currentColor"/>
+    </symbol>
+    <symbol id="icon-agency-fill" viewBox="0 0 24 24">
+      <path d="M4 20V8.78L12 4l8 4.78V20h-4v-5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v5H4Zm6 0h4v-5h-4v5Zm1-8h2v-2h-2v2Z" fill="currentColor"/>
+    </symbol>
+  </svg>
+
+  <div class="app home-v2-app" data-home-version="v2">
+    <main class="screen home-v2-page">
+      <section class="home-v2-hero home-v2-surface" aria-label="Новая главная">
+        <span class="home-v2-hero__eyebrow">Preview v2</span>
+        <div class="home-v2-hero__content">
+          <div>
+            <h1 class="home-v2-hero__title">Новая главная собирает поиск, подборки и быстрые действия в одном ритме</h1>
+            <p class="home-v2-hero__text">Экран остаётся лёгким: reused компоненты, те же карточки и категории, но с более витринным первым экраном.</p>
+          </div>
+          <div class="home-v2-hero__media" aria-hidden="true">
+            <img src="assets/collections/3.png" alt="">
+          </div>
+        </div>
+        <div class="home-v2-hero__meta" aria-label="Ключевые преимущества">
+          <span class="home-v2-hero__pill">Готово для review</span>
+          <span class="home-v2-hero__pill">Legacy сохранён</span>
+          <span class="home-v2-hero__pill">Переиспользование контрактов</span>
+        </div>
+      </section>
+
+      <section class="home-v2-search-surface home-v2-surface" aria-label="Поиск и регион">
+        <div class="search" aria-label="Поиск">
+          <a class="location" href="#">
+            <span class="icon-box icon-box--16 icon-color--secondary location__icon">
+              <svg class="icon-svg icon--navigation-fill" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="#icon-navigation-fill"></use>
+              </svg>
+            </span>
+            <span>Ташкент</span>
+          </a>
+          <button class="search-field" type="button" aria-label="Открыть поиск">
+            <span class="icon-box icon-box--20 icon-color--secondary">
+              <svg class="icon-svg icon--search" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="#icon-search"></use>
+              </svg>
+            </span>
+            <span class="search-field__text">Найти быстрее на новой главной</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="home-v2-quick-grid" aria-label="Быстрые переходы">
+        <a class="home-v2-quick-card" href="#">
+          <span class="icon-box icon-box--20 icon-color--primary home-v2-quick-card__icon">
+            <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+              <use href="#icon-search"></use>
+            </svg>
+          </span>
+          <p class="home-v2-quick-card__title">Подборки дня</p>
+          <p class="home-v2-quick-card__text">Собранные вручную витрины без перегруза первого экрана.</p>
+        </a>
+        <a class="home-v2-quick-card" href="seller-cabinet-screen.html">
+          <span class="icon-box icon-box--20 icon-color--active home-v2-quick-card__icon">
+            <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+              <use href="#icon-add-circle-fill"></use>
+            </svg>
+          </span>
+          <p class="home-v2-quick-card__title">Продать быстрее</p>
+          <p class="home-v2-quick-card__text">Переход к продаже остаётся рядом и не спорит с поиском.</p>
+        </a>
+        <a class="home-v2-quick-card" href="profile-screen.html">
+          <span class="icon-box icon-box--20 icon-color--secondary home-v2-quick-card__icon">
+            <svg class="icon-svg" viewBox="0 0 24 24" aria-hidden="true">
+              <use href="#icon-user"></use>
+            </svg>
+          </span>
+          <p class="home-v2-quick-card__title">Версии экрана</p>
+          <p class="home-v2-quick-card__text">Переключение между новой и прошлой главной живёт в профиле.</p>
+        </a>
+      </section>
+
+      <section class="home-v2-section home-v2-surface home-v2-banners" aria-label="Промо-баннеры">
+        <div class="home-v2-section__head">
+          <div>
+            <h2 class="home-v2-section__title">Подборки и баннеры</h2>
+            <p class="home-v2-section__text">Сохраняем знакомый rail, но подаём его как отдельную витринную секцию.</p>
+          </div>
+          <span class="home-v2-section__tag">Auto-loop</span>
+        </div>
+        <section class="banners" aria-label="Промо-баннеры">
+          <div class="scroll-row banner-scroll">
+            <article class="banner">
+              <img class="banner__image" src="assets/collections/1.png" alt="Товары для учебы">
+            </article>
+            <article class="banner">
+              <img class="banner__image" src="assets/collections/2.png" alt="Товары для свадьбы">
+            </article>
+            <article class="banner">
+              <img class="banner__image" src="assets/collections/3.png" alt="Гид по доставке BirBir">
+            </article>
+          </div>
+        </section>
+      </section>
+
+      <section class="home-v2-section home-v2-surface home-v2-categories" aria-label="Популярные категории">
+        <div class="home-v2-section__head">
+          <div>
+            <h2 class="home-v2-section__title">Популярные категории</h2>
+            <p class="home-v2-section__text">Те же чипсы и визуальный язык, но в более явной белой surface-зоне.</p>
+          </div>
+          <span class="home-v2-section__tag">2 ряда</span>
+        </div>
+        <section class="category-strip" aria-label="Категории">
+          <div class="category-scroll">
+            <div class="category-track">
+              <div class="category-row">
+                <button class="chip" type="button">
+                  <div class="chip__thumb">
+                    <img src="assets/category/Electronics.png" alt="Электроника">
+                  </div>
+                  <span class="chip__label">Электроника</span>
+                </button>
+                <button class="chip" type="button">
+                  <div class="chip__thumb">
+                    <img src="assets/category/Real%20Estate.png" alt="Недвижимость">
+                  </div>
+                  <span class="chip__label">Недвижимость</span>
+                </button>
+                <button class="chip" type="button">
+                  <div class="chip__thumb">
+                    <img src="assets/category/Children.png" alt="Для детей">
+                  </div>
+                  <span class="chip__label">Для детей</span>
+                </button>
+                <button class="chip" type="button">
+                  <div class="chip__thumb">
+                    <img src="assets/category/Clothes.png" alt="Одежда и обувь">
+                  </div>
+                  <span class="chip__label">Одежда и обувь</span>
+                </button>
+                <button class="chip" type="button">
+                  <div class="chip__thumb">
+                    <img src="assets/category/Home.png" alt="Товары для дома">
+                  </div>
+                  <span class="chip__label">Товары для дома</span>
+                </button>
+              </div>
+              <div class="category-row">
+                <button class="chip" type="button">
+                  <div class="chip__thumb">
+                    <img src="assets/category/Wellness.png" alt="Красота и здоровье">
+                  </div>
+                  <span class="chip__label">Красота и здоровье</span>
+                </button>
+                <button class="chip" type="button">
+                  <div class="chip__thumb">
+                    <img src="assets/category/Auto.png" alt="Автомобили">
+                  </div>
+                  <span class="chip__label">Автомобили</span>
+                </button>
+                <button class="chip" type="button">
+                  <div class="chip__thumb">
+                    <img src="assets/category/Services.png" alt="Услуги">
+                  </div>
+                  <span class="chip__label">Услуги</span>
+                </button>
+                <button class="chip" type="button">
+                  <div class="chip__thumb">
+                    <img src="assets/category/Work.png" alt="Работа">
+                  </div>
+                  <span class="chip__label">Работа</span>
+                </button>
+                <button class="chip" type="button">
+                  <div class="chip__thumb">
+                    <img src="assets/category/Hobby.png" alt="Хобби и спорт">
+                  </div>
+                  <span class="chip__label">Хобби и спорт</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="home-v2-section home-v2-surface home-v2-feed" aria-label="Лента объявлений">
+        <div class="home-v2-section__head">
+          <div>
+            <h2 class="home-v2-section__title">Свежие объявления</h2>
+            <p class="home-v2-section__text">Карточки и runtime-рендер остаются знакомыми, чтобы изменение касалось layout, а не логики товара.</p>
+          </div>
+          <span class="home-v2-section__tag">reused cards</span>
+        </div>
+        <div class="cards"></div>
+      </section>
+    </main>
+
+    <nav class="tabbar" aria-label="Основная навигация">
+      <div class="tabbar__items">
+        <a class="tabbar__item tabbar__item--active" href="birbir-home-screen-v2.html">
+          <span class="icon-box icon-box--24 icon-color--active">
+            <svg class="icon-svg icon--search" viewBox="0 0 24 24" aria-hidden="true">
+              <use href="#icon-search"></use>
+            </svg>
+          </span>
+          <span>Поиск</span>
+        </a>
+        <a class="tabbar__item" href="#">
+          <span class="icon-box icon-box--24 icon-color--primary">
+            <svg class="icon-svg icon--heart-empty" viewBox="0 0 24 24" aria-hidden="true">
+              <use href="#icon-heart-empty"></use>
+            </svg>
+          </span>
+          <span>Избранное</span>
+        </a>
+        <a class="tabbar__item" href="seller-cabinet-screen.html">
+          <span class="icon-box icon-box--24 icon-color--primary">
+            <svg class="icon-svg icon--add-circle-fill" viewBox="0 0 24 24" aria-hidden="true">
+              <use href="#icon-add-circle-fill"></use>
+            </svg>
+          </span>
+          <span>Продажа</span>
+        </a>
+        <a class="tabbar__item" href="#">
+          <span class="icon-box icon-box--24 icon-color--primary">
+            <svg class="icon-svg icon--chat" viewBox="0 0 24 24" aria-hidden="true">
+              <use href="#icon-chat"></use>
+            </svg>
+          </span>
+          <span>Сообщения</span>
+        </a>
+        <a class="tabbar__item" href="profile-screen.html">
+          <span class="icon-box icon-box--24 icon-color--primary">
+            <svg class="icon-svg icon--user" viewBox="0 0 24 24" aria-hidden="true">
+              <use href="#icon-user"></use>
+            </svg>
+          </span>
+          <span>Профиль</span>
+        </a>
+      </div>
+    </nav>
+  </div>
+
+  <script src="prototype-library/birbir-prototype-library.js?v=20260414-home-version-v1"></script>
+</body>
+</html>

@@ -3002,6 +3002,58 @@
       object-position: center;
     }
 
+    .detail-similar-badge {
+      position: absolute;
+      right: 24px;
+      bottom: 96px;
+      z-index: 3;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 114px;
+      height: 30px;
+      padding: 0 8px;
+      border: 0;
+      border-radius: 10px;
+      background: rgba(41, 41, 41, 0.6);
+      color: #ffffff;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      font: inherit;
+    }
+
+    .detail-similar-badge:focus-visible {
+      outline: 2px solid rgba(255, 255, 255, 0.72);
+      outline-offset: 2px;
+    }
+
+    .detail-similar-badge__icon {
+      position: relative;
+      width: 18px;
+      height: 18px;
+      flex: none;
+    }
+
+    .detail-similar-badge__icon svg {
+      position: absolute;
+      inset: 0;
+      width: 18px;
+      height: 18px;
+      overflow: visible;
+    }
+
+    .detail-similar-badge__label {
+      display: inline-block;
+      max-width: 72px;
+      padding: 0 4px;
+      overflow: hidden;
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 19px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
     .detail-hero__badge {
       position: absolute;
       left: 50%;
@@ -4114,18 +4166,17 @@
 
     .favorite-toast {
       position: fixed;
-      top: calc(58px + env(safe-area-inset-top, 0px));
+      top: min(684px, calc(100vh - 160px));
       left: 50%;
-      z-index: 70;
-      display: flex;
-      align-items: center;
-      gap: 16px;
+      z-index: 1000;
+      display: block;
       width: min(calc(100vw - 32px), 358px);
-      min-height: 70px;
-      padding: 12px;
+      height: 54px;
+      padding: 0;
       border-radius: 12px;
       background: #292929;
       color: #ffffff;
+      overflow: hidden;
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
@@ -4136,16 +4187,18 @@
     .favorite-toast.is-visible {
       opacity: 1;
       visibility: visible;
+      pointer-events: auto;
       transform: translate(-50%, 0);
     }
 
     .favorite-toast__thumb {
-      position: relative;
-      width: 40px;
-      height: 40px;
+      position: absolute;
+      top: 6px;
+      left: 5px;
+      width: 42px;
+      height: 42px;
       overflow: hidden;
-      border-radius: 9.23px;
-      flex: none;
+      border-radius: 10px;
       background: rgba(255, 255, 255, 0.08);
     }
 
@@ -4159,10 +4212,13 @@
     }
 
     .favorite-toast__body {
+      position: absolute;
+      top: 9px;
+      left: 57px;
+      right: 57px;
       display: flex;
-      flex: 1 0 0;
       flex-direction: column;
-      gap: 2px;
+      gap: 3px;
       min-width: 0;
     }
 
@@ -4173,17 +4229,35 @@
 
     .favorite-toast__title {
       overflow: hidden;
-      font-size: 16px;
+      font-size: 14px;
       font-weight: 600;
-      line-height: 22px;
+      line-height: 17px;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
 
     .favorite-toast__text {
-      font-size: 14px;
-      font-weight: 400;
-      line-height: 14px;
+      overflow: hidden;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12px;
+      font-weight: 500;
+      line-height: 15px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .favorite-toast__action {
+      position: absolute;
+      top: 15px;
+      right: 14px;
+      width: 24px;
+      height: 24px;
+      color: #ffffff;
+    }
+
+    .favorite-toast__action .icon-svg {
+      width: 24px;
+      height: 24px;
     }
 
     .installment {

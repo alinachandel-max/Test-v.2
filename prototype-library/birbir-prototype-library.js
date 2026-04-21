@@ -1,5 +1,6 @@
     window.addEventListener("load", function () {
       upgradeLegacyIcons();
+      initHomeVersionToggle();
       initBannerCarousel();
       initSearchOverlay();
       initSearchResults();
@@ -26,6 +27,83 @@
 
     var RADIO_COMPONENT_CHECKED_SRC = "prototype-library/icon-source-svg/RadioChecked.svg";
     var RANGE_ERROR_TEXT = 'Значение "От" должно быть меньше "До"';
+    var HOME_VERSION_STORAGE_KEY = "birbir.homeVersion";
+    var HOME_VERSION_LEGACY = "legacy";
+    var HOME_VERSION_V2 = "v2";
+
+    function normalizeSimilarQuery(value) {
+      return String(value || "").replace(/\s+/g, " ").trim();
+    }
+
+    function openSimilarResults(query) {
+      window.dispatchEvent(new CustomEvent("birbir:open-results", {
+        detail: {
+          query: normalizeSimilarQuery(query) || "Похожие объявления",
+          source: "similar-badge"
+        }
+      }));
+    }
+
+    function getStoredHomeVersion() {
+      try {
+        var storedValue = window.localStorage.getItem(HOME_VERSION_STORAGE_KEY);
+
+        if (storedValue === HOME_VERSION_V2 || storedValue === HOME_VERSION_LEGACY) {
+          return storedValue;
+        }
+      } catch (error) {}
+
+      return HOME_VERSION_LEGACY;
+    }
+
+    function setStoredHomeVersion(version) {
+      if (version !== HOME_VERSION_LEGACY && version !== HOME_VERSION_V2) {
+        return;
+      }
+
+      try {
+        window.localStorage.setItem(HOME_VERSION_STORAGE_KEY, version);
+      } catch (error) {}
+    }
+
+    function initHomeVersionToggle() {
+      var versionScreen = document.querySelector("[data-home-version]");
+      var toggleLink = document.querySelector("[data-home-version-toggle]");
+      var toggleLabel = toggleLink ? toggleLink.querySelector("[data-home-version-label]") : null;
+      var currentVersion;
+      var nextVersion;
+      var nextHref;
+      var nextLabel;
+
+      if (versionScreen) {
+        currentVersion = versionScreen.getAttribute("data-home-version");
+
+        if (currentVersion === HOME_VERSION_LEGACY || currentVersion === HOME_VERSION_V2) {
+          setStoredHomeVersion(currentVersion);
+        }
+      }
+
+      if (!toggleLink) {
+        return;
+      }
+
+      currentVersion = getStoredHomeVersion();
+      nextVersion = currentVersion === HOME_VERSION_V2 ? HOME_VERSION_LEGACY : HOME_VERSION_V2;
+      nextHref = nextVersion === HOME_VERSION_V2 ? "birbir-home-screen-v2.html" : "birbir-home-screen.html";
+      nextLabel = nextVersion === HOME_VERSION_V2 ? "Новая главная" : "Вернуться к прошлой версии главной";
+
+      toggleLink.setAttribute("href", nextHref);
+      toggleLink.setAttribute("data-home-version-target", nextVersion);
+
+      if (toggleLabel) {
+        toggleLabel.textContent = nextLabel;
+      }
+
+      toggleLink.addEventListener("click", function () {
+        var targetVersion = toggleLink.getAttribute("data-home-version-target") || HOME_VERSION_LEGACY;
+        setStoredHomeVersion(targetVersion);
+      });
+    }
 
     var HOME_FEED_PHOTOS = [
       "assets/Photo/2a9ddec28868becbf08a7f918ab0.webp",
@@ -3609,6 +3687,7 @@
       var detailQuestionChips = detailScreen ? detailScreen.querySelector("#detail-question-chips") : null;
       var detailSimilarTrack = detailScreen ? detailScreen.querySelector("#detail-similar-track") : null;
       var detailSellerTrack = detailScreen ? detailScreen.querySelector("#detail-seller-track") : null;
+      var detailSimilarBadge = detailScreen ? detailScreen.querySelector("[data-similar-action]") : null;
       var badgeTemplate = document.querySelector("#preview-card-badge-set");
       var baseCards = Array.prototype.slice.call(document.querySelectorAll(".cards .card"));
       var OFFER_DISCOUNTS = [10, 15, 20];
@@ -3636,6 +3715,17 @@
       }
 
       detailBack.addEventListener("click", closeDetail);
+
+      if (detailSimilarBadge) {
+        detailSimilarBadge.addEventListener("click", function (event) {
+          var query = detailHeroTitle ? detailHeroTitle.textContent : "";
+
+          event.preventDefault();
+          event.stopPropagation();
+          closeDetail();
+          openSimilarResults(query);
+        });
+      }
 
       detailOfferChips.addEventListener("click", function (event) {
         var chip = event.target.closest("[data-offer-discount]");
@@ -3708,7 +3798,7 @@
         detailHeroImage.alt = data.imageAlt || data.title;
         applyDetailHeroBadge(sourceOrdinal);
         detailHeroPrice.textContent = data.price || "11 900 000 сум";
-        detailHeroTitle.textContent = meta.heroTitle || data.title || "Iphone 17 Pro Max 512 gb Silver";
+        detailHeroTitle.textContent = meta.heroTitle || data.title || "Товар";
         detailHeroBadges.innerHTML = renderHeroTags(data.badgesHtml);
 
         if (data.oldPrice) {
@@ -3875,13 +3965,90 @@
       }
 
       function buildDetailMeta(title) {
+        var normalizedTitle = normalizeWhitespace(title).toLowerCase();
+        var detailMetaByTitle = {
+          "деревянный стул в скандинавском стиле": {
+            description: "Лаконичный деревянный стул в скандинавском стиле для кухни, спальни или рабочего уголка. Светлое дерево и мягкий текстильный акцент делают его спокойным предметом для современного интерьера.",
+            characteristics: [
+              { label: "Категория", value: "Товары для дома · Мебель · Стулья" },
+              { label: "Состояние", value: "Новое" },
+              { label: "Материал", value: "Дерево и текстиль" }
+            ]
+          },
+          "chevrolet nexia, седан": {
+            description: "Седан Chevrolet Nexia в темном цвете для городских поездок и повседневного использования. По фото видно аккуратный кузов и ухоженный внешний вид без явных повреждений.",
+            characteristics: [
+              { label: "Категория", value: "Автомобили · Легковые автомобили · Седаны" },
+              { label: "Состояние", value: "Б/у" },
+              { label: "Марка", value: "Chevrolet" }
+            ]
+          },
+          "lamelin vitamin 4 in 1 cream": {
+            description: "Крем для лица Lamelin Vitamin 4 in 1 Cream в фирменной коробке. Подходит для ежедневного ухода, увлажнения и выравнивания тона кожи.",
+            characteristics: [
+              { label: "Категория", value: "Красота и здоровье · Уход за лицом · Кремы" },
+              { label: "Состояние", value: "Новое" },
+              { label: "Объем", value: "100 мл" }
+            ]
+          },
+          "оверсайз рубашка в розовую полоску": {
+            description: "Легкая оверсайз рубашка в нежно-розовую полоску для повседневных образов. Смотрится свободно и подходит под шорты, джинсы или юбку.",
+            characteristics: [
+              { label: "Категория", value: "Одежда и обувь · Женская одежда · Рубашки" },
+              { label: "Состояние", value: "Новое" },
+              { label: "Фасон", value: "Оверсайз" }
+            ]
+          },
+          "женская блуза farkom": {
+            description: "Женская блуза Farkom в мягком желтом оттенке. Легкая ткань и аккуратная посадка делают ее удобной для офиса и повседневной носки.",
+            characteristics: [
+              { label: "Категория", value: "Одежда и обувь · Женская одежда · Блузы" },
+              { label: "Состояние", value: "Новое" },
+              { label: "Бренд", value: "Farkom" }
+            ]
+          },
+          "платье-пиджак бордовое": {
+            description: "Бордовое платье-пиджак с акцентом на талию для вечернего выхода или мероприятия. Смотрится собранно и легко комбинируется с лодочками или босоножками.",
+            characteristics: [
+              { label: "Категория", value: "Одежда и обувь · Женская одежда · Платья" },
+              { label: "Состояние", value: "Новое" },
+              { label: "Цвет", value: "Бордовый" }
+            ]
+          },
+          "туфли-лодочки фуксия": {
+            description: "Яркие туфли-лодочки цвета фуксии для праздничных и вечерних образов. Острый мыс и насыщенный оттенок делают их акцентной парой в гардеробе.",
+            characteristics: [
+              { label: "Категория", value: "Одежда и обувь · Женская обувь · Туфли" },
+              { label: "Состояние", value: "Новое" },
+              { label: "Цвет", value: "Фуксия" }
+            ]
+          },
+          "chevrolet lacetti, седан": {
+            description: "Седан Chevrolet Lacetti в темном цвете для города и трассы. По фото видно аккуратный кузов и ухоженный внешний вид без броских доработок.",
+            characteristics: [
+              { label: "Категория", value: "Автомобили · Легковые автомобили · Седаны" },
+              { label: "Состояние", value: "Б/у" },
+              { label: "Марка", value: "Chevrolet" }
+            ]
+          }
+        };
+        var matchedMeta = detailMetaByTitle[normalizedTitle];
+
+        if (matchedMeta) {
+          return {
+            heroTitle: title,
+            description: matchedMeta.description,
+            characteristics: matchedMeta.characteristics
+          };
+        }
+
         return {
           heroTitle: title,
-          description: "На глянцах царапин практически нет, все работает и проблем вообще не было. В ремонт особо сложного его не возил, но тачскрин уже начал подуступать. Посмотрите и выберите. На глянцах царапин практически нет, все работает и проблем вообще не было. В ремонт особо сложного его не возил, но тачскрин уже начал подуступать. Посмотрите и выберите. На глянцах царапин практически нет, все работает и проблем вообще не было. В ремонт особо сложного его не возил, но тачскрин уже начал подуступать. Посмотрите и выберите.",
+          description: "Аккуратный товар в хорошем визуальном состоянии. Перед покупкой можно уточнить детали у продавца и договориться о просмотре.",
           characteristics: [
-            { label: "Категория", value: "Одежда и обувь · Женская одежда · Верхняя женская одежда" },
-            { label: "Состояние", value: "Б/у" },
-            { label: "Бренд", value: "Birkenstock" }
+            { label: "Категория", value: "Товары для дома и личного пользования" },
+            { label: "Состояние", value: "Хорошее" },
+            { label: "Дополнительно", value: "Уточняйте у продавца" }
           ]
         };
       }
@@ -3958,6 +4125,9 @@
       var favoriteToastText = favoriteToast ? favoriteToast.querySelector(".favorite-toast__text") : null;
       var favoriteToastTimer = null;
       var fallbackToastImage = "assets/Photo/karolina-grabowska-g4ve1q1gQxM-unsplash.jpg";
+
+      window.__birbirFavoriteButtonsReady = true;
+
       var likeBurstPreset = [
         { x: -42, y: -56, scale: 1.28, rotate: "-28deg", delay: 0 },
         { x: -24, y: -76, scale: 1.08, rotate: "-16deg", delay: 35 },
@@ -4035,6 +4205,9 @@
         }
 
         var cardImage = card ? card.querySelector(".card__image, .results-card__image, .detail-hero__image") : null;
+        var isHomeFeedCard = card && card.classList && card.classList.contains("card");
+        var cardTitle = card ? card.querySelector(".card__title, .results-card__title, #detail-hero-title") : null;
+        var similarTitle = normalizeWhitespace(cardTitle ? cardTitle.textContent : "");
 
         if (!cardImage && document.querySelector(".detail-screen.is-open .detail-hero__image")) {
           cardImage = document.querySelector(".detail-screen.is-open .detail-hero__image");
@@ -4048,15 +4221,35 @@
         }
 
         if (favoriteToastTitle) {
-          favoriteToastTitle.textContent = "Добавлено в избранное";
+          favoriteToastTitle.textContent = isHomeFeedCard ? "Смотреть похожее" : "Добавлено в избранное";
         }
 
         if (favoriteToastText) {
-          favoriteToastText.textContent = "Ваше избранное находится в профиле";
+          favoriteToastText.textContent = isHomeFeedCard ? similarTitle || "Похожие объявления" : "Ваше избранное находится в профиле";
+        }
+
+        if (isHomeFeedCard) {
+          favoriteToast.setAttribute("data-similar-query", similarTitle || "Похожие объявления");
+        } else {
+          favoriteToast.removeAttribute("data-similar-query");
         }
 
         favoriteToast.classList.add("is-visible");
         favoriteToastTimer = window.setTimeout(hideFavoriteToast, 1500);
+      }
+
+      if (favoriteToast) {
+        favoriteToast.addEventListener("click", function (event) {
+          var query = favoriteToast.getAttribute("data-similar-query");
+
+          if (!query) {
+            return;
+          }
+
+          event.preventDefault();
+          hideFavoriteToast();
+          openSimilarResults(query);
+        });
       }
 
       Array.prototype.forEach.call(document.querySelectorAll(".like-button"), function (button) {

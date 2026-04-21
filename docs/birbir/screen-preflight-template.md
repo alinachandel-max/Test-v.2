@@ -8,8 +8,15 @@
 - product goal:
 - target Figma file:
 - target node id:
+- target node readable via Figma tools: yes/no
 - this is legacy or canonical:
 - owner:
+
+Если `target node readable via Figma tools = no`, visual implementation не начинается.
+Вместо этого нужно:
+- сообщить пользователю о блокере
+- не собирать guessed layout
+- запросить screenshot/export exact frame или восстановление доступа
 
 ## Change Routing
 
