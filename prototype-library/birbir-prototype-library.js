@@ -4222,7 +4222,7 @@
         }
 
         if (favoriteToastTitle) {
-          favoriteToastTitle.textContent = isHomeFeedCard ? "Смотреть похожее" : "Добавлено в избранное";
+          favoriteToastTitle.textContent = isHomeFeedCard ? "Смотреть похожие" : "Добавлено в избранное";
         }
 
         if (favoriteToastText) {
