@@ -4166,7 +4166,7 @@
 
     .favorite-toast {
       position: fixed;
-      top: min(669px, calc(100vh - 112px));
+      bottom: calc(95px + var(--safe-bottom));
       left: 50%;
       z-index: 1000;
       display: flex;
@@ -4218,7 +4218,11 @@
       display: flex;
       flex: 1 0 0;
       flex-direction: column;
+      align-items: center;
+      justify-content: center;
       min-width: 0;
+      height: 100%;
+      text-align: center;
     }
 
     .favorite-toast__title,
@@ -4231,7 +4235,7 @@
       height: 18px;
       font-size: 16px;
       font-weight: 600;
-      line-height: 22px;
+      line-height: 18px;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
