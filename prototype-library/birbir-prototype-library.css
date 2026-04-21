@@ -3020,12 +3020,6 @@
       cursor: pointer;
       -webkit-tap-highlight-color: transparent;
       font: inherit;
-      transition: width 220ms ease, padding 220ms ease, border-radius 220ms ease;
-    }
-
-    .detail-similar-badge--compact {
-      width: 30px;
-      padding: 0;
     }
 
     .detail-similar-badge:focus-visible {
@@ -3056,16 +3050,8 @@
       font-size: 14px;
       font-weight: 500;
       line-height: 19px;
-      opacity: 1;
       text-overflow: ellipsis;
       white-space: nowrap;
-      transition: width 200ms ease, padding 200ms ease, opacity 140ms ease;
-    }
-
-    .detail-similar-badge--compact .detail-similar-badge__label {
-      width: 0;
-      padding: 0;
-      opacity: 0;
     }
 
     .detail-hero__badge {
@@ -4180,16 +4166,16 @@
 
     .favorite-toast {
       position: fixed;
-      top: min(682px, calc(100vh - 160px));
+      top: min(669px, calc(100vh - 112px));
       left: 50%;
       z-index: 1000;
       display: flex;
       align-items: center;
-      gap: 16px;
-      width: min(calc(100vw - 32px), 358px);
-      height: 70px;
-      padding: 12px;
-      border-radius: 12px;
+      gap: 8px;
+      width: min(calc(100vw - 32px), 279px);
+      height: 44px;
+      padding: 6px 12px 6px 6px;
+      border-radius: 100px;
       background: #292929;
       color: #ffffff;
       overflow: hidden;
@@ -4210,10 +4196,10 @@
 
     .favorite-toast__thumb {
       position: relative;
-      width: 44px;
-      height: 44px;
+      width: 32px;
+      height: 32px;
       overflow: hidden;
-      border-radius: 11px;
+      border-radius: 999px;
       flex: none;
       background: rgba(255, 255, 255, 0.08);
     }
@@ -4225,13 +4211,13 @@
       height: 100%;
       object-fit: cover;
       object-position: center;
+      border-radius: 999px;
     }
 
     .favorite-toast__body {
       display: flex;
       flex: 1 0 0;
       flex-direction: column;
-      gap: 4px;
       min-width: 0;
     }
 
@@ -4251,13 +4237,7 @@
     }
 
     .favorite-toast__text {
-      overflow: hidden;
-      color: #ffffff;
-      font-size: 14px;
-      font-weight: 400;
-      line-height: normal;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      display: none;
     }
 
     .favorite-toast__action {
@@ -4265,8 +4245,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 24px;
-      height: 24px;
+      width: 32px;
+      height: 32px;
       color: #ffffff;
       flex: none;
     }
@@ -4274,8 +4254,8 @@
     .favorite-toast__action .icon-svg {
       position: relative;
       inset: auto;
-      width: 24px;
-      height: 24px;
+      width: 20px;
+      height: 20px;
     }
 
     .installment {
