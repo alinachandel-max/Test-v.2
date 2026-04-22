@@ -1465,8 +1465,8 @@
 
     .results-card__badges {
       position: absolute;
-      left: 5px;
-      top: 5px;
+      left: 6px;
+      top: 6px;
       z-index: 2;
       display: flex;
       flex-wrap: wrap;
@@ -4215,8 +4215,8 @@
 
     .card__badges {
       position: absolute;
-      top: 5px;
-      left: 5px;
+      top: 6px;
+      left: 6px;
       display: flex;
       align-items: center;
       gap: 4px;
