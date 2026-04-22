@@ -324,10 +324,23 @@
       height: 4.22px;
     }
 
-    .status-bar,
     .search-overlay__status,
     .detail-screen__status {
       display: none !important;
+    }
+
+    .status-bar {
+      position: sticky;
+      top: 0;
+      z-index: 45;
+      display: flex;
+      background: var(--accent);
+      color: #ffffff;
+    }
+
+    .app.home-scrolled .status-bar {
+      background: #ffffff;
+      color: var(--text);
     }
 
     .screen {
@@ -4126,7 +4139,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 4px;
     }
 
     .feed-tabs__current,
@@ -4548,6 +4561,7 @@
     }
 
     .feed-tune-button {
+      position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -4584,6 +4598,9 @@
     }
 
     .feed-tune-button__label {
+      position: absolute;
+      left: 44px;
+      right: 44px;
       overflow: hidden;
       font-size: 16px;
       font-weight: 600;

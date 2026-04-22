@@ -392,7 +392,6 @@
       var step = originalSlides[0].getBoundingClientRect().width + 8;
       var loopWidth = step * originalSlides.length;
       var resetTimer = null;
-      var autoplayTimer = null;
 
       function normalizeScroll() {
         if (bannerScroll.scrollLeft < loopWidth * 0.5) {
@@ -403,21 +402,8 @@
       }
 
       function stopAutoplay() {
-        if (autoplayTimer) {
-          window.clearInterval(autoplayTimer);
-          autoplayTimer = null;
-        }
-      }
-
-      function startAutoplay() {
-        stopAutoplay();
-        autoplayTimer = window.setInterval(function () {
-          normalizeScroll();
-          bannerScroll.scrollBy({
-            left: step,
-            behavior: "smooth"
-          });
-        }, 3200);
+        window.clearTimeout(resetTimer);
+        resetTimer = window.setTimeout(normalizeScroll, 140);
       }
 
       bannerScroll.scrollLeft = loopWidth;
@@ -428,13 +414,11 @@
       });
 
       bannerScroll.addEventListener("pointerdown", stopAutoplay, { passive: true });
-      bannerScroll.addEventListener("pointerup", startAutoplay, { passive: true });
+      bannerScroll.addEventListener("pointerup", stopAutoplay, { passive: true });
       bannerScroll.addEventListener("touchstart", stopAutoplay, { passive: true });
-      bannerScroll.addEventListener("touchend", startAutoplay, { passive: true });
+      bannerScroll.addEventListener("touchend", stopAutoplay, { passive: true });
       bannerScroll.addEventListener("mouseenter", stopAutoplay);
-      bannerScroll.addEventListener("mouseleave", startAutoplay);
-
-      startAutoplay();
+      bannerScroll.addEventListener("mouseleave", stopAutoplay);
     }
 
     function initHomeScrollState() {
