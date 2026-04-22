@@ -3822,6 +3822,7 @@
       function openDetail(card) {
         assignSourceCardOrdinals();
         populateDetail(card);
+        document.querySelector(".app").classList.remove("feed-tune-visible");
         detailScreen.classList.add("is-open");
         detailScreen.setAttribute("aria-hidden", "false");
         detailScroller.scrollTop = 0;

@@ -4564,6 +4564,13 @@
       transform: translateY(0);
     }
 
+    .detail-screen.is-open ~ .feed-tune-panel {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(16px);
+    }
+
     .feed-tune-button {
       position: relative;
       display: flex;
