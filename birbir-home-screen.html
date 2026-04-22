@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="prototype-library/birbir-prototype-library.css?v=20260421-similar-toast-v12">
+  <link rel="stylesheet" href="prototype-library/birbir-prototype-library.css?v=20260422-home-scroll-v6">
 </head>
 <body>
   <!-- Icon sprite source: prototype-library/birbir-icon-sprite.html -->
@@ -147,45 +147,77 @@
     </header>
 
     <main class="screen">
-      <section class="banners" aria-label="Промо-баннеры">
-        <div class="scroll-row banner-scroll">
-          <article class="banner">
-            <img class="banner__image" src="assets/collections/1.png" alt="Товары для учебы">
-          </article>
-
-          <article class="banner">
-            <img class="banner__image" src="assets/collections/2.png" alt="Товары для свадьбы">
-          </article>
-
-          <article class="banner">
-            <img class="banner__image" src="assets/collections/3.png" alt="Гид по доставке BirBir">
-          </article>
-        </div>
+      <section class="home-sticky-search" aria-label="Поиск при прокрутке">
+        <button class="search-field search-field--sticky" type="button" aria-label="Открыть поиск">
+          <span class="search-field__text">Искать iPhone</span>
+          <span class="search-field__submit icon-box icon-box--20 icon-color--on-dark" aria-hidden="true">
+            <svg class="icon-svg icon--search" viewBox="0 0 24 24">
+              <use href="#icon-search"></use>
+            </svg>
+          </span>
+        </button>
       </section>
 
-      <section class="search" aria-label="Поиск">
-        <a class="location" href="#">
-          <span class="icon-box icon-box--16 icon-color--secondary location__icon">
+      <section class="home-hero" aria-label="Главный поиск">
+        <a class="home-location" href="#">
+          <span class="icon-box icon-box--18 icon-color--on-dark home-location__icon">
             <svg class="icon-svg icon--navigation-fill" viewBox="0 0 24 24" aria-hidden="true">
               <use href="#icon-navigation-fill"></use>
             </svg>
           </span>
           <span>Ташкент</span>
         </a>
-        <button class="search-field" type="button" aria-label="Открыть поиск">
-          <span class="icon-box icon-box--20 icon-color--secondary">
-            <svg class="icon-svg icon--search" viewBox="0 0 24 24" aria-hidden="true">
+        <button class="search-field search-field--hero" type="button" aria-label="Открыть поиск">
+          <span class="search-field__text">Найти микроволновку</span>
+          <span class="search-field__submit icon-box icon-box--20 icon-color--on-dark" aria-hidden="true">
+            <svg class="icon-svg icon--search" viewBox="0 0 24 24">
               <use href="#icon-search"></use>
             </svg>
           </span>
-          <span class="search-field__text">Найти в Узбекистане</span>
         </button>
+      </section>
+
+      <section class="recent-search-strip" aria-label="Недавние поиски">
+        <div class="recent-search-scroll">
+          <button class="recent-search-card" type="button" data-recent-query="Chevrolet Cobalt 2015 белый">
+            <span class="recent-search-card__copy">
+              <span class="recent-search-card__meta">Недавний поиск · 567 новых</span>
+              <span class="recent-search-card__title">Chevrolet Cobalt 2015 белый</span>
+            </span>
+            <span class="recent-search-card__images" aria-hidden="true">
+              <span class="recent-search-card__image"><img src="assets/Photo/3b6ce1f096e72287f6d7c2933f26.webp" alt=""></span>
+              <span class="recent-search-card__image"><img src="assets/Photo/c9015e7d3f066b6b163b9c0babbe.webp" alt=""></span>
+            </span>
+            <span class="recent-search-card__close" aria-hidden="true">×</span>
+          </button>
+
+          <button class="recent-search-card recent-search-card--secondary" type="button" data-recent-query="Аренда квартиры Ташкент">
+            <span class="recent-search-card__copy">
+              <span class="recent-search-card__meta">Недавний поиск · 567 новых</span>
+              <span class="recent-search-card__title">Аренда квартиры Ташкент</span>
+            </span>
+            <span class="recent-search-card__images" aria-hidden="true">
+              <span class="recent-search-card__image recent-search-card__image--square"><img src="assets/Photo/photo-1506439773649-6e0eb8cfb237.avif" alt=""></span>
+              <span class="recent-search-card__image recent-search-card__image--square"><img src="assets/Photo/photo-1560228022-f1a3298022e9.avif" alt=""></span>
+            </span>
+            <span class="recent-search-card__close" aria-hidden="true">×</span>
+          </button>
+        </div>
       </section>
 
       <section class="category-strip" aria-label="Категории">
         <div class="category-scroll">
           <div class="category-track">
             <div class="category-row">
+              <button class="chip chip--plain" type="button">
+                <span class="icon-box icon-box--16 icon-color--primary">
+                  <svg class="icon-svg icon--search-list" viewBox="0 0 24 24" aria-hidden="true">
+                    <use href="#icon-search-list"></use>
+                  </svg>
+                </span>
+                <span class="chip__label">Все</span>
+              </button>
+
               <button class="chip" type="button">
                 <div class="chip__thumb">
                   <img src="assets/category/Electronics.png" alt="Электроника">
@@ -262,17 +294,32 @@
         </div>
       </section>
 
+      <section class="banners" aria-label="Промо-баннеры">
+        <div class="scroll-row banner-scroll">
+          <article class="banner">
+            <img class="banner__image" src="assets/collections/1.png" alt="Товары для свадьбы">
+          </article>
+
+          <article class="banner">
+            <img class="banner__image" src="assets/collections/2.png" alt="Товары для учебы">
+          </article>
+
+          <article class="banner">
+            <img class="banner__image" src="assets/collections/3.png" alt="Гид по доставке BirBir">
+          </article>
+        </div>
+      </section>
+
       <section class="feed" aria-label="Лента объявлений">
         <div class="feed-tabs">
-          <p class="feed-tabs__current">Актуальное</p>
-          <div class="feed-tabs__secondary-wrap">
-            <p class="feed-tabs__secondary">Умная лента</p>
-            <span class="icon-box icon-box--18 icon-color--secondary">
-              <svg class="icon-svg icon--chevron-right-circle-fill" viewBox="0 0 24 24" aria-hidden="true">
-                <use href="#icon-chevron-right-circle-fill"></use>
+          <p class="feed-tabs__current">Объявления в Ташкенте</p>
+          <button class="feed-tabs__filter" type="button" aria-label="Настроить ленту">
+            <span class="icon-box icon-box--20 icon-color--primary">
+              <svg class="icon-svg icon--filter-controls" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="#icon-filter-controls"></use>
               </svg>
             </span>
-          </div>
+          </button>
         </div>
 
         <div class="cards">
@@ -1284,6 +1331,19 @@
       </span>
     </div>
 
+    <div class="feed-tune-panel" aria-hidden="true">
+      <button class="feed-tune-button" type="button" aria-label="Настроить ленту">
+        <span class="feed-tune-button__icon" aria-hidden="true">
+          <svg viewBox="0 0 14.57 13.47" fill="none">
+            <path d="M3.883 2.378c.163-.375.663-.393.86-.056l.028.056.502 1.158a5.31 5.31 0 0 0 2.087 2.434l.155.093.89.514a.5.5 0 0 1 .052.835l-.052.035-.89.513a5.32 5.32 0 0 0-2.167 2.361l-.075.166-.502 1.158c-.163.375-.664.393-.86.056l-.028-.056-.502-1.158a5.31 5.31 0 0 0-2.087-2.434l-.155-.093-.89-.514a.5.5 0 0 1-.052-.835l.052-.035.89-.514a5.32 5.32 0 0 0 2.167-2.36l.075-.167.502-1.158Z" fill="currentColor"/>
+            <path d="M11.429 7.204c.107-.246.437-.258.566-.037l.019.037.33.759c.288.662.767 1.219 1.374 1.596l.102.061.586.336a.32.32 0 0 1 .034.57l-.034.001-.586.336a3.5 3.5 0 0 0-1.426 1.548l-.05.109-.33.759c-.107.246-.437.258-.566.037l-.019-.037-.33-.759a3.49 3.49 0 0 0-1.374-1.596l-.102-.061-.586-.336a.32.32 0 0 1-.034-.548l.034-.023.586-.336a3.5 3.5 0 0 0 1.426-1.548l.05-.109.33-.759ZM9.853.151c.083-.192.336-.201.436-.029l.014.029.254.592c.222.516.59.95 1.057 1.244l.078.048.451.262a.25.25 0 0 1 .026.427l-.026.018-.451.262a2.79 2.79 0 0 0-1.097 1.207l-.038.085-.254.592c-.083.192-.336.201-.436.029l-.014-.029-.254-.592a2.79 2.79 0 0 0-1.057-1.244l-.078-.048-.451-.262a.25.25 0 0 1-.026-.427l.026-.018.451-.262A2.79 2.79 0 0 0 9.561.828l.038-.085.254-.592Z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="feed-tune-button__label">Настроить ленту</span>
+      </button>
+      <button class="feed-tune-button__close" type="button" aria-label="Скрыть настройку ленты">×</button>
+    </div>
+
     <template id="library-prompt-chip-template">
       <button class="library-chip" type="button">
         <span class="library-chip__label">Когда можно посмотреть?</span>
@@ -1559,7 +1619,7 @@
     </nav>
   </div>
 
-  <script src="prototype-library/birbir-prototype-library.js?v=20260421-similar-toast-v12"></script>
+  <script src="prototype-library/birbir-prototype-library.js?v=20260422-home-scroll-v6"></script>
   <script>
     window.addEventListener("load", function () {
       window.setTimeout(function () {

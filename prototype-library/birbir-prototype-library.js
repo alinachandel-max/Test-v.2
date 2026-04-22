@@ -2,6 +2,7 @@
       upgradeLegacyIcons();
       initHomeVersionToggle();
       initBannerCarousel();
+      initHomeScrollState();
       initSearchOverlay();
       initSearchResults();
       initProductDetails();
@@ -436,12 +437,75 @@
       startAutoplay();
     }
 
+    function initHomeScrollState() {
+      var app = document.querySelector(".app");
+      var feed = document.querySelector(".feed");
+      var stickySearch = document.querySelector(".home-sticky-search");
+      var feedTunePanel = document.querySelector(".feed-tune-panel");
+      var feedTuneClose = feedTunePanel ? feedTunePanel.querySelector(".feed-tune-button__close") : null;
+      var lastScrollY = window.scrollY || 0;
+      var feedScrollDistance = 0;
+      var feedTuneDismissed = false;
+      var ticking = false;
+
+      if (!app || !feed || !stickySearch) {
+        return;
+      }
+
+      function updateHomeScrollState() {
+        var currentScrollY = window.scrollY || 0;
+        var scrollDelta = currentScrollY - lastScrollY;
+        var isInFeed = feed.getBoundingClientRect().top <= 76;
+
+        app.classList.toggle("home-scrolled", isInFeed);
+
+        if (isInFeed && scrollDelta > 0) {
+          feedScrollDistance += scrollDelta;
+        } else if (!isInFeed) {
+          feedScrollDistance = 0;
+          app.classList.remove("feed-tune-visible");
+        }
+
+        if (feedTunePanel && !feedTuneDismissed && feedScrollDistance >= 240) {
+          app.classList.add("feed-tune-visible");
+          feedTunePanel.setAttribute("aria-hidden", "false");
+        }
+
+        lastScrollY = currentScrollY;
+        ticking = false;
+      }
+
+      function requestHomeScrollStateUpdate() {
+        if (ticking) {
+          return;
+        }
+
+        ticking = true;
+        window.requestAnimationFrame(updateHomeScrollState);
+      }
+
+      updateHomeScrollState();
+
+      if (feedTuneClose) {
+        feedTuneClose.addEventListener("click", function (event) {
+          event.preventDefault();
+          event.stopPropagation();
+          feedTuneDismissed = true;
+          app.classList.remove("feed-tune-visible");
+          feedTunePanel.setAttribute("aria-hidden", "true");
+        });
+      }
+
+      window.addEventListener("scroll", requestHomeScrollStateUpdate, { passive: true });
+      window.addEventListener("resize", requestHomeScrollStateUpdate);
+    }
+
     function initSearchOverlay() {
       var app = document.querySelector(".app");
-      var searchTrigger = document.querySelector(".search-field");
+      var searchTriggers = Array.prototype.slice.call(document.querySelectorAll(".search-field"));
       var searchOverlay = document.querySelector(".search-overlay");
 
-      if (!app || !searchTrigger || !searchOverlay) {
+      if (!app || !searchTriggers.length || !searchOverlay) {
         return;
       }
 
@@ -503,14 +567,47 @@
         openSearch(event && event.detail ? event.detail : {});
       });
 
-      searchTrigger.addEventListener("click", function () {
-        openSearch();
+      searchTriggers.forEach(function (searchTrigger) {
+        searchTrigger.addEventListener("click", function () {
+          openSearch();
+        });
       });
       backButton.addEventListener("click", closeSearch);
 
       document.addEventListener("click", function (event) {
+        var feedTuneButton = event.target.closest(".feed-tune-button");
+        var recentClose = event.target.closest(".recent-search-card__close");
+        var recentCard = event.target.closest("[data-recent-query]");
         var chip = event.target.closest(".chip");
         var label;
+
+        if (feedTuneButton) {
+          event.preventDefault();
+          openFullFilterSheet();
+          return;
+        }
+
+        if (recentClose) {
+          event.preventDefault();
+          event.stopPropagation();
+          recentCard = recentClose.closest("[data-recent-query]");
+          if (recentCard) {
+            recentCard.classList.add("is-hidden");
+            updateRecentSearchVisibility(recentCard.closest(".recent-search-strip"));
+          }
+          return;
+        }
+
+        if (recentCard) {
+          event.preventDefault();
+          window.dispatchEvent(new CustomEvent("birbir:open-results", {
+            detail: {
+              query: normalizeWhitespace(recentCard.getAttribute("data-recent-query") || ""),
+              source: "home-recent"
+            }
+          }));
+          return;
+        }
 
         if (!chip || !chip.closest(".category-strip")) {
           return;
@@ -527,6 +624,18 @@
           }
         }));
       });
+
+      function updateRecentSearchVisibility(recentStrip) {
+        if (!recentStrip) {
+          return;
+        }
+
+        var visibleCards = Array.prototype.filter.call(recentStrip.querySelectorAll("[data-recent-query]"), function (card) {
+          return !card.classList.contains("is-hidden");
+        });
+
+        recentStrip.classList.toggle("is-hidden", visibleCards.length === 0);
+      }
 
       searchForm.addEventListener("submit", function (event) {
         var committedQuery;
