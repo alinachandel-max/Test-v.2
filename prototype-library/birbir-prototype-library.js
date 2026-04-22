@@ -373,52 +373,7 @@
         return;
       }
 
-      var originalSlides = Array.prototype.slice.call(bannerScroll.children);
-      if (!originalSlides.length) {
-        return;
-      }
-
-      var prependClones = document.createDocumentFragment();
-      var appendClones = document.createDocumentFragment();
-
-      originalSlides.forEach(function (slide) {
-        prependClones.appendChild(slide.cloneNode(true));
-        appendClones.appendChild(slide.cloneNode(true));
-      });
-
-      bannerScroll.insertBefore(prependClones, bannerScroll.firstChild);
-      bannerScroll.appendChild(appendClones);
-
-      var step = originalSlides[0].getBoundingClientRect().width + 8;
-      var loopWidth = step * originalSlides.length;
-      var resetTimer = null;
-
-      function normalizeScroll() {
-        if (bannerScroll.scrollLeft < loopWidth * 0.5) {
-          bannerScroll.scrollLeft += loopWidth;
-        } else if (bannerScroll.scrollLeft > loopWidth * 1.5) {
-          bannerScroll.scrollLeft -= loopWidth;
-        }
-      }
-
-      function stopAutoplay() {
-        window.clearTimeout(resetTimer);
-        resetTimer = window.setTimeout(normalizeScroll, 140);
-      }
-
-      bannerScroll.scrollLeft = loopWidth;
-
-      bannerScroll.addEventListener("scroll", function () {
-        window.clearTimeout(resetTimer);
-        resetTimer = window.setTimeout(normalizeScroll, 140);
-      });
-
-      bannerScroll.addEventListener("pointerdown", stopAutoplay, { passive: true });
-      bannerScroll.addEventListener("pointerup", stopAutoplay, { passive: true });
-      bannerScroll.addEventListener("touchstart", stopAutoplay, { passive: true });
-      bannerScroll.addEventListener("touchend", stopAutoplay, { passive: true });
-      bannerScroll.addEventListener("mouseenter", stopAutoplay);
-      bannerScroll.addEventListener("mouseleave", stopAutoplay);
+      bannerScroll.scrollLeft = 0;
     }
 
     function initHomeScrollState() {
