@@ -552,6 +552,7 @@
           recentCard = recentClose.closest("[data-recent-query]");
           if (recentCard) {
             recentCard.hidden = true;
+            updateRecentSearchVisibility(recentCard.closest(".recent-search-strip"));
           }
           return;
         }
@@ -582,6 +583,18 @@
           }
         }));
       });
+
+      function updateRecentSearchVisibility(recentStrip) {
+        if (!recentStrip) {
+          return;
+        }
+
+        var visibleCards = Array.prototype.filter.call(recentStrip.querySelectorAll("[data-recent-query]"), function (card) {
+          return !card.hidden;
+        });
+
+        recentStrip.classList.toggle("is-hidden", visibleCards.length === 0);
+      }
 
       searchForm.addEventListener("submit", function (event) {
         var committedQuery;
