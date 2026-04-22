@@ -455,7 +455,7 @@
       function updateHomeScrollState() {
         var currentScrollY = window.scrollY || 0;
         var scrollDelta = currentScrollY - lastScrollY;
-        var isInFeed = feed.getBoundingClientRect().top <= 124;
+        var isInFeed = feed.getBoundingClientRect().top <= 76;
 
         app.classList.toggle("home-scrolled", isInFeed);
 
