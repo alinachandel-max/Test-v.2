@@ -541,9 +541,20 @@
       backButton.addEventListener("click", closeSearch);
 
       document.addEventListener("click", function (event) {
+        var recentClose = event.target.closest(".recent-search-card__close");
         var recentCard = event.target.closest("[data-recent-query]");
         var chip = event.target.closest(".chip");
         var label;
+
+        if (recentClose) {
+          event.preventDefault();
+          event.stopPropagation();
+          recentCard = recentClose.closest("[data-recent-query]");
+          if (recentCard) {
+            recentCard.hidden = true;
+          }
+          return;
+        }
 
         if (recentCard) {
           event.preventDefault();

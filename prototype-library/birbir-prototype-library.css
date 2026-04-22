@@ -499,6 +499,7 @@
     }
 
     .search-field__submit {
+      position: relative;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -508,6 +509,13 @@
       border-radius: 12px;
       background: var(--accent);
       flex: none;
+    }
+
+    .search-field__submit .icon-svg {
+      position: relative;
+      inset: auto;
+      width: 20px;
+      height: 20px;
     }
 
     .search-field__text {
@@ -525,7 +533,7 @@
       gap: 8px;
       overflow-x: auto;
       overscroll-behavior-x: contain;
-      padding: 0 16px 4px;
+      padding: 8px 16px 4px;
       scrollbar-width: none;
       -ms-overflow-style: none;
     }
