@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="prototype-library/birbir-prototype-library.css?v=20260422-home-scroll-v3">
+  <link rel="stylesheet" href="prototype-library/birbir-prototype-library.css?v=20260422-home-scroll-v4">
 </head>
 <body>
   <!-- Icon sprite source: prototype-library/birbir-icon-sprite.html -->
@@ -1335,6 +1335,18 @@
       </span>
     </div>
 
+    <div class="feed-tune-panel" aria-hidden="true">
+      <button class="feed-tune-button" type="button" aria-label="Настроить ленту">
+        <span class="feed-tune-button__icon" aria-hidden="true">
+          <svg viewBox="0 0 16 16" fill="none">
+            <path d="M4.35 2.2 5.1 4.1l1.9.75-1.9.75-.75 1.9-.75-1.9-1.9-.75 1.9-.75.75-1.9ZM11.15 5.15l.55 1.35 1.35.55-1.35.55-.55 1.35-.55-1.35-1.35-.55 1.35-.55.55-1.35ZM7.75 10.1l.44 1.06 1.06.44-1.06.44-.44 1.06-.44-1.06-1.06-.44 1.06-.44.44-1.06Z" fill="currentColor"/>
+          </svg>
+        </span>
+        <span class="feed-tune-button__label">Настроить ленту</span>
+      </button>
+      <button class="feed-tune-button__close" type="button" aria-label="Скрыть настройку ленты">×</button>
+    </div>
+
     <template id="library-prompt-chip-template">
       <button class="library-chip" type="button">
         <span class="library-chip__label">Когда можно посмотреть?</span>
@@ -1610,7 +1622,7 @@
     </nav>
   </div>
 
-  <script src="prototype-library/birbir-prototype-library.js?v=20260422-home-scroll-v3"></script>
+  <script src="prototype-library/birbir-prototype-library.js?v=20260422-home-scroll-v4"></script>
   <script>
     window.addEventListener("load", function () {
       window.setTimeout(function () {
