@@ -4421,10 +4421,10 @@
       z-index: 1000;
       display: flex;
       align-items: center;
-      gap: 8px;
-      width: min(calc(100vw - 32px), 279px);
-      height: 44px;
-      padding: 6px 12px 6px 6px;
+      gap: 12px;
+      width: min(calc(100vw - 32px), 242px);
+      height: 40px;
+      padding: 8px 12px 8px 8px;
       border-radius: 100px;
       background: #292929;
       color: #ffffff;
@@ -4450,8 +4450,8 @@
 
     .favorite-toast__thumb {
       position: relative;
-      width: 32px;
-      height: 32px;
+      width: 24px;
+      height: 24px;
       overflow: hidden;
       border-radius: 999px;
       flex: none;
@@ -4470,7 +4470,7 @@
 
     .favorite-toast__body {
       display: flex;
-      flex: 1 0 0;
+      flex: 0 1 154px;
       flex-direction: column;
       align-items: center;
       justify-content: center;
@@ -4486,10 +4486,10 @@
 
     .favorite-toast__title {
       overflow: hidden;
-      height: 18px;
+      height: 22px;
       font-size: 16px;
       font-weight: 600;
-      line-height: 18px;
+      line-height: 22px;
       text-overflow: ellipsis;
       white-space: nowrap;
     }
@@ -4503,8 +4503,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 32px;
-      height: 32px;
+      width: 20px;
+      height: 20px;
       color: #ffffff;
       flex: none;
     }
