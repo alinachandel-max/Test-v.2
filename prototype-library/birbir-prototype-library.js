@@ -2,6 +2,7 @@
       upgradeLegacyIcons();
       initHomeVersionToggle();
       initBannerCarousel();
+      initHomeScrollState();
       initSearchOverlay();
       initSearchResults();
       initProductDetails();
@@ -436,12 +437,41 @@
       startAutoplay();
     }
 
+    function initHomeScrollState() {
+      var app = document.querySelector(".app");
+      var feed = document.querySelector(".feed");
+      var stickySearch = document.querySelector(".home-sticky-search");
+      var ticking = false;
+
+      if (!app || !feed || !stickySearch) {
+        return;
+      }
+
+      function updateHomeScrollState() {
+        app.classList.toggle("home-scrolled", feed.getBoundingClientRect().top <= 124);
+        ticking = false;
+      }
+
+      function requestHomeScrollStateUpdate() {
+        if (ticking) {
+          return;
+        }
+
+        ticking = true;
+        window.requestAnimationFrame(updateHomeScrollState);
+      }
+
+      updateHomeScrollState();
+      window.addEventListener("scroll", requestHomeScrollStateUpdate, { passive: true });
+      window.addEventListener("resize", requestHomeScrollStateUpdate);
+    }
+
     function initSearchOverlay() {
       var app = document.querySelector(".app");
-      var searchTrigger = document.querySelector(".search-field");
+      var searchTriggers = Array.prototype.slice.call(document.querySelectorAll(".search-field"));
       var searchOverlay = document.querySelector(".search-overlay");
 
-      if (!app || !searchTrigger || !searchOverlay) {
+      if (!app || !searchTriggers.length || !searchOverlay) {
         return;
       }
 
@@ -503,14 +533,28 @@
         openSearch(event && event.detail ? event.detail : {});
       });
 
-      searchTrigger.addEventListener("click", function () {
-        openSearch();
+      searchTriggers.forEach(function (searchTrigger) {
+        searchTrigger.addEventListener("click", function () {
+          openSearch();
+        });
       });
       backButton.addEventListener("click", closeSearch);
 
       document.addEventListener("click", function (event) {
+        var recentCard = event.target.closest("[data-recent-query]");
         var chip = event.target.closest(".chip");
         var label;
+
+        if (recentCard) {
+          event.preventDefault();
+          window.dispatchEvent(new CustomEvent("birbir:open-results", {
+            detail: {
+              query: normalizeWhitespace(recentCard.getAttribute("data-recent-query") || ""),
+              source: "home-recent"
+            }
+          }));
+          return;
+        }
 
         if (!chip || !chip.closest(".category-strip")) {
           return;
