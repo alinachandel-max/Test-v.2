@@ -385,6 +385,7 @@
       var lastScrollY = window.scrollY || 0;
       var feedScrollDistance = 0;
       var feedTuneDismissed = false;
+      var themeColor = document.querySelector('meta[name="theme-color"]');
       var ticking = false;
 
       if (!app || !feed || !stickySearch) {
@@ -397,6 +398,9 @@
         var isInFeed = feed.getBoundingClientRect().top <= 76;
 
         app.classList.toggle("home-scrolled", isInFeed);
+        if (themeColor) {
+          themeColor.setAttribute("content", isInFeed ? "#ffffff" : "#b8057d");
+        }
 
         if (isInFeed && scrollDelta > 0) {
           feedScrollDistance += scrollDelta;

@@ -255,22 +255,6 @@
       overflow-x: hidden;
     }
 
-    .app::before {
-      content: "";
-      position: fixed;
-      top: 0;
-      right: 0;
-      left: 0;
-      z-index: 45;
-      height: max(var(--safe-top), 48px);
-      background: var(--accent);
-      pointer-events: none;
-    }
-
-    .app.home-scrolled::before {
-      background: #ffffff;
-    }
-
     .status-bar {
       position: sticky;
       top: 0;
@@ -352,7 +336,7 @@
 
     .home-sticky-search {
       position: fixed;
-      top: max(var(--safe-top), 48px);
+      top: 0;
       left: 0;
       z-index: 44;
       display: flex;
@@ -383,7 +367,6 @@
       flex-direction: column;
       justify-content: flex-end;
       min-height: 107px;
-      margin-top: max(var(--safe-top), 48px);
       padding: 12px 16px;
       border-bottom-right-radius: 20px;
       border-bottom-left-radius: 20px;
