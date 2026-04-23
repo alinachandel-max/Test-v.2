@@ -519,7 +519,6 @@
 
       document.addEventListener("click", function (event) {
         var feedTuneButton = event.target.closest(".feed-tune-button");
-        var recentClose = event.target.closest(".recent-search-card__close");
         var recentCard = event.target.closest("[data-recent-query]");
         var chip = event.target.closest(".chip");
         var label;
@@ -527,17 +526,6 @@
         if (feedTuneButton) {
           event.preventDefault();
           openFullFilterSheet();
-          return;
-        }
-
-        if (recentClose) {
-          event.preventDefault();
-          event.stopPropagation();
-          recentCard = recentClose.closest("[data-recent-query]");
-          if (recentCard) {
-            recentCard.classList.add("is-hidden");
-            updateRecentSearchVisibility(recentCard.closest(".recent-search-strip"));
-          }
           return;
         }
 
@@ -567,18 +555,6 @@
           }
         }));
       });
-
-      function updateRecentSearchVisibility(recentStrip) {
-        if (!recentStrip) {
-          return;
-        }
-
-        var visibleCards = Array.prototype.filter.call(recentStrip.querySelectorAll("[data-recent-query]"), function (card) {
-          return !card.classList.contains("is-hidden");
-        });
-
-        recentStrip.classList.toggle("is-hidden", visibleCards.length === 0);
-      }
 
       searchForm.addEventListener("submit", function (event) {
         var committedQuery;
