@@ -250,9 +250,23 @@
     .app {
       position: relative;
       width: 100%;
+      max-width: 430px;
       min-height: 100vh;
+      margin: 0 auto;
       background: var(--bg);
       overflow-x: hidden;
+    }
+
+    .home-sticky-search,
+    .search-overlay,
+    .search-results,
+    .detail-screen,
+    .detail-screen__bottom,
+    .feed-tune-panel,
+    .tabbar {
+      max-width: 430px;
+      margin-right: auto;
+      margin-left: auto;
     }
 
     .status-bar {
@@ -337,7 +351,7 @@
     .home-sticky-search {
       position: fixed;
       top: 0;
-      left: 0;
+      left: 50%;
       z-index: 44;
       display: flex;
       align-items: flex-end;
@@ -351,7 +365,7 @@
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transform: translateY(-10px);
+      transform: translate(-50%, -10px);
       transition: opacity 180ms ease, transform 220ms ease, visibility 180ms ease;
     }
 
@@ -359,7 +373,7 @@
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
-      transform: translateY(0);
+      transform: translate(-50%, 0);
     }
 
     .home-hero {
@@ -947,9 +961,9 @@
     .search-results {
       position: fixed;
       top: 0;
-      right: 0;
+      right: auto;
       bottom: 0;
-      left: 0;
+      left: 50%;
       width: 100%;
       height: 100vh;
       margin: 0;
@@ -960,6 +974,7 @@
       pointer-events: none;
       transition: opacity 180ms ease, visibility 180ms ease;
       overflow: hidden;
+      transform: translateX(-50%);
     }
 
     .search-results.is-open {
@@ -3001,9 +3016,9 @@
     .detail-screen {
       position: fixed;
       top: 0;
-      right: 0;
+      right: auto;
       bottom: 0;
-      left: 0;
+      left: 50%;
       width: 100%;
       height: 100vh;
       margin: 0;
@@ -3014,6 +3029,7 @@
       pointer-events: none;
       transition: opacity 180ms ease, visibility 180ms ease;
       overflow: hidden;
+      transform: translateX(-50%);
     }
 
     .detail-screen.is-open {
@@ -3965,9 +3981,9 @@
 
     .detail-screen__bottom {
       position: fixed;
-      right: 0;
+      right: auto;
       bottom: 0;
-      left: 0;
+      left: 50%;
       width: 100%;
       margin: 0;
       z-index: 70;
@@ -3979,6 +3995,7 @@
       border-top-left-radius: 16px;
       border-top-right-radius: 16px;
       box-shadow: 0 -10px 60px rgba(39, 56, 63, 0.06), 0 10px 60px rgba(39, 56, 63, 0.06);
+      transform: translateX(-50%);
     }
 
     @supports (height: 100dvh) {
@@ -4480,7 +4497,7 @@
 
     .feed-tune-panel {
       position: fixed;
-      left: 0;
+      left: 50%;
       bottom: calc(79px + var(--safe-bottom));
       z-index: 90;
       display: flex;
@@ -4496,7 +4513,7 @@
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transform: translateY(16px);
+      transform: translate(-50%, 16px);
       transition: opacity 180ms ease, transform 220ms ease, visibility 180ms ease;
       -webkit-backdrop-filter: blur(50px);
       backdrop-filter: blur(50px);
@@ -4506,14 +4523,14 @@
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
-      transform: translateY(0);
+      transform: translate(-50%, 0);
     }
 
     .detail-screen.is-open ~ .feed-tune-panel {
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transform: translateY(16px);
+      transform: translate(-50%, 16px);
     }
 
     .feed-tune-button {
@@ -4712,13 +4729,14 @@
 
     .tabbar {
       position: fixed;
-      left: 0;
+      left: 50%;
       bottom: 0;
       z-index: 50;
       width: 100%;
       height: calc(79px + var(--safe-bottom));
       border-top: 1px solid var(--tab-border);
       background: #ffffff;
+      transform: translateX(-50%);
     }
 
     .tabbar__items {
