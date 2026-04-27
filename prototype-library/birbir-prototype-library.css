@@ -4077,7 +4077,7 @@
     }
 
     .detail-screen__bottom-seller[data-seller-presence="offline"] .detail-screen__bottom-seller-status {
-      color: #858585;
+      display: none;
     }
 
     .detail-screen__bottom-seller-subtitle {
@@ -4112,8 +4112,8 @@
 
     .detail-screen__bottom-seller-dot {
       position: absolute;
-      top: 0;
-      right: 0;
+      top: 1px;
+      right: 1px;
       width: 8px;
       height: 8px;
       border-radius: 999px;
@@ -4122,7 +4122,7 @@
     }
 
     .detail-screen__bottom-seller[data-seller-presence="offline"] .detail-screen__bottom-seller-dot {
-      background: #d4d4d4;
+      display: none;
     }
 
     .detail-screen__bottom-actions {
