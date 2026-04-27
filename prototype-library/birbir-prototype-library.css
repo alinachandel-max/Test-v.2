@@ -4096,7 +4096,7 @@
       height: 36px;
       flex: none;
       border-radius: 999px;
-      overflow: hidden;
+      overflow: visible;
       background: #f2f2f2;
     }
 
@@ -4107,6 +4107,7 @@
       height: 100%;
       object-fit: cover;
       object-position: center;
+      border-radius: inherit;
     }
 
     .detail-screen__bottom-seller-dot {
