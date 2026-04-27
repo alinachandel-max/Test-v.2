@@ -3992,6 +3992,7 @@
       align-items: center;
       justify-content: flex-end;
       background: #ffffff;
+      border-top: 1px solid #ededed;
       border-top-left-radius: 16px;
       border-top-right-radius: 16px;
       box-shadow: 0 -10px 60px rgba(39, 56, 63, 0.06), 0 10px 60px rgba(39, 56, 63, 0.06);
@@ -4005,11 +4006,108 @@
       }
     }
 
+    .detail-screen__bottom-seller {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      padding: 12px 16px 0;
+    }
+
+    .detail-screen__bottom-seller-body {
+      display: flex;
+      flex: 1 0 0;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+    }
+
+    .detail-screen__bottom-seller-name-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .detail-screen__bottom-seller-name,
+    .detail-screen__bottom-seller-status,
+    .detail-screen__bottom-seller-subtitle {
+      margin: 0;
+    }
+
+    .detail-screen__bottom-seller-name {
+      max-width: 220px;
+      overflow: hidden;
+      color: #292929;
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 17px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .detail-screen__bottom-seller-status {
+      flex: none;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 17px;
+      white-space: nowrap;
+      color: #16982b;
+    }
+
+    .detail-screen__bottom-seller[data-seller-presence="offline"] .detail-screen__bottom-seller-status {
+      color: #858585;
+    }
+
+    .detail-screen__bottom-seller-subtitle {
+      overflow: hidden;
+      color: #858585;
+      font-size: 14px;
+      font-weight: 500;
+      line-height: 17px;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .detail-screen__bottom-seller-avatar {
+      position: relative;
+      width: 36px;
+      height: 36px;
+      flex: none;
+      border-radius: 999px;
+      overflow: hidden;
+      background: #f2f2f2;
+    }
+
+    .detail-screen__bottom-seller-avatar img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+    }
+
+    .detail-screen__bottom-seller-dot {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: #20c341;
+      box-shadow: 0 0 0 2px #ffffff;
+    }
+
+    .detail-screen__bottom-seller[data-seller-presence="offline"] .detail-screen__bottom-seller-dot {
+      background: #d4d4d4;
+    }
+
     .detail-screen__bottom-actions {
       display: flex;
       gap: 8px;
       width: 100%;
-      padding: 16px 16px 8px;
+      padding: 12px 16px 8px;
     }
 
     .category-strip {
