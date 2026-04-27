@@ -3901,9 +3901,11 @@
       }
 
       function applyBottomSeller(sellerPreview) {
+        var statusText = sellerPreview.status || "";
+
         detailBottomSeller.setAttribute("data-seller-presence", sellerPreview.presence || "online");
         detailBottomSellerName.textContent = sellerPreview.name || "Даврон";
-        detailBottomSellerStatus.textContent = sellerPreview.status || "онлайн";
+        detailBottomSellerStatus.textContent = statusText;
         detailBottomSellerSubtitle.textContent = sellerPreview.subtitle || "Отвечает в течение часа";
         detailBottomSellerAvatar.src = sellerPreview.avatar || "assets/avatar/04.png";
         detailBottomSellerAvatar.alt = sellerPreview.avatarAlt || "Аватар продавца";
@@ -4053,7 +4055,7 @@
               status: "онлайн",
               subtitle: "Отвечает в течение часа",
               presence: "online",
-              avatar: "assets/avatar/04.png"
+              avatar: "assets/avatar/Cat.png"
             },
             characteristics: [
               { label: "Категория", value: "Товары для дома · Мебель · Стулья" },
@@ -4064,11 +4066,11 @@
           "chevrolet nexia, седан": {
             description: "Седан Chevrolet Nexia в темном цвете для городских поездок и повседневного использования. По фото видно аккуратный кузов и ухоженный внешний вид без явных повреждений.",
             sellerPreview: {
-              name: "Сабина",
-              status: "офлайн",
+              name: "Сабина Мирзаева",
+              status: "",
               subtitle: "Отвечает в течение дня",
               presence: "offline",
-              avatar: "assets/avatar/04.png"
+              avatar: "assets/avatar/Watermelon.png"
             },
             characteristics: [
               { label: "Категория", value: "Автомобили · Легковые автомобили · Седаны" },
@@ -4079,11 +4081,11 @@
           "lamelin vitamin 4 in 1 cream": {
             description: "Крем для лица Lamelin Vitamin 4 in 1 Cream в фирменной коробке. Подходит для ежедневного ухода, увлажнения и выравнивания тона кожи.",
             sellerPreview: {
-              name: "Шахноза",
+              name: "Шахноза И.",
               status: "онлайн",
               subtitle: "Отвечает в течение часа",
               presence: "online",
-              avatar: "assets/avatar/04.png"
+              avatar: "assets/avatar/Duck.png"
             },
             characteristics: [
               { label: "Категория", value: "Красота и здоровье · Уход за лицом · Кремы" },
@@ -4095,10 +4097,10 @@
             description: "Легкая оверсайз рубашка в нежно-розовую полоску для повседневных образов. Смотрится свободно и подходит под шорты, джинсы или юбку.",
             sellerPreview: {
               name: "Мадина",
-              status: "офлайн",
+              status: "",
               subtitle: "Отвечает в течение дня",
               presence: "offline",
-              avatar: "assets/avatar/04.png"
+              avatar: "assets/avatar/Smile.png"
             },
             characteristics: [
               { label: "Категория", value: "Одежда и обувь · Женская одежда · Рубашки" },
@@ -4109,11 +4111,11 @@
           "женская блуза farkom": {
             description: "Женская блуза Farkom в мягком желтом оттенке. Легкая ткань и аккуратная посадка делают ее удобной для офиса и повседневной носки.",
             sellerPreview: {
-              name: "Сабина",
-              status: "офлайн",
+              name: "Феруза Абдуллаева",
+              status: "",
               subtitle: "Отвечает в течение дня",
               presence: "offline",
-              avatar: "assets/avatar/04.png"
+              avatar: "assets/avatar/Cactus.png"
             },
             characteristics: [
               { label: "Категория", value: "Одежда и обувь · Женская одежда · Блузы" },
@@ -4128,7 +4130,7 @@
               status: "онлайн",
               subtitle: "Отвечает в течение часа",
               presence: "online",
-              avatar: "assets/avatar/04.png"
+              avatar: "assets/avatar/Star.png"
             },
             characteristics: [
               { label: "Категория", value: "Одежда и обувь · Женская одежда · Платья" },
@@ -4139,11 +4141,11 @@
           "туфли-лодочки фуксия": {
             description: "Яркие туфли-лодочки цвета фуксии для праздничных и вечерних образов. Острый мыс и насыщенный оттенок делают их акцентной парой в гардеробе.",
             sellerPreview: {
-              name: "Мадина",
-              status: "офлайн",
+              name: "Алина Х.",
+              status: "",
               subtitle: "Отвечает в течение дня",
               presence: "offline",
-              avatar: "assets/avatar/04.png"
+              avatar: "assets/avatar/Watermelon.png"
             },
             characteristics: [
               { label: "Категория", value: "Одежда и обувь · Женская обувь · Туфли" },
@@ -4154,11 +4156,11 @@
           "chevrolet lacetti, седан": {
             description: "Седан Chevrolet Lacetti в темном цвете для города и трассы. По фото видно аккуратный кузов и ухоженный внешний вид без броских доработок.",
             sellerPreview: {
-              name: "Акмал",
+              name: "Абдурахмон",
               status: "онлайн",
               subtitle: "Отвечает в течение часа",
               presence: "online",
-              avatar: "assets/avatar/04.png"
+              avatar: "assets/avatar/Cat.png"
             },
             characteristics: [
               { label: "Категория", value: "Автомобили · Легковые автомобили · Седаны" },
@@ -4201,11 +4203,11 @@
 
         if (offlineTitles[normalizedTitle]) {
           return {
-            name: "Сабина",
-            status: "офлайн",
+            name: "Сабина Мирзаева",
+            status: "",
             subtitle: "Отвечает в течение дня",
             presence: "offline",
-            avatar: "assets/avatar/04.png"
+            avatar: "assets/avatar/Watermelon.png"
           };
         }
 
@@ -4214,7 +4216,7 @@
           status: "онлайн",
           subtitle: "Отвечает в течение часа",
           presence: "online",
-          avatar: "assets/avatar/04.png"
+          avatar: "assets/avatar/Cat.png"
         };
       }
 
