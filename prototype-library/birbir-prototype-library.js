@@ -3731,6 +3731,13 @@
       var detailHeroDiscount = detailScreen ? detailScreen.querySelector("#detail-hero-discount") : null;
       var detailHeroTitle = detailScreen ? detailScreen.querySelector("#detail-hero-title") : null;
       var detailHeroBadges = detailScreen ? detailScreen.querySelector("#detail-hero-badges") : null;
+      var detailBottomSeller = detailScreen ? detailScreen.querySelector(".detail-screen__bottom-seller") : null;
+      var detailBottomSellerName = detailScreen ? detailScreen.querySelector("#detail-bottom-seller-name") : null;
+      var detailBottomSellerStatus = detailScreen ? detailScreen.querySelector("#detail-bottom-seller-status") : null;
+      var detailBottomSellerSubtitle = detailScreen ? detailScreen.querySelector("#detail-bottom-seller-subtitle") : null;
+      var detailBottomSellerAvatar = detailScreen ? detailScreen.querySelector("#detail-bottom-seller-avatar") : null;
+      var detailSellerName = detailScreen ? detailScreen.querySelector(".detail-seller__name") : null;
+      var detailSellerAvatar = detailScreen ? detailScreen.querySelector(".detail-seller__avatar img") : null;
       var detailCharacteristics = detailScreen ? detailScreen.querySelector("#detail-characteristics") : null;
       var detailDescription = detailScreen ? detailScreen.querySelector("#detail-description") : null;
       var detailOfferInput = detailScreen ? detailScreen.querySelector("#detail-offer-input") : null;
@@ -3762,7 +3769,7 @@
       ];
       var detailHeroBadgeTimer = null;
 
-      if (!detailScreen || !detailScroller || !detailBack || !detailHeroImage || !detailHeroBadge || !detailHeroPrice || !detailHeroOld || !detailHeroOldValue || !detailHeroDiscount || !detailHeroTitle || !detailHeroBadges || !detailCharacteristics || !detailDescription || !detailOfferInput || !detailOfferChips || !detailQuestionInput || !detailQuestionChips || !detailSimilarTrack || !detailSellerTrack) {
+      if (!detailScreen || !detailScroller || !detailBack || !detailHeroImage || !detailHeroBadge || !detailHeroPrice || !detailHeroOld || !detailHeroOldValue || !detailHeroDiscount || !detailHeroTitle || !detailHeroBadges || !detailBottomSeller || !detailBottomSellerName || !detailBottomSellerStatus || !detailBottomSellerSubtitle || !detailBottomSellerAvatar || !detailCharacteristics || !detailDescription || !detailOfferInput || !detailOfferChips || !detailQuestionInput || !detailQuestionChips || !detailSimilarTrack || !detailSellerTrack) {
         return;
       }
 
@@ -3853,6 +3860,7 @@
         detailHeroPrice.textContent = data.price || "11 900 000 сум";
         detailHeroTitle.textContent = meta.heroTitle || data.title || "Товар";
         detailHeroBadges.innerHTML = renderHeroTags(data.badgesHtml);
+        applyBottomSeller(meta.sellerPreview || buildSellerPreview(data.title));
 
         if (data.oldPrice) {
           detailHeroOld.hidden = false;
@@ -3890,6 +3898,24 @@
         detailSellerTrack.innerHTML = railCards.seller.map(function (item) {
           return item.outerHTML;
         }).join("");
+      }
+
+      function applyBottomSeller(sellerPreview) {
+        detailBottomSeller.setAttribute("data-seller-presence", sellerPreview.presence || "online");
+        detailBottomSellerName.textContent = sellerPreview.name || "Даврон";
+        detailBottomSellerStatus.textContent = sellerPreview.status || "онлайн";
+        detailBottomSellerSubtitle.textContent = sellerPreview.subtitle || "Отвечает в течение часа";
+        detailBottomSellerAvatar.src = sellerPreview.avatar || "assets/avatar/04.png";
+        detailBottomSellerAvatar.alt = sellerPreview.avatarAlt || "Аватар продавца";
+
+        if (detailSellerName) {
+          detailSellerName.textContent = sellerPreview.name || "Даврон";
+        }
+
+        if (detailSellerAvatar) {
+          detailSellerAvatar.src = sellerPreview.avatar || "assets/avatar/04.png";
+          detailSellerAvatar.alt = sellerPreview.avatarAlt || "Аватар продавца";
+        }
       }
 
       function assignSourceCardOrdinals() {
@@ -4022,6 +4048,13 @@
         var detailMetaByTitle = {
           "деревянный стул в скандинавском стиле": {
             description: "Лаконичный деревянный стул в скандинавском стиле для кухни, спальни или рабочего уголка. Светлое дерево и мягкий текстильный акцент делают его спокойным предметом для современного интерьера.",
+            sellerPreview: {
+              name: "Даврон",
+              status: "онлайн",
+              subtitle: "Отвечает в течение часа",
+              presence: "online",
+              avatar: "assets/avatar/04.png"
+            },
             characteristics: [
               { label: "Категория", value: "Товары для дома · Мебель · Стулья" },
               { label: "Состояние", value: "Новое" },
@@ -4030,6 +4063,13 @@
           },
           "chevrolet nexia, седан": {
             description: "Седан Chevrolet Nexia в темном цвете для городских поездок и повседневного использования. По фото видно аккуратный кузов и ухоженный внешний вид без явных повреждений.",
+            sellerPreview: {
+              name: "Сабина",
+              status: "офлайн",
+              subtitle: "Отвечает в течение дня",
+              presence: "offline",
+              avatar: "assets/avatar/04.png"
+            },
             characteristics: [
               { label: "Категория", value: "Автомобили · Легковые автомобили · Седаны" },
               { label: "Состояние", value: "Б/у" },
@@ -4038,6 +4078,13 @@
           },
           "lamelin vitamin 4 in 1 cream": {
             description: "Крем для лица Lamelin Vitamin 4 in 1 Cream в фирменной коробке. Подходит для ежедневного ухода, увлажнения и выравнивания тона кожи.",
+            sellerPreview: {
+              name: "Шахноза",
+              status: "онлайн",
+              subtitle: "Отвечает в течение часа",
+              presence: "online",
+              avatar: "assets/avatar/04.png"
+            },
             characteristics: [
               { label: "Категория", value: "Красота и здоровье · Уход за лицом · Кремы" },
               { label: "Состояние", value: "Новое" },
@@ -4046,6 +4093,13 @@
           },
           "оверсайз рубашка в розовую полоску": {
             description: "Легкая оверсайз рубашка в нежно-розовую полоску для повседневных образов. Смотрится свободно и подходит под шорты, джинсы или юбку.",
+            sellerPreview: {
+              name: "Мадина",
+              status: "офлайн",
+              subtitle: "Отвечает в течение дня",
+              presence: "offline",
+              avatar: "assets/avatar/04.png"
+            },
             characteristics: [
               { label: "Категория", value: "Одежда и обувь · Женская одежда · Рубашки" },
               { label: "Состояние", value: "Новое" },
@@ -4054,6 +4108,13 @@
           },
           "женская блуза farkom": {
             description: "Женская блуза Farkom в мягком желтом оттенке. Легкая ткань и аккуратная посадка делают ее удобной для офиса и повседневной носки.",
+            sellerPreview: {
+              name: "Сабина",
+              status: "офлайн",
+              subtitle: "Отвечает в течение дня",
+              presence: "offline",
+              avatar: "assets/avatar/04.png"
+            },
             characteristics: [
               { label: "Категория", value: "Одежда и обувь · Женская одежда · Блузы" },
               { label: "Состояние", value: "Новое" },
@@ -4062,6 +4123,13 @@
           },
           "платье-пиджак бордовое": {
             description: "Бордовое платье-пиджак с акцентом на талию для вечернего выхода или мероприятия. Смотрится собранно и легко комбинируется с лодочками или босоножками.",
+            sellerPreview: {
+              name: "Нилуфар",
+              status: "онлайн",
+              subtitle: "Отвечает в течение часа",
+              presence: "online",
+              avatar: "assets/avatar/04.png"
+            },
             characteristics: [
               { label: "Категория", value: "Одежда и обувь · Женская одежда · Платья" },
               { label: "Состояние", value: "Новое" },
@@ -4070,6 +4138,13 @@
           },
           "туфли-лодочки фуксия": {
             description: "Яркие туфли-лодочки цвета фуксии для праздничных и вечерних образов. Острый мыс и насыщенный оттенок делают их акцентной парой в гардеробе.",
+            sellerPreview: {
+              name: "Мадина",
+              status: "офлайн",
+              subtitle: "Отвечает в течение дня",
+              presence: "offline",
+              avatar: "assets/avatar/04.png"
+            },
             characteristics: [
               { label: "Категория", value: "Одежда и обувь · Женская обувь · Туфли" },
               { label: "Состояние", value: "Новое" },
@@ -4078,6 +4153,13 @@
           },
           "chevrolet lacetti, седан": {
             description: "Седан Chevrolet Lacetti в темном цвете для города и трассы. По фото видно аккуратный кузов и ухоженный внешний вид без броских доработок.",
+            sellerPreview: {
+              name: "Акмал",
+              status: "онлайн",
+              subtitle: "Отвечает в течение часа",
+              presence: "online",
+              avatar: "assets/avatar/04.png"
+            },
             characteristics: [
               { label: "Категория", value: "Автомобили · Легковые автомобили · Седаны" },
               { label: "Состояние", value: "Б/у" },
@@ -4091,18 +4173,48 @@
           return {
             heroTitle: title,
             description: matchedMeta.description,
-            characteristics: matchedMeta.characteristics
+            characteristics: matchedMeta.characteristics,
+            sellerPreview: matchedMeta.sellerPreview || buildSellerPreview(title)
           };
         }
 
         return {
           heroTitle: title,
           description: "Аккуратный товар в хорошем визуальном состоянии. Перед покупкой можно уточнить детали у продавца и договориться о просмотре.",
+          sellerPreview: buildSellerPreview(title),
           characteristics: [
             { label: "Категория", value: "Товары для дома и личного пользования" },
             { label: "Состояние", value: "Хорошее" },
             { label: "Дополнительно", value: "Уточняйте у продавца" }
           ]
+        };
+      }
+
+      function buildSellerPreview(title) {
+        var normalizedTitle = normalizeWhitespace(title).toLowerCase();
+        var offlineTitles = {
+          "chevrolet nexia, седан": true,
+          "оверсайз рубашка в розовую полоску": true,
+          "женская блуза farkom": true,
+          "туфли-лодочки фуксия": true
+        };
+
+        if (offlineTitles[normalizedTitle]) {
+          return {
+            name: "Сабина",
+            status: "офлайн",
+            subtitle: "Отвечает в течение дня",
+            presence: "offline",
+            avatar: "assets/avatar/04.png"
+          };
+        }
+
+        return {
+          name: "Даврон",
+          status: "онлайн",
+          subtitle: "Отвечает в течение часа",
+          presence: "online",
+          avatar: "assets/avatar/04.png"
         };
       }
 

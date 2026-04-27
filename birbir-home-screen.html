@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="prototype-library/birbir-prototype-library.css?v=20260422-home-scroll-v11">
+  <link rel="stylesheet" href="prototype-library/birbir-prototype-library.css?v=20260427-detail-seller-v1">
 </head>
 <body>
   <!-- Icon sprite source: prototype-library/birbir-icon-sprite.html -->
@@ -1078,18 +1078,6 @@
               <div class="detail-hero__badges" id="detail-hero-badges"></div>
             </div>
 
-            <div class="detail-compact-seller">
-              <div class="detail-compact-seller__body">
-                <div class="detail-compact-seller__name-row">
-                  <p class="detail-compact-seller__name">Даврон</p>
-                  <p class="detail-compact-seller__status">Онлайн</p>
-                </div>
-                <p class="detail-compact-seller__subtitle">Отвечает в течение часа</p>
-              </div>
-              <div class="detail-compact-seller__avatar">
-                <img src="assets/avatar/04.png" alt="Аватар продавца">
-              </div>
-            </div>
           </section>
 
           <section class="detail-card">
@@ -1282,6 +1270,19 @@
       </div>
 
       <div class="detail-screen__bottom">
+        <div class="detail-screen__bottom-seller" data-seller-presence="online">
+          <div class="detail-screen__bottom-seller-body">
+            <div class="detail-screen__bottom-seller-name-row">
+              <p class="detail-screen__bottom-seller-name" id="detail-bottom-seller-name">Даврон</p>
+              <p class="detail-screen__bottom-seller-status" id="detail-bottom-seller-status">онлайн</p>
+            </div>
+            <p class="detail-screen__bottom-seller-subtitle" id="detail-bottom-seller-subtitle">Отвечает в течение часа</p>
+          </div>
+          <div class="detail-screen__bottom-seller-avatar">
+            <img id="detail-bottom-seller-avatar" src="assets/avatar/04.png" alt="Аватар продавца">
+            <span class="detail-screen__bottom-seller-dot" aria-hidden="true"></span>
+          </div>
+        </div>
         <div class="detail-screen__bottom-actions">
           <button class="library-button library-button--accent-filled" type="button">
             <span class="library-button__icon" aria-hidden="true">
@@ -1609,7 +1610,7 @@
     </nav>
   </div>
 
-  <script src="prototype-library/birbir-prototype-library.js?v=20260422-home-scroll-v11"></script>
+  <script src="prototype-library/birbir-prototype-library.js?v=20260427-detail-seller-v1"></script>
   <script>
     window.addEventListener("load", function () {
       window.setTimeout(function () {
