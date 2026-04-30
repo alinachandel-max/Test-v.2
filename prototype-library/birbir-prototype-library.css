@@ -407,12 +407,12 @@
 
     .banners {
       position: relative;
-      height: 150px;
-      margin-top: 6px;
+      height: 100px;
+      margin-top: 24px;
     }
 
     .banners .scroll-row {
-      padding-bottom: 4px;
+      padding-bottom: 0;
     }
 
     .banner-scroll {
@@ -424,13 +424,13 @@
 
     .banner {
       position: relative;
-      flex: 0 0 274px;
-      width: 274px;
-      height: 150px;
+      flex: 0 0 100px;
+      width: 100px;
+      height: 100px;
       overflow: hidden;
       border-radius: 16px;
       background: #ffffff;
-      scroll-snap-align: center;
+      scroll-snap-align: start;
     }
 
     .banner__image {
