@@ -47,7 +47,7 @@
       "binding_status": "needs_figma_binding",
       "current_code_refs": [
         "prototype-library/birbir-prototype-library.css::.results-header",
-        "birbir-home-screen.html::.search-overlay / .search-results"
+        "index.html::.search-overlay / .search-results"
       ]
     },
     {
@@ -88,7 +88,7 @@
       "binding_status": "needs_figma_binding",
       "current_code_refs": [
         "prototype-library/birbir-prototype-library.css::.filter-sheet*",
-        "birbir-home-screen.html::.filter-sheet"
+        "index.html::.filter-sheet"
       ]
     },
     {
@@ -102,7 +102,7 @@
       "binding_status": "needs_figma_binding",
       "current_code_refs": [
         "prototype-library/birbir-prototype-library.css::.filter-bottomsheet*",
-        "birbir-home-screen.html::.filter-bottomsheet"
+        "index.html::.filter-bottomsheet"
       ]
     },
     {
@@ -189,6 +189,51 @@
       ]
     },
     {
+      "component_key": "home_product_card",
+      "display_name": "Home product feed card",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": "60198:190957",
+      "library_source": "BirBir card preview pattern",
+      "state_name": "default_similar_badges_installment_wide_cta",
+      "code_owner": "prototype-library",
+      "binding_status": "bound",
+      "current_code_refs": [
+        "prototype-library/birbir-prototype-library.js::HOME_FEED_BLUEPRINTS",
+        "prototype-library/birbir-prototype-library.js::renderHomeCardMarkup",
+        "prototype-library/birbir-prototype-library.css::.card*",
+        "assets/home-feed/*"
+      ]
+    },
+    {
+      "component_key": "home_collections_rail",
+      "display_name": "Home collections rail",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": "60198:190935",
+      "library_source": "BirBir home screen pattern",
+      "state_name": "square_cards_partial_fourth",
+      "code_owner": "prototype-library",
+      "binding_status": "bound",
+      "current_code_refs": [
+        "index.html::.home-collections",
+        "prototype-library/birbir-prototype-library.css::.home-collection-card*",
+        "assets/home-collections/*"
+      ]
+    },
+    {
+      "component_key": "home_recent_search_cards",
+      "display_name": "Home recent search cards",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": "60318:99525",
+      "library_source": "BirBir home screen pattern",
+      "state_name": "horizontal_recent_queries",
+      "code_owner": "prototype-library",
+      "binding_status": "bound",
+      "current_code_refs": [
+        "index.html::.recent-search-strip",
+        "prototype-library/birbir-prototype-library.css::.recent-search-card*"
+      ]
+    },
+    {
       "component_key": "detail_seller_tags",
       "display_name": "Detail seller tags",
       "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
@@ -198,8 +243,23 @@
       "code_owner": "detail-static-html",
       "binding_status": "bound",
       "current_code_refs": [
-        "birbir-home-screen.html::.detail-seller__tags",
+        "index.html::.detail-seller__tags",
         "prototype-library/birbir-prototype-library.css::.detail-seller__tag*"
+      ]
+    },
+    {
+      "component_key": "detail_product_hero_card",
+      "display_name": "Detail product hero card",
+      "figma_file_key": "BPlqeBZM6wfvNTTeMDcu9f",
+      "node_id": "61571:106543",
+      "library_source": "BirBir detail pattern",
+      "state_name": "default_old_price_delivery_bargain",
+      "code_owner": "detail-static-html",
+      "binding_status": "bound",
+      "current_code_refs": [
+        "index.html::.detail-hero",
+        "prototype-library/birbir-prototype-library.css::.detail-hero*",
+        "prototype-library/birbir-prototype-library.js::renderHeroTags"
       ]
     },
     {
