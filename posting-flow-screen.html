@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>BirBir Posting Flow</title>
+  <link rel="icon" href="data:,">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="prototype-library/birbir-prototype-library.css?v=20260704-posting-flow-v36">
+</head>
+<body>
+  <div class="app posting-app" data-posting-root>
+    <main class="screen posting-screen">
+      <header class="posting-topbar" aria-label="Постановка объявления">
+        <div class="posting-topbar__row">
+          <button class="posting-icon-button" type="button" data-posting-back aria-label="Назад">
+            <img class="posting-arrow" src="assets/posting-flow/arrow-left.svg?v=20260704-posting-flow-v33" alt="" aria-hidden="true">
+          </button>
+          <a class="posting-draft-link" href="seller-cabinet-screen.html">Сохранить в черновики</a>
+        </div>
+        <div class="posting-progress" data-posting-progress aria-label="Прогресс постановки"></div>
+      </header>
+
+      <section class="posting-content" data-posting-content aria-live="polite"></section>
+    </main>
+
+    <footer class="posting-bottom">
+      <button class="posting-primary-button" type="button" data-posting-next>Продолжить</button>
+    </footer>
+
+    <div class="posting-overlay" data-posting-permission hidden aria-hidden="true">
+      <div class="posting-overlay__shade" data-posting-close-overlay></div>
+      <section class="posting-alert" role="dialog" aria-modal="true" aria-label="Доступ к фото">
+        <h2 class="posting-alert__title">Разрешить приложению доступ к фото?</h2>
+        <p class="posting-alert__text">Приложение получит доступ к фото только во время использования</p>
+        <div class="posting-alert__actions">
+          <button class="posting-alert__button" type="button" data-posting-close-overlay>Запретить</button>
+          <button class="posting-alert__button posting-alert__button--primary" type="button" data-posting-open-gallery>Разрешить</button>
+        </div>
+      </section>
+    </div>
+
+    <div class="posting-overlay posting-overlay--sheet" data-posting-gallery hidden aria-hidden="true">
+      <div class="posting-overlay__shade" data-posting-close-gallery></div>
+      <section class="posting-gallery" role="dialog" aria-modal="true" aria-label="Выбор фото">
+        <div class="posting-gallery__grabber" aria-hidden="true"></div>
+        <div class="posting-gallery__header">
+          <button class="posting-gallery__link" type="button" data-posting-close-gallery>Отмена</button>
+          <h2 class="posting-gallery__title">Недавние</h2>
+          <button class="posting-gallery__link posting-gallery__link--accent" type="button" data-posting-select-photo>Выбрать</button>
+        </div>
+        <div class="posting-gallery__grid" data-posting-gallery-grid></div>
+      </section>
+    </div>
+
+    <div class="posting-overlay posting-overlay--sheet" data-posting-sheet hidden aria-hidden="true">
+      <div class="posting-overlay__shade" data-posting-close-sheet></div>
+      <section class="posting-bottomsheet" role="dialog" aria-modal="true" aria-label="Выбор значения">
+        <div class="posting-gallery__grabber" aria-hidden="true"></div>
+        <div class="posting-bottomsheet__header">
+          <button class="posting-gallery__link" type="button" data-posting-close-sheet>Отмена</button>
+          <h2 class="posting-bottomsheet__title" data-posting-sheet-title>Выбор</h2>
+          <span class="posting-bottomsheet__spacer" aria-hidden="true"></span>
+        </div>
+        <div class="posting-bottomsheet__list" data-posting-sheet-list></div>
+      </section>
+    </div>
+
+    <div class="posting-overlay posting-overlay--success" data-posting-success hidden aria-hidden="true">
+      <section class="posting-success-screen" role="dialog" aria-modal="true" aria-label="Объявление опубликовано">
+        <button class="posting-success-close" type="button" data-posting-close-success aria-label="Закрыть">
+          <img src="assets/posting-flow/success-close.svg?v=20260704-success-v1" alt="" aria-hidden="true">
+        </button>
+
+        <img class="posting-success-confetti" src="assets/posting-flow/success-confetti.png?v=20260704-success-v1" alt="" aria-hidden="true">
+
+        <div class="posting-success-main">
+          <img class="posting-success-check" src="assets/posting-flow/success-check.svg?v=20260704-success-v1" alt="" aria-hidden="true">
+          <div class="posting-success-copy">
+            <h2>Объявление<br>опубликовано</h2>
+            <p>Его уже видят покупатели</p>
+          </div>
+        </div>
+
+        <div class="posting-success-promos" aria-label="Продвижение объявления">
+          <article class="posting-success-promo-stack">
+            <div class="posting-success-promo-banner">Сделайте объявление заметнее</div>
+            <div class="posting-success-card">
+              <div class="posting-success-card__top">
+                <img class="posting-success-card__image" src="assets/posting-flow/success-promo-maxi.png?v=20260704-success-v1" alt="" aria-hidden="true">
+                <div class="posting-success-card__content">
+                  <div class="posting-success-card__title-row">
+                    <h3>Макси карточка</h3>
+                    <span class="posting-success-checkbox" aria-hidden="true"></span>
+                  </div>
+                  <p class="posting-success-card__price">4 450 сум · 7 дней</p>
+                </div>
+              </div>
+              <div class="posting-success-card__separator"></div>
+              <ul class="posting-success-card__list">
+                <li>Крупная фотогалерея и бейдж «Premium»</li>
+                <li>Прямой доступ к контактам</li>
+              </ul>
+              <button class="posting-success-link" type="button">Подробнее</button>
+            </div>
+          </article>
+
+          <article class="posting-success-card">
+            <div class="posting-success-card__top">
+              <img class="posting-success-card__image" src="assets/posting-flow/success-promo-up.png?v=20260704-success-v1" alt="" aria-hidden="true">
+              <div class="posting-success-card__content">
+                <div class="posting-success-card__title-row">
+                  <h3>Вверх</h3>
+                  <span class="posting-success-checkbox" aria-hidden="true"></span>
+                </div>
+                <p class="posting-success-card__price">15 000 сум · 4 раза</p>
+              </div>
+            </div>
+            <div class="posting-success-card__separator"></div>
+            <ul class="posting-success-card__list">
+              <li>Автоподнятие 4 раза — на 7, 14, 21 и 28 день</li>
+              <li>Объявление поднимается вверх в ленте</li>
+            </ul>
+            <button class="posting-success-link" type="button">Подробнее</button>
+          </article>
+        </div>
+
+        <footer class="posting-success-bottom">
+          <button class="posting-success-pay" type="button">Оплатить рекламу</button>
+          <button class="posting-success-secondary" type="button" data-posting-close-success>Перейти к объявлению</button>
+          <p>Нажимая на кнопку «Оплатить»,<br>вы соглашаетесь с условиями <span>оферты</span></p>
+        </footer>
+      </section>
+    </div>
+
+    <div class="posting-keyboard" data-posting-keyboard hidden aria-hidden="true">
+      <div class="posting-keyboard__suggestions">
+        <span></span><span></span><span></span>
+      </div>
+      <div class="posting-keyboard__rows">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+  </div>
+
+  <script src="prototype-library/posting-flow.js?v=20260704-posting-flow-v34"></script>
+</body>
+</html>

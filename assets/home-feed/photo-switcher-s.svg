@@ -1,0 +1,10 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 38 3" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Photo Switcher">
+<circle id="1" cx="1.5" cy="1.5" r="1.5" fill="var(--fill-0, #292929)"/>
+<circle id="2" cx="8.5" cy="1.5" r="1.5" fill="var(--fill-0, #E0E0E0)"/>
+<circle id="3" cx="15.5" cy="1.5" r="1.5" fill="var(--fill-0, #E0E0E0)"/>
+<circle id="4" cx="22.5" cy="1.5" r="1.5" fill="var(--fill-0, #E0E0E0)"/>
+<circle id="5" cx="29.5" cy="1.5" r="1.5" fill="var(--fill-0, #E0E0E0)"/>
+<circle id="6" cx="36.5" cy="1.5" r="1.5" fill="var(--fill-0, #E0E0E0)"/>
+</g>
+</svg>
