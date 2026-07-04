@@ -33,6 +33,35 @@
     var HOME_VERSION_LEGACY = "legacy";
     var HOME_VERSION_V2 = "v2";
 
+    var PROTOTYPE_HAPTIC_PATTERNS = {
+      light: 18,
+      success: [28, 36, 48]
+    };
+
+    function triggerPrototypeHaptic(type) {
+      var pattern = PROTOTYPE_HAPTIC_PATTERNS[type] || PROTOTYPE_HAPTIC_PATTERNS.light;
+
+      try {
+        if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+          if (type === "success" && typeof window.Telegram.WebApp.HapticFeedback.notificationOccurred === "function") {
+            window.Telegram.WebApp.HapticFeedback.notificationOccurred("success");
+            return;
+          }
+
+          if (typeof window.Telegram.WebApp.HapticFeedback.impactOccurred === "function") {
+            window.Telegram.WebApp.HapticFeedback.impactOccurred("light");
+            return;
+          }
+        }
+      } catch (error) {}
+
+      try {
+        if (window.navigator && typeof window.navigator.vibrate === "function") {
+          window.navigator.vibrate(pattern);
+        }
+      } catch (error) {}
+    }
+
     function normalizeSimilarQuery(value) {
       return String(value || "").replace(/\s+/g, " ").trim();
     }
@@ -4562,6 +4591,12 @@
         var sheetOpen = event.target.closest("[data-seller-sheet-open]");
         var sheetClose = event.target.closest("[data-seller-sheet-close]");
         var primaryCta = event.target.closest("[data-seller-primary-cta]");
+        var postingEntry = event.target.closest("[data-seller-posting-entry]");
+
+        if (postingEntry) {
+          triggerPrototypeHaptic("light");
+          return;
+        }
 
         if (tabButton) {
           event.preventDefault();

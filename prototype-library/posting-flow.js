@@ -11,7 +11,6 @@
   var progress = root.querySelector("[data-posting-progress]");
   var nextButton = root.querySelector("[data-posting-next]");
   var backButton = root.querySelector("[data-posting-back]");
-  var permissionOverlay = root.querySelector("[data-posting-permission]");
   var galleryOverlay = root.querySelector("[data-posting-gallery]");
   var galleryGrid = root.querySelector("[data-posting-gallery-grid]");
   var sheetOverlay = root.querySelector("[data-posting-sheet]");
@@ -22,6 +21,9 @@
   var themeMeta = document.querySelector('meta[name="theme-color"]');
   var keyboard = root.querySelector("[data-posting-keyboard]");
   var returnTimer = null;
+  var HAPTIC_PATTERNS = {
+    success: [28, 36, 48]
+  };
 
   var photos = [
     "photo-01.png",
@@ -128,8 +130,6 @@
   document.addEventListener("click", function (event) {
     var target = event.target;
     var openPhoto = target.closest("[data-posting-open-photo]");
-    var closeOverlay = target.closest("[data-posting-close-overlay]");
-    var openGallery = target.closest("[data-posting-open-gallery]");
     var closeGallery = target.closest("[data-posting-close-gallery]");
     var selectPhoto = target.closest("[data-posting-select-photo]");
     var galleryPhoto = target.closest("[data-posting-gallery-photo]");
@@ -144,17 +144,6 @@
     var categoryPicker = target.closest("[data-posting-category-picker]");
 
     if (openPhoto) {
-      showOverlay(permissionOverlay);
-      return;
-    }
-
-    if (closeOverlay) {
-      hideOverlay(permissionOverlay);
-      return;
-    }
-
-    if (openGallery) {
-      hideOverlay(permissionOverlay);
       showOverlay(galleryOverlay);
       return;
     }
@@ -346,8 +335,6 @@
           photo,
           '" alt="">',
           index === 0 ? '<span class="posting-photo-badge">Главная</span>' : "",
-          index === 7 ? '<span class="posting-photo-status">Ошибка</span>' : "",
-          index === 8 ? '<span class="posting-photo-loader">×</span>' : "",
           "</div>"
         ].join("");
       }).join(""),
@@ -537,7 +524,9 @@
       '<div class="posting-map"><img src="',
       ASSET_DIR,
       'map.png?v=20260704-posting-flow-v23" alt=""></div>',
-      '<a class="posting-location-link" href="#"><span class="posting-location-icon" aria-hidden="true"></span>Определить моё местоположение</a>',
+      '<a class="posting-location-link" href="#"><span class="posting-location-icon" aria-hidden="true"><img src="',
+      ASSET_DIR,
+      'navigation-fill.svg?v=20260704-posting-flow-v1" alt=""></span>Определить моё местоположение</a>',
       "</div>",
       '<div class="posting-place-fields">',
       renderTextField("address", "Адрес", "Введите адрес", state.address, true),
@@ -896,6 +885,7 @@
     successOverlay.classList.remove("is-running");
     successOverlay.offsetHeight;
     successOverlay.classList.add("is-running");
+    triggerPostingHaptic("success");
   }
 
   function closeSuccessFlow() {
@@ -904,6 +894,30 @@
       themeMeta.setAttribute("content", "#ffffff");
     }
     window.location.href = "seller-cabinet-screen.html";
+  }
+
+  function triggerPostingHaptic(type) {
+    var pattern = HAPTIC_PATTERNS[type];
+
+    try {
+      if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+        if (type === "success" && typeof window.Telegram.WebApp.HapticFeedback.notificationOccurred === "function") {
+          window.Telegram.WebApp.HapticFeedback.notificationOccurred("success");
+          return;
+        }
+
+        if (typeof window.Telegram.WebApp.HapticFeedback.impactOccurred === "function") {
+          window.Telegram.WebApp.HapticFeedback.impactOccurred("light");
+          return;
+        }
+      }
+    } catch (error) {}
+
+    try {
+      if (window.navigator && typeof window.navigator.vibrate === "function" && pattern) {
+        window.navigator.vibrate(pattern);
+      }
+    } catch (error) {}
   }
 
   function trim(value) {
