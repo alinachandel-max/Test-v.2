@@ -40,6 +40,7 @@
 ## Обязательные артефакты
 
 - [docs/birbir/README.md](./docs/birbir/README.md)
+- [docs/birbir/prototype-build-playbook.md](./docs/birbir/prototype-build-playbook.md)
 - [docs/birbir/component-contracts.md](./docs/birbir/component-contracts.md)
 - [docs/birbir/source-of-truth.json](./docs/birbir/source-of-truth.json)
 - [docs/birbir/screen-preflight-template.md](./docs/birbir/screen-preflight-template.md)
