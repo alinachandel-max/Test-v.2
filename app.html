@@ -162,6 +162,76 @@
           }
         });
         patchBadges(doc);
+        patchSellerPosting(doc);
+      }
+
+      function closeSellerPosting(doc) {
+        var embed = doc.querySelector("[data-seller-posting-embed]");
+        if (!embed) {
+          return;
+        }
+        embed.classList.remove("is-open");
+        embed.hidden = true;
+        embed.setAttribute("aria-hidden", "true");
+        if (doc.body) {
+          doc.body.classList.remove("seller-posting-modal-open");
+        }
+      }
+
+      function patchPostingFrame(sellerDoc, postingFrame) {
+        var postingDoc;
+        try {
+          postingDoc = postingFrame.contentDocument;
+          if (!postingDoc || postingDoc.__birbirSingleLinkPostingWired) {
+            return;
+          }
+          postingDoc.__birbirSingleLinkPostingWired = true;
+          postingDoc.addEventListener("click", function (event) {
+            var target = event.target;
+            if (target && target.closest && target.closest(".posting-draft-link, [data-posting-close-success]")) {
+              event.preventDefault();
+              event.stopPropagation();
+              closeSellerPosting(sellerDoc);
+            }
+          }, true);
+        } catch (error) {
+          return;
+        }
+      }
+
+      function patchSellerPosting(doc) {
+        var embed = doc.querySelector("[data-seller-posting-embed]");
+        var postingFrame = doc.querySelector("[data-seller-posting-frame]");
+        var frameWindow = doc.defaultView;
+        if (!embed || !postingFrame) {
+          return;
+        }
+        if (frameWindow && !frameWindow.__birbirSingleLinkPostingMessageWired) {
+          frameWindow.__birbirSingleLinkPostingMessageWired = true;
+          frameWindow.addEventListener("message", function (event) {
+            if (event.data && event.data.type === "birbir-posting-close") {
+              closeSellerPosting(doc);
+            }
+          });
+        }
+        if (!postingFrame.__birbirSingleLinkPostingLoadWired) {
+          postingFrame.__birbirSingleLinkPostingLoadWired = true;
+          postingFrame.addEventListener("load", function () {
+            var loadedRoute = "";
+            try {
+              loadedRoute = getRoute(postingFrame.contentWindow.location.href, window.location.href);
+            } catch (error) {
+              loadedRoute = "";
+            }
+            if (loadedRoute === "seller") {
+              closeSellerPosting(doc);
+              postingFrame.src = "posting-flow-screen.html?embedded=1&v=20260705-single-link-v1";
+              return;
+            }
+            patchPostingFrame(doc, postingFrame);
+          });
+        }
+        patchPostingFrame(doc, postingFrame);
       }
 
       function wireFrame(frame) {
