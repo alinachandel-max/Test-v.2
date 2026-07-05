@@ -76,6 +76,11 @@
       ];
       var activeRoute = "home";
       var frames = {};
+      var SOURCES = {
+        home: "index.html?app=1&v=20260705-single-link-v1",
+        seller: "seller-cabinet-screen.html?single=1&v=20260705-single-link-v1",
+        profile: "profile-screen.html?single=1&v=20260705-single-link-v1"
+      };
 
       function getFileName(href, base) {
         try {
@@ -180,12 +185,32 @@
         }
       }
 
+      function syncFrameRoute(frame, route) {
+        var loadedRoute = "";
+        try {
+          loadedRoute = getRoute(frame.contentWindow.location.href, window.location.href);
+        } catch (error) {
+          loadedRoute = "";
+        }
+        wireFrame(frame);
+        if (loadedRoute && loadedRoute !== route && frames[loadedRoute]) {
+          setActiveRoute(loadedRoute);
+          if (!frame.__birbirSingleLinkRestoring && SOURCES[route]) {
+            frame.__birbirSingleLinkRestoring = true;
+            window.setTimeout(function () {
+              frame.src = SOURCES[route];
+              frame.__birbirSingleLinkRestoring = false;
+            }, 0);
+          }
+        }
+      }
+
       Array.prototype.forEach.call(document.querySelectorAll("[data-route]"), function (frame) {
         var route = frame.getAttribute("data-route");
         frames[route] = frame;
         frame.setAttribute("aria-hidden", route === activeRoute ? "false" : "true");
         frame.addEventListener("load", function () {
-          wireFrame(frame);
+          syncFrameRoute(frame, route);
         });
         wireFrame(frame);
       });
@@ -193,6 +218,11 @@
       document.addEventListener("click", function (event) {
         handleRouteClick(event, document);
       }, true);
+      window.setInterval(function () {
+        Object.keys(frames).forEach(function (route) {
+          wireFrame(frames[route]);
+        });
+      }, 300);
     }());
   </script>
 </body>
