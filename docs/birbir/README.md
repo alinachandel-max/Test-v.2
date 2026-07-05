@@ -8,12 +8,13 @@ Figma page уже создана:
 - page id: `56932:78348`
 
 Файлы:
+- [prototype-build-playbook.md](./prototype-build-playbook.md) — быстрый workflow сборки BirBir HTML-прототипов, карта артефактов, Figma nodes, правила без Lazyweb
 - [component-contracts.md](./component-contracts.md) — human rules, change routing, QA
 - [source-of-truth.json](./source-of-truth.json) — machine-readable bindings для canonical contracts
 - [screen-preflight-template.md](./screen-preflight-template.md) — обязательный preflight перед новым экраном
 
 Как использовать:
-1. Перед любой новой сборкой экрана открыть `component-contracts.md`
+1. Перед любой новой сборкой экрана открыть `prototype-build-playbook.md`
 2. Разложить экран на contracts
 3. Проверить bindings в `source-of-truth.json`
 4. Заполнить `screen-preflight-template.md`
