@@ -11,6 +11,7 @@
   var progress = root.querySelector("[data-posting-progress]");
   var nextButton = root.querySelector("[data-posting-next]");
   var backButton = root.querySelector("[data-posting-back]");
+  var draftLink = root.querySelector(".posting-draft-link");
   var galleryOverlay = root.querySelector("[data-posting-gallery]");
   var galleryGrid = root.querySelector("[data-posting-gallery-grid]");
   var sheetOverlay = root.querySelector("[data-posting-sheet]");
@@ -21,6 +22,8 @@
   var themeMeta = document.querySelector('meta[name="theme-color"]');
   var keyboard = root.querySelector("[data-posting-keyboard]");
   var returnTimer = null;
+  var STORAGE_KEY = "birbirPostingFlowState";
+  var isEmbedded = window.parent !== window && new URLSearchParams(window.location.search).get("embedded") === "1";
   var HAPTIC_PATTERNS = {
     success: [28, 36, 48]
   };
@@ -38,7 +41,7 @@
     "photo-10.png"
   ];
 
-  var state = {
+  var DEFAULT_STATE = {
     step: 0,
     selectedGalleryIndex: 0,
     photosAdded: false,
@@ -65,6 +68,8 @@
     errors: {}
   };
 
+  var state = loadState();
+
   var steps = [
     { id: "photos", title: "Фото" },
     { id: "title", title: "Название" },
@@ -75,6 +80,8 @@
     { id: "place", title: "Место сделки" },
     { id: "contacts", title: "Контакты" }
   ];
+
+  state.step = Math.max(0, Math.min(Number(state.step) || 0, steps.length - 1));
 
   var sheets = {
     category: {
@@ -127,8 +134,13 @@
   render();
   renderGallery();
 
+  if (isEmbedded && draftLink) {
+    draftLink.setAttribute("href", "#");
+  }
+
   document.addEventListener("click", function (event) {
     var target = event.target;
+    var draftAction = target.closest(".posting-draft-link");
     var openPhoto = target.closest("[data-posting-open-photo]");
     var closeGallery = target.closest("[data-posting-close-gallery]");
     var selectPhoto = target.closest("[data-posting-select-photo]");
@@ -143,6 +155,12 @@
     var categoryOption = target.closest("[data-posting-category-option]");
     var categoryPicker = target.closest("[data-posting-category-picker]");
 
+    if (draftAction && isEmbedded) {
+      event.preventDefault();
+      closeEmbeddedFlow(false);
+      return;
+    }
+
     if (openPhoto) {
       showOverlay(galleryOverlay);
       return;
@@ -155,6 +173,7 @@
 
     if (galleryPhoto) {
       state.selectedGalleryIndex = Number(galleryPhoto.getAttribute("data-posting-gallery-photo") || 0);
+      saveState();
       renderGallery();
       return;
     }
@@ -162,6 +181,7 @@
     if (selectPhoto) {
       state.photosAdded = true;
       state.errors.photos = false;
+      saveState();
       hideOverlay(galleryOverlay);
       render();
       return;
@@ -219,17 +239,16 @@
     }
     state[field.getAttribute("data-posting-field")] = event.target.value;
     state.errors[field.getAttribute("data-posting-field")] = false;
+    saveState();
   });
 
-  document.addEventListener("focusin", function (event) {
-    if (event.target.matches(".posting-input, .posting-textarea")) {
-      showKeyboard();
+  window.addEventListener("message", function (event) {
+    if (!isEmbedded || event.origin !== window.location.origin) {
+      return;
     }
-  });
 
-  document.addEventListener("focusout", function (event) {
-    if (event.target.matches(".posting-input, .posting-textarea")) {
-      window.setTimeout(hideKeyboard, 120);
+    if (event.data && event.data.type === "birbir-posting-open") {
+      resetFlow();
     }
   });
 
@@ -247,18 +266,24 @@
     state.step += 1;
     state.errors = {};
     hideKeyboard();
+    saveState();
     render();
     window.scrollTo({ top: 0, behavior: "instant" });
   });
 
   backButton.addEventListener("click", function () {
     if (state.step === 0) {
+      if (isEmbedded) {
+        closeEmbeddedFlow(false);
+        return;
+      }
       window.location.href = "seller-cabinet-screen.html";
       return;
     }
     state.step -= 1;
     state.errors = {};
     hideKeyboard();
+    saveState();
     render();
     window.scrollTo({ top: 0, behavior: "instant" });
   });
@@ -750,6 +775,7 @@
       ok = false;
     }
 
+    saveState();
     return ok;
   }
 
@@ -762,12 +788,14 @@
       state.price = "";
       state.errors.price = false;
     }
+    saveState();
     render();
   }
 
   function handleCheckbox(button) {
     var field = button.getAttribute("data-posting-checkbox");
     state[field] = !state[field];
+    saveState();
     render();
   }
 
@@ -779,6 +807,7 @@
     if (type === "telegram") {
       state.telegramOn = !state.telegramOn;
     }
+    saveState();
     render();
   }
 
@@ -838,6 +867,7 @@
       setCategory(value);
       return;
     }
+    saveState();
     hideOverlay(sheetOverlay);
     render();
   }
@@ -847,6 +877,7 @@
     state.subcategory = state.category ? "Кровати диваны и кресла" : "";
     state.errors.category = false;
     state.errors.subcategory = false;
+    saveState();
     hideOverlay(sheetOverlay);
     render();
   }
@@ -865,17 +896,23 @@
   }
 
   function showKeyboard() {
-    root.classList.add("is-keyboard-open");
-    keyboard.hidden = false;
+    root.classList.remove("is-keyboard-open");
+    if (keyboard) {
+      keyboard.hidden = true;
+    }
   }
 
   function hideKeyboard() {
     root.classList.remove("is-keyboard-open");
-    keyboard.hidden = true;
+    if (keyboard) {
+      keyboard.hidden = true;
+    }
   }
 
   function publish() {
     hideKeyboard();
+    state.errors = {};
+    saveState();
     window.clearTimeout(returnTimer);
     root.classList.add("is-success-open");
     if (themeMeta) {
@@ -890,10 +927,91 @@
 
   function closeSuccessFlow() {
     window.clearTimeout(returnTimer);
+    clearState();
     if (themeMeta) {
       themeMeta.setAttribute("content", "#ffffff");
     }
+    if (isEmbedded) {
+      closeEmbeddedFlow(true);
+      return;
+    }
     window.location.href = "seller-cabinet-screen.html";
+  }
+
+  function resetFlow() {
+    window.clearTimeout(returnTimer);
+    state = cloneDefaultState();
+    saveState();
+    root.classList.remove("is-success-open");
+    successOverlay.classList.remove("is-running");
+    hideOverlay(galleryOverlay);
+    hideOverlay(sheetOverlay);
+    hideOverlay(successOverlay);
+    hideKeyboard();
+    if (themeMeta) {
+      themeMeta.setAttribute("content", "#ffffff");
+    }
+    render();
+    renderGallery();
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }
+
+  function closeEmbeddedFlow(clear) {
+    window.clearTimeout(returnTimer);
+    if (clear) {
+      clearState();
+    } else {
+      saveState();
+    }
+    root.classList.remove("is-success-open");
+    if (themeMeta) {
+      themeMeta.setAttribute("content", "#ffffff");
+    }
+    try {
+      window.parent.postMessage({ type: "birbir-posting-close" }, window.location.origin);
+    } catch (error) {}
+  }
+
+  function loadState() {
+    var fallback = cloneDefaultState();
+
+    try {
+      var saved = window.sessionStorage && window.sessionStorage.getItem(STORAGE_KEY);
+      if (!saved) {
+        return fallback;
+      }
+
+      var parsed = JSON.parse(saved);
+      return Object.assign(fallback, parsed, {
+        errors: parsed && parsed.errors && typeof parsed.errors === "object" ? parsed.errors : {}
+      });
+    } catch (error) {
+      return fallback;
+    }
+  }
+
+  function saveState() {
+    try {
+      if (window.sessionStorage) {
+        window.sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      }
+    } catch (error) {
+      return;
+    }
+  }
+
+  function clearState() {
+    try {
+      if (window.sessionStorage) {
+        window.sessionStorage.removeItem(STORAGE_KEY);
+      }
+    } catch (error) {
+      return;
+    }
+  }
+
+  function cloneDefaultState() {
+    return Object.assign({}, DEFAULT_STATE, { errors: {} });
   }
 
   function triggerPostingHaptic(type) {

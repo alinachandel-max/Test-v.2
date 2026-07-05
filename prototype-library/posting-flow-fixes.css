@@ -1,0 +1,316 @@
+.posting-bottom {
+  padding: 12px 16px calc(4px + var(--safe-bottom)) !important;
+}
+
+.posting-app.is-keyboard-open .posting-bottom {
+  bottom: 0 !important;
+}
+
+.posting-keyboard {
+  display: none !important;
+}
+
+.seller-posting-modal-open {
+  overflow: hidden;
+}
+
+.seller-posting-embed {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: block;
+  width: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background: #f2f2f2;
+  opacity: 1;
+  pointer-events: none;
+  transform: none;
+  transition: none;
+}
+
+.seller-posting-embed[hidden] {
+  display: none;
+}
+
+.seller-posting-embed.is-open {
+  pointer-events: auto;
+}
+
+.seller-posting-embed__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #f2f2f2;
+}
+
+.posting-success-screen,
+.posting-success-canvas {
+  min-height: 100dvh;
+}
+
+.posting-success-close {
+  top: 56px;
+}
+
+.posting-success-confetti {
+  left: 50%;
+  z-index: 1;
+  width: 72px;
+  height: 34px;
+  opacity: 0;
+  transform: translate(-50%, 268px) scale(0.35);
+  transform-origin: center center;
+}
+
+.posting-success-main {
+  z-index: 2;
+}
+
+.posting-success-promos {
+  top: 252px;
+  left: 16px;
+  width: calc(100% - 32px);
+  gap: 6px;
+}
+
+.posting-success-promo-banner {
+  height: 58px;
+  padding-top: 8px;
+  border-radius: 24px 24px 0 0;
+}
+
+.posting-success-promo-stack .posting-success-card {
+  margin-top: -28px;
+}
+
+.posting-success-card {
+  gap: 5px;
+  height: 134px;
+  padding: 12px 14px;
+  border-radius: 14px;
+}
+
+.posting-success-card__top {
+  gap: 10px;
+  height: 48px;
+}
+
+.posting-success-card__image {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+}
+
+.posting-success-card__content {
+  gap: 1px;
+}
+
+.posting-success-card__title-row {
+  height: 22px;
+}
+
+.posting-success-card h3 {
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.posting-success-checkbox,
+.posting-success-checkbox::before {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+}
+
+.posting-success-checkbox::before {
+  left: 0;
+  top: 0;
+}
+
+.posting-success-card__price {
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.posting-success-card__list {
+  gap: 2px;
+}
+
+.posting-success-card__list li {
+  min-height: 14px;
+  padding-left: 9px;
+  font-size: 11px;
+  line-height: 14px;
+}
+
+.posting-success-card__list li::before {
+  top: 5px;
+  width: 3px;
+  height: 3px;
+}
+
+.posting-success-link {
+  height: 16px;
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.posting-success-bottom {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: auto;
+  gap: 6px;
+  padding: 8px 16px calc(4px + var(--safe-bottom));
+  border-radius: 16px 16px 0 0;
+}
+
+.posting-success-pay,
+.posting-success-secondary {
+  height: 40px;
+  border-radius: 12px;
+  font-size: 15px;
+  line-height: 18px;
+}
+
+.posting-success-bottom p {
+  font-size: 11px;
+  line-height: 13px;
+}
+
+.posting-overlay--success.is-running .posting-success-screen::before {
+  animation: posting-success-bg 1600ms ease-out both;
+}
+
+.posting-overlay--success.is-running .posting-success-close {
+  animation: posting-success-fade 260ms ease-out 1580ms both;
+}
+
+.posting-overlay--success.is-running .posting-success-confetti {
+  animation: posting-success-confetti 900ms cubic-bezier(0.2, 1.25, 0.35, 1) 40ms both;
+}
+
+.posting-overlay--success.is-running .posting-success-main {
+  animation: posting-success-main 1760ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.posting-overlay--success.is-running .posting-success-check {
+  animation: posting-success-check 900ms cubic-bezier(0.18, 0.89, 0.32, 1.28) both;
+}
+
+.posting-overlay--success.is-running .posting-success-copy {
+  animation: posting-success-fade-up 320ms ease-out 80ms both;
+}
+
+.posting-overlay--success.is-running .posting-success-promos {
+  animation: posting-success-fade-up 440ms ease-out 1500ms both;
+}
+
+.posting-overlay--success.is-running .posting-success-bottom {
+  animation: posting-success-bottom 440ms ease-out 1580ms both;
+}
+
+@keyframes posting-success-main {
+  0%,
+  64% {
+    transform: translate(-50%, 266px);
+  }
+
+  88% {
+    transform: translate(-50%, -5px);
+  }
+
+  100% {
+    transform: translate(-50%, 0);
+  }
+}
+
+@keyframes posting-success-check {
+  0% {
+    opacity: 0;
+    transform: scale(0.68);
+  }
+
+  8% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  16% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+
+  42% {
+    opacity: 1;
+    transform: scale(1.42);
+  }
+
+  60% {
+    opacity: 1;
+    transform: scale(1.16);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes posting-success-confetti {
+  0%,
+  4% {
+    opacity: 0;
+    transform: translate(-50%, 292px) scale(0.32);
+  }
+
+  14% {
+    opacity: 1;
+    transform: translate(-50%, 270px) scale(2.65);
+  }
+
+  28% {
+    opacity: 1;
+    transform: translate(-50%, 266px) scale(2.15);
+  }
+
+  44% {
+    opacity: 1;
+    transform: translate(-50%, 270px) scale(2.38);
+  }
+
+  62% {
+    opacity: 1;
+    transform: translate(-50%, 266px) scale(1.38);
+  }
+
+  80% {
+    opacity: 0;
+    transform: translate(-50%, 278px) scale(0.38);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(-50%, 0) scale(0.3);
+  }
+}
+
+@keyframes posting-success-bottom {
+  0% {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .posting-success-confetti {
+    transform: translate(-50%, 0) scale(1);
+  }
+}

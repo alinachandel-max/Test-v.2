@@ -16,6 +16,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
   <link rel="stylesheet" href="prototype-library/birbir-prototype-library.css?v=20260704-tabbar-center-v1">
+  <link rel="stylesheet" href="prototype-library/posting-flow-fixes.css?v=20260705-posting-flow-v2">
 </head>
 <body>
   <svg class="icon-sprite" aria-hidden="true" focusable="false">
@@ -188,6 +189,10 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="seller-posting-embed" data-seller-posting-embed hidden aria-hidden="true">
+    <iframe class="seller-posting-embed__frame" data-seller-posting-frame title="Постановка объявления" src="posting-flow-screen.html?embedded=1&amp;v=20260705-embedded-v2"></iframe>
   </div>
 
   <script id="seller-cabinet-state-map" type="application/json">
@@ -441,6 +446,109 @@
       }
     }
   </script>
-  <script src="prototype-library/birbir-prototype-library.js?v=20260704-haptics-v1"></script>
+  <script>
+    (function () {
+      "use strict";
+
+      var STORAGE_KEY = "birbirPostingFlowState";
+      var embed = document.querySelector("[data-seller-posting-embed]");
+      var frame = document.querySelector("[data-seller-posting-frame]");
+      var frameReady = false;
+      var pendingReset = false;
+      var closeTimer = null;
+
+      if (!embed || !frame) {
+        return;
+      }
+
+      frame.addEventListener("load", function () {
+        frameReady = true;
+        if (pendingReset) {
+          resetPostingFrame();
+        }
+      });
+
+      document.addEventListener("click", function (event) {
+        var trigger = event.target.closest("[data-seller-posting-entry]");
+        if (!trigger) {
+          return;
+        }
+
+        event.preventDefault();
+        event.stopImmediatePropagation();
+        openPostingFlow();
+      }, true);
+
+      window.addEventListener("message", function (event) {
+        if (event.origin !== window.location.origin) {
+          return;
+        }
+
+        if (event.data && event.data.type === "birbir-posting-close") {
+          closePostingFlow();
+        }
+      });
+
+      window.setTimeout(function () {
+        frame.contentWindow;
+      }, 120);
+
+      function openPostingFlow() {
+        window.clearTimeout(closeTimer);
+        clearSavedPosting();
+        pendingReset = true;
+        resetPostingFrame();
+        triggerLightHaptic();
+        embed.hidden = false;
+        embed.setAttribute("aria-hidden", "false");
+        document.body.classList.add("seller-posting-modal-open");
+
+        window.requestAnimationFrame(function () {
+          embed.classList.add("is-open");
+        });
+      }
+
+      function closePostingFlow() {
+        window.clearTimeout(closeTimer);
+        embed.classList.remove("is-open");
+        embed.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("seller-posting-modal-open");
+        embed.hidden = true;
+      }
+
+      function resetPostingFrame() {
+        if (!frame.contentWindow) {
+          return;
+        }
+
+        pendingReset = false;
+        frame.contentWindow.postMessage({ type: "birbir-posting-open" }, window.location.origin);
+      }
+
+      function clearSavedPosting() {
+        try {
+          if (window.sessionStorage) {
+            window.sessionStorage.removeItem(STORAGE_KEY);
+          }
+        } catch (error) {}
+      }
+
+      function triggerLightHaptic() {
+        try {
+          if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.HapticFeedback) {
+            window.Telegram.WebApp.HapticFeedback.impactOccurred("light");
+            return;
+          }
+        } catch (error) {}
+
+        try {
+          if (window.navigator && typeof window.navigator.vibrate === "function") {
+            window.navigator.vibrate(12);
+          }
+        } catch (error) {}
+      }
+    })();
+  </script>
+  <script src="prototype-library/birbir-prototype-library.js?v=20260705-posting-flow-v1"></script>
 </body>
 </html>
