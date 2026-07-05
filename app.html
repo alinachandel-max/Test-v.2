@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>BirBir Prototype</title>
+  <link rel="icon" href="data:,">
+  <style>
+    html,
+    body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #f3f4f6;
+    }
+
+    .prototype-app {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      background: #f3f4f6;
+    }
+
+    .prototype-app__frame {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      opacity: 0;
+      pointer-events: none;
+      background: #fff;
+      transition: opacity 120ms ease;
+    }
+
+    .prototype-app__frame.is-active {
+      z-index: 1;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .prototype-app__frame {
+        transition: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="prototype-app" aria-label="BirBir clickable prototype">
+    <iframe class="prototype-app__frame is-active" data-route="home" title="Главная" src="index.html?app=1&amp;v=20260705-single-link-v1"></iframe>
+    <iframe class="prototype-app__frame" data-route="seller" title="Продажа" src="seller-cabinet-screen.html?single=1&amp;v=20260705-single-link-v1"></iframe>
+    <iframe class="prototype-app__frame" data-route="profile" title="Профиль" src="profile-screen.html?single=1&amp;v=20260705-single-link-v1"></iframe>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      var ROUTES = {
+        "": "home",
+        "index.html": "home",
+        "birbir-home-screen-v2.html": "home",
+        "seller-cabinet-screen.html": "seller",
+        "profile-screen.html": "profile"
+      };
+      var ICONS = [
+        ["badge--premium", "icon-crown-fill"],
+        ["badge--urgent-sale", "icon-lightning-fill"],
+        ["badge--business", "icon-check-circle-fill"],
+        ["badge--delivery", "icon-track-fill"],
+        ["badge--agency", "icon-agency-fill"],
+        ["badge--close", "icon-close-circle-fill"],
+        ["badge--push-up", "icon-up-ad-fill"]
+      ];
+      var activeRoute = "home";
+      var frames = {};
+
+      function getFileName(href, base) {
+        try {
+          var url = new URL(href, base || window.location.href);
+          if (url.origin !== window.location.origin) {
+            return "";
+          }
+          return url.pathname.split("/").pop() || "index.html";
+        } catch (error) {
+          return "";
+        }
+      }
+
+      function getRoute(href, base) {
+        return ROUTES[getFileName(href, base)] || "";
+      }
+
+      function setActiveRoute(route) {
+        if (!route || !frames[route]) {
+          return;
+        }
+        activeRoute = route;
+        Object.keys(frames).forEach(function (key) {
+          frames[key].classList.toggle("is-active", key === route);
+          frames[key].setAttribute("aria-hidden", key === route ? "false" : "true");
+        });
+        wireFrame(frames[route]);
+      }
+
+      function handleRouteClick(event, doc) {
+        var target = event.target;
+        var link = target && target.closest ? target.closest("a[href]") : null;
+        var route;
+        if (!link || link.target && link.target !== "_self") {
+          return;
+        }
+        route = getRoute(link.getAttribute("href"), doc.location.href);
+        if (!route) {
+          return;
+        }
+        event.preventDefault();
+        event.stopPropagation();
+        setActiveRoute(route);
+      }
+
+      function iconForBadge(badge) {
+        var found = "";
+        ICONS.some(function (entry) {
+          if (badge.classList.contains(entry[0])) {
+            found = entry[1];
+            return true;
+          }
+          return false;
+        });
+        return found;
+      }
+
+      function patchBadges(doc) {
+        Array.prototype.forEach.call(doc.querySelectorAll(".badge .badge__icon"), function (icon) {
+          var badge = icon.closest(".badge");
+          var symbol = badge ? iconForBadge(badge) : "";
+          var size = icon.classList.contains("badge__icon--10") ? 10 : 12;
+          if (!symbol) {
+            return;
+          }
+          icon.innerHTML = '<span class="icon-box icon-box--' + size + ' icon-color--on-dark" aria-hidden="true"><svg class="icon-svg" viewBox="0 0 24 24"><use href="#' + symbol + '"></use></svg></span>';
+        });
+      }
+
+      function patchDocument(doc) {
+        var homeToggle = doc.querySelector("[data-home-version-toggle]");
+        if (homeToggle) {
+          homeToggle.setAttribute("href", "index.html");
+        }
+        Array.prototype.forEach.call(doc.querySelectorAll(".status-bar__time"), function (node) {
+          var statusBar = node.closest(".status-bar, .ios-status-bar, [class*='status-bar']");
+          if (statusBar && statusBar.parentNode) {
+            statusBar.parentNode.removeChild(statusBar);
+          }
+        });
+        patchBadges(doc);
+      }
+
+      function wireFrame(frame) {
+        var doc;
+        try {
+          doc = frame.contentDocument;
+          if (!doc) {
+            return;
+          }
+          if (!doc.__birbirSingleLinkWired) {
+            doc.__birbirSingleLinkWired = true;
+            doc.addEventListener("click", function (event) {
+              handleRouteClick(event, doc);
+            }, true);
+          }
+          patchDocument(doc);
+          window.setTimeout(function () { patchDocument(doc); }, 250);
+          window.setTimeout(function () { patchDocument(doc); }, 1000);
+        } catch (error) {
+          return;
+        }
+      }
+
+      Array.prototype.forEach.call(document.querySelectorAll("[data-route]"), function (frame) {
+        var route = frame.getAttribute("data-route");
+        frames[route] = frame;
+        frame.setAttribute("aria-hidden", route === activeRoute ? "false" : "true");
+        frame.addEventListener("load", function () {
+          wireFrame(frame);
+        });
+        wireFrame(frame);
+      });
+
+      document.addEventListener("click", function (event) {
+        handleRouteClick(event, document);
+      }, true);
+    }());
+  </script>
+</body>
+</html>
