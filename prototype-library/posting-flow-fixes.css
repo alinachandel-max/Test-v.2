@@ -1,5 +1,30 @@
+.posting-app {
+  --posting-title-size: 24px;
+  --posting-title-line: 29px;
+}
+
 .posting-bottom {
   padding: 12px 16px calc(4px + var(--safe-bottom)) !important;
+}
+
+.posting-title {
+  font-size: var(--posting-title-size) !important;
+  font-weight: 700 !important;
+  line-height: var(--posting-title-line) !important;
+  letter-spacing: 0 !important;
+}
+
+.posting-primary-button,
+.posting-secondary-button,
+.posting-success-pay,
+.posting-success-secondary {
+  height: 50px !important;
+  min-height: 50px !important;
+  border-radius: 16px !important;
+}
+
+.posting-app[data-posting-step="price"] .posting-primary-button {
+  height: 50px !important;
 }
 
 .posting-app.is-keyboard-open .posting-bottom {
@@ -169,10 +194,11 @@
 
 .posting-success-pay,
 .posting-success-secondary {
-  height: 40px;
-  border-radius: 12px;
-  font-size: 15px;
-  line-height: 18px;
+  height: 50px;
+  min-height: 50px;
+  border-radius: 16px;
+  font-size: 16px;
+  line-height: 19px;
 }
 
 .posting-success-bottom p {
