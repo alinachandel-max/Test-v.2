@@ -37,7 +37,7 @@
 button.bba-mini { cursor:pointer; -webkit-tap-highlight-color:transparent; }
 .bba-mini > img { flex:none; width:80px; height:80px; object-fit:cover; pointer-events:none; }
 .bba-card[data-complete="false"] > .bba-card__icon,
-.bba-mini[data-complete="false"] > img { opacity:.35; }
+.bba-mini[data-complete="false"] > img { opacity:.18; }
 .bba-mini__text { margin-top:10px; width:100%; }
 .bba-mini h2 { margin:0; font-size:16px; line-height:19px; font-weight:600; white-space:nowrap; }
 .bba-mini p { margin:4px 0 0; font-size:14px; line-height:17px; }
