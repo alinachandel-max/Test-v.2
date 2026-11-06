@@ -29,7 +29,7 @@
 .bba-card__footer { position:absolute;top:var(--footer-y);left:50%;width:272px;transform:translateX(-50%) scale(var(--detail-scale,1));transform-origin:top center; }
 .bba-next-step { width:272px;height:50px;padding:0 16px;border:0;background:var(--text,#292929);color:white;font:500 14px/17px Inter,-apple-system,sans-serif;cursor:pointer;border-radius:18px;-webkit-tap-highlight-color:transparent; }
 .bba-next-step:active { filter:brightness(1.25); }
-.bba-earned { text-align:center;color:#148c2a;font-size:14px;line-height:50px;font-weight:500; }
+.bba-earned { text-align:center;color:var(--muted,#858585);font-size:14px;line-height:50px;font-weight:500; }
 .bba-card.is-just-earned .bba-card__icon { animation:bba-earned-pop .5s cubic-bezier(.2,.8,.2,1); }
 @keyframes bba-earned-pop { 0%,100%{transform:translateX(-50%) scale(1)} 45%{transform:translateX(-50%) scale(1.09)} }
 

@@ -18,8 +18,9 @@
  * scaled as a whole on viewports narrower than 390px. At 390px, neighbouring
  * centres are 285px apart and side-card scale is .7125. No slides are cloned.
  * Three or more slides loop seamlessly; one/two slides have bounded ends.
- * Neighbours turn inward by up to 7deg. Horizontal dragging adds at most 1.8deg
- * of roll; reduced motion disables both rotation and the settling animation.
+ * Neighbours lean outward by 7deg and darken to .92 brightness. Both effects
+ * ease back to neutral as they approach the centre. Horizontal dragging adds
+ * at most .63deg; reduced motion disables rotation and the settling animation.
  * onChange runs on settlement; onProgress follows every rendered movement.
  */
 (function (global) {
@@ -235,12 +236,15 @@
       this._items.forEach((item, slideIndex) => {
         const offset = this._offset(slideIndex);
         const distance = Math.abs(offset);
-        const scale = (1 - (1 - SIDE_SCALE) * Math.min(1, distance)) * this._baseScale;
+        const emphasis = Math.min(1, distance);
+        const scale = (1 - (1 - SIDE_SCALE) * emphasis) * this._baseScale;
+        const tilt = reducedMotion ? 0 : clamp(offset, -1, 1) * 7;
+        const dragRoll = roll * 0.35 * Math.min(1, distance * 4);
         item.host.style.setProperty('--bb-coverflow-x', `${(offset * this._spacing).toFixed(4)}px`);
         item.host.style.setProperty('--bb-coverflow-scale', scale.toFixed(6));
-        item.host.style.setProperty('--bb-coverflow-yaw', `${reducedMotion ? 0 : clamp(-offset * 7, -7, 7)}deg`);
         // Keep the full-size card's top/bottom edges intact as a drag starts.
-        item.host.style.setProperty('--bb-coverflow-roll', `${(roll * Math.min(1, distance * 4)).toFixed(3)}deg`);
+        item.host.style.setProperty('--bb-coverflow-roll', `${(tilt + dragRoll).toFixed(3)}deg`);
+        item.host.style.setProperty('--bb-coverflow-brightness', (1 - 0.08 * emphasis).toFixed(4));
         item.host.style.zIndex = String(1000 - Math.round(distance * 100));
         // Loop wrapping happens outside the visible neighbourhood, including
         // larger achievement sets, so distant cards never flash across it.
