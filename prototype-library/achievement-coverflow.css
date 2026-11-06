@@ -6,8 +6,8 @@
   overflow: hidden;
   overflow: clip;
   isolation: isolate;
-  touch-action: pan-y pinch-zoom;
-  overscroll-behavior-x: contain;
+  touch-action: pinch-zoom;
+  overscroll-behavior: none;
   cursor: grab;
   -webkit-tap-highlight-color: transparent;
 }
@@ -25,7 +25,6 @@
   margin: 0;
   padding: 0;
   transform: translate3d(var(--bb-coverflow-x, 0px), 0, 0)
-    rotateZ(var(--bb-coverflow-roll, 0deg))
     scale(var(--bb-coverflow-scale, 1));
   filter: brightness(var(--bb-coverflow-brightness, 1));
   transform-origin: center;

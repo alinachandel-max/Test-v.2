@@ -23,7 +23,7 @@
   dotGroup.replaceChildren(...dots);
   const carousel=new window.BirBirCoverflow(viewport,{
     slides,initialIndex:1,cardHeight:Card.geometry.height,
-    onChange(index){updateDots(index);},
+    onChange(index){updateDots(index);if(phase==='open'&&step.hidden)Card.celebrate?.(slides[index]);},
     onProgress(state){
       viewport.dataset.progress=state.progress.toFixed(4);viewport.dataset.activeIndex=state.index;
       overlay.style.setProperty('--gallery-height',state.cardHeight+'px');updateDots(state.index);
@@ -58,11 +58,12 @@
     const index=achievements.findIndex(a=>a.id===id);if(index<0)return;
     phase='preparing';
     await Promise.all([document.fonts.ready,...Array.from(slides[index].querySelectorAll('img')).map(i=>i.decode().catch(()=>{}))]);
+    document.documentElement.classList.add('bba-gallery-open');
     openingTile=tiles[index];const source=rectWithinApp(openingTile);
     overlay.hidden=false;overlay.dataset.phase='opening';setReveal(0);
     openingTile.style.visibility='hidden';openingTile.setAttribute('aria-expanded','true');screen.inert=true;
     carousel.open(index);const destination=rectWithinApp(viewport.querySelector('.bb-coverflow__item.is-current'));
-    phase='opening';animateMorph(source,destination,true,achievements[index],()=>{phase='open';overlay.dataset.phase='open';setReveal(1);viewport.focus({preventScroll:true});});
+    phase='opening';animateMorph(source,destination,true,achievements[index],()=>{phase='open';overlay.dataset.phase='open';setReveal(1);viewport.focus({preventScroll:true});Card.celebrate?.(slides[index]);});
   }
   function close(){
     if(phase!=='open')return;
@@ -72,6 +73,7 @@
     phase='closing';overlay.dataset.phase='closing';
     animateMorph(from,rectWithinApp(target),false,achievements[index],()=>{
       overlay.hidden=true;overlay.dataset.phase='closed';phase='closed';screen.inert=false;
+      document.documentElement.classList.remove('bba-gallery-open');
       tiles.forEach(t=>{t.style.visibility='';t.setAttribute('aria-expanded','false');});target.focus({preventScroll:true});
     });
   }
@@ -94,9 +96,16 @@
     const item=pendingAction,index=achievements.indexOf(item),criterion=item.criteria.find(c=>!c.done);
     if(criterion){criterion.done=true;criterion.description='Выполнено';}
     Card.update(slides[index],item);Card.updateCompact(tiles[index],item,assets);closeStep();
-    if(item.criteria.every(c=>c.done)){slides[index].classList.add('is-just-earned');setTimeout(()=>slides[index].classList.remove('is-just-earned'),550);}
+    if(item.criteria.every(c=>c.done))Card.celebrate?.(slides[index]);
   });
   overlay.querySelector('.bba-backdrop').addEventListener('click',close);
+  // Lock the page while either gallery layer is open, including Safari bounce
+  // and trackpad wheel input. Two-finger pinch zoom remains available.
+  const preventPagePan=event=>{
+    if(phase!=='closed'&&event.cancelable&&(!event.touches||event.touches.length===1))event.preventDefault();
+  };
+  document.addEventListener('wheel',preventPagePan,{passive:false,capture:true});
+  document.addEventListener('touchmove',preventPagePan,{passive:false,capture:true});
   document.addEventListener('keydown',event=>{
     if(phase==='closed'||phase==='preparing')return;
     if(event.key==='Escape'){event.preventDefault();close();}

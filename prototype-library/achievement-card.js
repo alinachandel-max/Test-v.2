@@ -3,6 +3,7 @@
   const FULL = { width: 320, height: 505.59024 };
   const mix = (a, b, p) => a + (b - a) * p;
   const configs = new WeakMap();
+  const celebrations = new WeakMap();
   const escape = value => String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   function smoothPath(width,height,radius,inset=0) {
     // Figma's iOS preset: 60% smoothing, using tangent Beziers + a circular arc.
@@ -51,6 +52,7 @@
     return card;
   }
   function update(card,achievement) {
+    celebrations.get(card)?.();
     const config=configs.get(card);config.achievement=achievement;
     const{assets,onAction}=config;
     const done=achievement.criteria.filter(c=>c.done).length,complete=done===achievement.criteria.length;
@@ -108,5 +110,49 @@
     el.innerHTML=`<img src="${assets}/${achievement.icon}.png" alt=""><div class="bba-mini__text"><h2>${escape(achievement.title)}</h2><p>${done}/${achievement.criteria.length} выполнено</p></div><div class="bba-mini__progress"><span style="width:${done/achievement.criteria.length*100}%"></span></div>`;
     requestAnimationFrame(()=>{if(el.offsetWidth)corners(el,el.offsetWidth,178,28,'#ededed');});
   }
-  window.BirBirAchievementCard = { create, update, compact, updateCompact, setProgress, corners, geometry: FULL };
+  // Call after an earned card becomes visible or its completion state changes.
+  // Returns false for incomplete cards or reduced motion. Repeats replace the
+  // current effect; update() also cancels it before replacing the card contents.
+  function celebrate(card) {
+    if(!card)return false;
+    celebrations.get(card)?.();
+    const motion=window.matchMedia('(prefers-reduced-motion: reduce)');
+    const icon=card.querySelector('.bba-card__icon');
+    if(card.dataset.complete!=='true'||motion.matches||!icon)return false;
+    const layer=document.createElement('div');
+    layer.className='bba-celebration';layer.setAttribute('aria-hidden','true');
+    const colours=['#77c990','#f3c45a','#e6a3c8','#a8bce9'];
+    for(let i=0;i<12;i++) {
+      const particle=document.createElement('i'),angle=-Math.PI/2+i*Math.PI/6;
+      const radius=74+(i%3)*5;
+      particle.className='bba-celebration__particle';
+      const values={
+        'spark-size':(3+i%2)+'px','spark-colour':colours[i%colours.length],
+        'spark-start-x':(Math.cos(angle)*18).toFixed(2)+'px',
+        'spark-start-y':(Math.sin(angle)*18).toFixed(2)+'px',
+        'spark-x':(Math.cos(angle)*radius).toFixed(2)+'px',
+        'spark-y':(Math.sin(angle)*radius).toFixed(2)+'px',
+        'spark-turn':(i%2?115:-95)+'deg',
+        'spark-duration':(680+(i%3)*35)+'ms','spark-delay':(i%4)*12+'ms'
+      };
+      for(const[name,value]of Object.entries(values))particle.style.setProperty('--'+name,value);
+      layer.appendChild(particle);
+    }
+    card.insertBefore(layer,icon);
+    // Flush only the icon so a rapid repeated call restarts its CSS animation.
+    void icon.offsetWidth;
+    card.classList.add('is-celebrating');
+    let timer;
+    const cancel=()=>{
+      clearTimeout(timer);layer.remove();card.classList.remove('is-celebrating');
+      motion.removeEventListener?.('change',onMotionChange);
+      celebrations.delete(card);
+    };
+    const onMotionChange=()=>{if(motion.matches)cancel();};
+    motion.addEventListener?.('change',onMotionChange);
+    celebrations.set(card,cancel);
+    timer=setTimeout(cancel,810);
+    return true;
+  }
+  window.BirBirAchievementCard = { create, update, compact, updateCompact, setProgress, corners, celebrate, geometry: FULL };
 })();
