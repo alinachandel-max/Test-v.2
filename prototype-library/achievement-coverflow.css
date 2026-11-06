@@ -1,0 +1,62 @@
+/* Geometry only. Card content, colour, typography and artwork belong to the slide. */
+.bb-coverflow {
+  position: relative;
+  inline-size: 100%;
+  block-size: var(--bb-coverflow-height, var(--bb-coverflow-card-height, 439.59px));
+  overflow: hidden;
+  overflow: clip;
+  isolation: isolate;
+  perspective: 1000px;
+  perspective-origin: 50% 50%;
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior-x: contain;
+  cursor: grab;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.bb-coverflow.is-dragging {
+  cursor: grabbing;
+}
+
+.bb-coverflow__item {
+  position: absolute;
+  left: calc(50% - 160px);
+  top: calc(50% - var(--bb-coverflow-card-height, 439.59px) * .5);
+  width: 320px;
+  height: var(--bb-coverflow-card-height, 439.59px);
+  margin: 0;
+  padding: 0;
+  transform: translate3d(var(--bb-coverflow-x, 0px), 0, 0)
+    rotateY(var(--bb-coverflow-yaw, 0deg))
+    rotateZ(var(--bb-coverflow-roll, 0deg))
+    scale(var(--bb-coverflow-scale, 1));
+  transform-origin: center;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.bb-coverflow__item > * {
+  width: 100%;
+  height: 100%;
+}
+
+.bb-coverflow__item:not(.is-current) > * {
+  pointer-events: none;
+}
+
+.bb-coverflow__item img {
+  -webkit-user-drag: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bb-coverflow {
+    perspective: none;
+  }
+
+  .bb-coverflow__item {
+    transform: translate3d(var(--bb-coverflow-x, 0px), 0, 0)
+      scale(var(--bb-coverflow-scale, 1));
+  }
+}

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#ffffff">
+  <title>Мои достижения — BirBir</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../prototype-library/birbir-prototype-library.css">
+  <link rel="stylesheet" href="../../prototype-library/achievement-card.css?v=4">
+  <link rel="stylesheet" href="../../prototype-library/achievement-coverflow.css?v=4">
+  <link rel="stylesheet" href="screen.css?v=4">
+</head>
+<body>
+  <main class="bba-app" id="achievement-app">
+    <div class="bba-screen" id="achievement-screen">
+      <header class="bba-header"><a href="../../index.html" aria-label="Назад"><img src="../../assets/achievement-gallery/back.svg" width="24" height="24" alt=""></a></header>
+      <div class="bba-content">
+        <section class="bba-profile" aria-labelledby="screen-title">
+          <img src="../../assets/achievement-gallery/avatar.png" width="100" height="100" alt="">
+          <div><h1 id="screen-title">Мои достижения</h1><p>Зарабатывайте бейджи доверия<br>для роста продаж на BirBir</p></div>
+        </section>
+        <section class="bba-grid" id="achievement-grid" aria-label="Достижения"></section>
+      </div>
+    </div>
+    <section class="bba-overlay" id="achievement-overlay" role="dialog" aria-modal="true" aria-label="Проверенный — галерея достижений" hidden>
+      <button class="bba-backdrop" type="button" aria-label="Закрыть галерею"></button>
+      <div class="bba-gallery" id="achievement-gallery" aria-label="Карточки достижений"></div>
+      <div class="bba-dots" role="group" aria-label="Положение в галерее"></div>
+      <section class="bba-step" id="next-step" role="dialog" aria-modal="true" aria-labelledby="next-step-title" hidden>
+        <button class="bba-step-backdrop" type="button" aria-label="Закрыть следующий шаг"></button>
+        <div class="bba-step-panel">
+          <p class="bba-step-eyebrow">Следующий шаг</p>
+          <h2 id="next-step-title"></h2>
+          <p class="bba-step-description"></p>
+          <p class="bba-step-note">Демо: действие изменит состояние только в этом прототипе.</p>
+          <button class="bba-next-step" id="complete-demo-step" type="button">Показать выполненный шаг</button>
+          <button class="bba-step-cancel" type="button">Назад</button>
+        </div>
+      </section>
+    </section>
+  </main>
+  <script src="../../prototype-library/achievement-card.js?v=4"></script>
+  <script src="../../prototype-library/achievement-coverflow.js?v=4"></script>
+  <script src="achievements.js?v=4"></script>
+  <script src="screen.js?v=4"></script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+.bba-card {
+  position: relative;
+  width: 320px;
+  height: 505.59024px;
+  overflow: hidden;
+  border-radius: 32px;
+  background: var(--bg, #fff);
+  color: var(--text, #292929);
+  -webkit-user-select: none;
+  user-select: none;
+}
+.bba-card__icon { position:absolute; width:var(--icon-size); height:var(--icon-size); top:var(--icon-y); left:50%; transform:translateX(-50%); object-fit:cover; pointer-events:none; }
+.bba-card__text { position:absolute; top:var(--text-y); width:var(--text-width); left:50%; transform:translateX(-50%); display:flex; flex-direction:column; gap:var(--text-gap); text-align:center; }
+.bba-card h2, .bba-card h3, .bba-card p { margin:0; }
+.bba-card__text h2 { font-size:var(--title-size); line-height:var(--title-line); font-weight:var(--title-weight); }
+.bba-card__text p { font-size:var(--subtitle-size); line-height:var(--subtitle-line); font-weight:400; }
+.bba-card__progress { position:absolute; top:var(--progress-y); left:50%; transform:translateX(-50%); width:var(--progress-width); height:var(--progress-height); border-radius:40px; background:var(--chip-bg,#f2f2f2); overflow:hidden; }
+.bba-card__progress > span,.bba-mini__progress > span { display:block;height:100%;background:var(--success,#19b333);border-radius:inherit;transition:width .35s ease; }
+.bba-card__details { position:absolute; top:var(--details-y); left:50%; width:var(--details-width); transform:translateX(-50%); opacity:1; }
+.bba-card__details-inner { width:272px; display:flex; flex-direction:column; gap:8px; transform:scale(var(--detail-scale,1)); transform-origin:top left; }
+.bba-card__row { position:relative; display:flex; align-items:center; gap:12px; height:72px; padding:16px; border-radius:18px; }
+.bba-card__row > img { flex:0 0 24px; }
+.bba-card__row > div { min-width:0; }
+.bba-card__row h3 { font-size:16px; line-height:19px; font-weight:600; white-space:nowrap; }
+.bba-card__row p { margin-top:4px; font-size:14px; line-height:17px; white-space:nowrap; }
+.bba-card__row.is-pending p { color:var(--muted,#858585); }
+.bba-pending-circle { flex:none;display:block;width:20px;height:20px;margin:2px;border:1.5px solid #c8c8c8;border-radius:50%; }
+.bba-outline { position:absolute;inset:0;width:100%;height:100%;pointer-events:none; }
+.bba-card__footer { position:absolute;top:var(--footer-y);left:50%;width:272px;transform:translateX(-50%) scale(var(--detail-scale,1));transform-origin:top center; }
+.bba-next-step { width:272px;height:50px;padding:0 16px;border:0;background:var(--text,#292929);color:white;font:500 14px/17px Inter,-apple-system,sans-serif;cursor:pointer;border-radius:18px;-webkit-tap-highlight-color:transparent; }
+.bba-next-step:active { filter:brightness(1.25); }
+.bba-earned { text-align:center;color:#148c2a;font-size:14px;line-height:50px;font-weight:500; }
+.bba-card.is-just-earned .bba-card__icon { animation:bba-earned-pop .5s cubic-bezier(.2,.8,.2,1); }
+@keyframes bba-earned-pop { 0%,100%{transform:translateX(-50%) scale(1)} 45%{transform:translateX(-50%) scale(1.09)} }
+
+.bba-mini { position:relative;height:178px; padding:17px 13px; border:0; border-radius:28px; background:#fff; color:inherit; font:inherit; text-align:center; display:flex; flex-direction:column; align-items:center; }
+button.bba-mini { cursor:pointer; -webkit-tap-highlight-color:transparent; }
+.bba-mini > img { flex:none; width:80px; height:80px; object-fit:cover; pointer-events:none; }
+.bba-card[data-complete="false"] > .bba-card__icon,
+.bba-mini[data-complete="false"] > img { opacity:.35; }
+.bba-mini__text { margin-top:10px; width:100%; }
+.bba-mini h2 { margin:0; font-size:16px; line-height:19px; font-weight:600; white-space:nowrap; }
+.bba-mini p { margin:4px 0 0; font-size:14px; line-height:17px; }
+.bba-mini__progress { flex:none; margin-top:10px; width:min(126px,100%); height:4px; background:var(--chip-bg,#f2f2f2); border-radius:24px;overflow:hidden; }
+@media(prefers-reduced-motion:reduce){.bba-card.is-just-earned .bba-card__icon{animation:none}.bba-card__progress>span,.bba-mini__progress>span{transition:none}}
