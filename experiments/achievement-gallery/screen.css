@@ -15,7 +15,7 @@ html.bba-gallery-open, .bba-gallery-open body { overflow:hidden;overscroll-behav
 .bba-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin-top:32px; }
 .bba-overlay[hidden] { display:none; }
 .bba-overlay { position:absolute; inset:0; z-index:5; --reveal:0; touch-action:pinch-zoom;overscroll-behavior:none; }
-.bba-backdrop { position:absolute; inset:0; padding:0; border:0; border-radius:inherit; background:rgba(20,20,20,calc(.4 * var(--reveal))); -webkit-backdrop-filter:blur(calc(15px * var(--reveal))); backdrop-filter:blur(calc(15px * var(--reveal))); cursor:pointer; }
+.bba-backdrop { position:absolute; inset:0; padding:0; border:0; border-radius:inherit; background:rgba(20,20,20,calc(.6 * var(--reveal))); -webkit-backdrop-filter:blur(calc(15px * var(--reveal))); backdrop-filter:blur(calc(15px * var(--reveal))); cursor:pointer; }
 .bba-gallery { position:absolute; z-index:1; top:50%; transform:translateY(-50%); width:100%; }
 .bba-overlay:not([data-phase="open"]) .bba-gallery { pointer-events:none; }
 .bba-overlay:not([data-phase="open"]) .bb-coverflow__item { opacity:var(--neighbors,0); }
