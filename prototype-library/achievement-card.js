@@ -51,6 +51,22 @@
     update(card,achievement);
     return card;
   }
+  function compactState(achievement) {
+    const done=achievement.criteria.filter(c=>c.done).length,total=achievement.criteria.length;
+    const complete=done===total,business=achievement.group==='business',locked=!business&&!!achievement.locked;
+    return {done,total,complete,business,locked,progress:!business&&!locked&&!complete,
+      icon:locked&&achievement.lockedIcon?achievement.lockedIcon:achievement.icon,
+      opacity:business?.3:locked?.45:complete?1:.3,
+      iconY:business||locked?24:17,textY:business||locked?114:107,
+      subtitle:business?'Подробнее':locked?'Пока закрыт':complete?'Задание выполнено':`${done}/${total} выполнено`,
+      badge:business?achievement.badge:null};
+  }
+  function compactMedia(state,assets) {
+    const src=`${assets}/${state.icon}.png`;
+    return `<img class="bba-mini__image" src="${src}" alt="" draggable="false" style="opacity:${state.opacity}">`+
+      (state.progress?`<img class="bba-mini__image bba-mini__image-fill" src="${src}" alt="" draggable="false" style="clip-path:inset(${(1-state.done/state.total)*100}% 0 0)">`:'')+
+      (state.badge?`<span class="bba-mini__badge">${escape(state.badge)}</span>`:'');
+  }
   function update(card,achievement) {
     celebrations.get(card)?.();
     const config=configs.get(card);config.achievement=achievement;
@@ -74,10 +90,11 @@
   }
   function setProgress(card, progress, { compactWidth = 175, compactHeight = 178, scale = 1 } = {}) {
     const p = Math.min(1, Math.max(0, progress));
+    const config=configs.get(card),state=compactState(config.achievement);
     const values = {
       'icon-size': mix(80, 117.78889 * scale, p),
-      'icon-y': mix(17, 24 * scale, p),
-      'text-y': mix(107, 162.46304 * scale, p),
+      'icon-y': mix(state.iconY, 24 * scale, p),
+      'text-y': mix(state.textY, 162.46304 * scale, p),
       'text-width': mix(compactWidth - 26, 219.52585 * scale, p),
       'text-gap': mix(4, 5.88945 * scale, p),
       'title-size': mix(16, 24 * scale, p),
@@ -95,20 +112,36 @@
     card.style.setProperty('--detail-scale', scale);
     card.style.setProperty('--title-weight', 600 + 100 * p);
     card.style.setProperty('--card-border-alpha', 1 - p);
+    const icon=card.querySelector('.bba-card__icon'),text=card.querySelector('.bba-card__text'),subtitle=text.querySelector('p');
+    let compactIcon=card.querySelector('.bba-card__compact-media');
+    if(p<1&&(state.progress||state.business||state.locked)) {
+      if(!compactIcon){compactIcon=document.createElement('span');compactIcon.className='bba-mini__media bba-card__compact-media';compactIcon.setAttribute('aria-hidden','true');compactIcon.innerHTML=compactMedia(state,config.assets);card.insertBefore(compactIcon,icon);}
+      compactIcon.style.opacity=1-p;
+      icon.style.opacity=(state.complete?1:.18)*p;
+    }else{compactIcon?.remove();icon.style.removeProperty('opacity');}
+    subtitle.textContent=p<.5?state.subtitle:`${state.done}/${state.total} выполнено`;
+    text.style.color=state.locked?`rgb(${mix(133,41,p)},${mix(133,41,p)},${mix(133,41,p)})`:'';
+    subtitle.style.color=state.business?`rgb(${mix(31,41,p)},${mix(147,41,p)},${mix(204,41,p)})`:'';
+    subtitle.style.fontWeight=state.business?mix(500,400,p):400;
+    card.querySelector('.bba-card__progress').style.opacity=state.progress?1:p;
     const geometry={ width: mix(compactWidth, FULL.width * scale, p), height: mix(compactHeight, FULL.height * scale, p) };
-    corners(card,geometry.width,geometry.height,mix(28,32*scale,p));
+    corners(card,geometry.width,geometry.height,mix(24,32*scale,p));
     return geometry;
   }
   function compact(achievement,assets,onOpen) {
     const el=document.createElement('button');el.type='button';el.className='bba-mini';
     el.dataset.achievement=achievement.id;el.setAttribute('aria-haspopup','dialog');el.setAttribute('aria-expanded','false');
-    updateCompact(el,achievement,assets);el.addEventListener('click',()=>onOpen(achievement.id));return el;
+    updateCompact(el,achievement,assets);el.addEventListener('click',()=>onOpen(el.dataset.achievement));return el;
   }
   function updateCompact(el,achievement,assets) {
-    const done=achievement.criteria.filter(c=>c.done).length;
-    el.dataset.complete=String(done===achievement.criteria.length);
-    el.innerHTML=`<img src="${assets}/${achievement.icon}.png" alt=""><div class="bba-mini__text"><h2>${escape(achievement.title)}</h2><p>${done}/${achievement.criteria.length} выполнено</p></div><div class="bba-mini__progress"><span style="width:${done/achievement.criteria.length*100}%"></span></div>`;
-    requestAnimationFrame(()=>{if(el.offsetWidth)corners(el,el.offsetWidth,178,28,'#ededed');});
+    celebrations.get(el)?.();
+    const state=compactState(achievement);
+    el.dataset.achievement=achievement.id;el.dataset.complete=String(state.complete);
+    el.dataset.group=state.business?'business':'level';el.dataset.locked=String(state.locked);
+    el.style.setProperty('--mini-icon-y',state.iconY+'px');el.style.setProperty('--mini-text-y',state.textY+'px');
+    el.innerHTML=`<span class="bba-mini__media" aria-hidden="true">${compactMedia(state,assets)}</span><div class="bba-mini__text"><h2>${escape(achievement.title)}</h2><p>${state.subtitle}</p></div>`+
+      (state.progress?`<div class="bba-mini__progress"><span style="width:${state.done/state.total*100}%"></span></div>`:'');
+    requestAnimationFrame(()=>{if(el.offsetWidth)corners(el,el.offsetWidth,178,24,'#ededed');});
   }
   // Call after an earned card becomes visible or its completion state changes.
   // Returns false for incomplete cards or reduced motion. Repeats replace the
@@ -117,19 +150,20 @@
     if(!card)return false;
     celebrations.get(card)?.();
     const motion=window.matchMedia('(prefers-reduced-motion: reduce)');
-    const icon=card.querySelector('.bba-card__icon');
+    const mini=card.classList.contains('bba-mini'),particleScale=mini?.68:1;
+    const icon=card.querySelector(mini?'.bba-mini__media':'.bba-card__icon');
     if(card.dataset.complete!=='true'||motion.matches||!icon)return false;
     const layer=document.createElement('div');
     layer.className='bba-celebration';layer.setAttribute('aria-hidden','true');
     const colours=['#77c990','#f3c45a','#e6a3c8','#a8bce9'];
     for(let i=0;i<12;i++) {
       const particle=document.createElement('i'),angle=-Math.PI/2+i*Math.PI/6;
-      const radius=74+(i%3)*5;
+      const radius=(74+(i%3)*5)*particleScale;
       particle.className='bba-celebration__particle';
       const values={
         'spark-size':(3+i%2)+'px','spark-colour':colours[i%colours.length],
-        'spark-start-x':(Math.cos(angle)*18).toFixed(2)+'px',
-        'spark-start-y':(Math.sin(angle)*18).toFixed(2)+'px',
+        'spark-start-x':(Math.cos(angle)*18*particleScale).toFixed(2)+'px',
+        'spark-start-y':(Math.sin(angle)*18*particleScale).toFixed(2)+'px',
         'spark-x':(Math.cos(angle)*radius).toFixed(2)+'px',
         'spark-y':(Math.sin(angle)*radius).toFixed(2)+'px',
         'spark-turn':(i%2?115:-95)+'deg',

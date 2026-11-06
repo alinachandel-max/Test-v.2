@@ -3,6 +3,10 @@
   const app=document.querySelector('#achievement-app');
   const screen=document.querySelector('#achievement-screen');
   const grid=document.querySelector('#achievement-grid');
+  const businessGrid=document.querySelector('#business-grid');
+  const profileAvatar=document.querySelector('#profile-avatar');
+  const levelNext=document.querySelector('.bba-level-next');
+  const levelAction=document.querySelector('#level-next-action');
   const overlay=document.querySelector('#achievement-overlay');
   const viewport=document.querySelector('#achievement-gallery');
   const dotGroup=overlay.querySelector('.bba-dots');
@@ -13,7 +17,8 @@
   const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
   let phase='closed',animation=0,ghost=null,openingTile=null,pendingAction=null;
   const tiles=achievements.map(a=>Card.compact(a,assets,open));
-  grid.replaceChildren(...tiles);
+  grid.replaceChildren(...tiles.filter((_,i)=>achievements[i].group==='level'));
+  businessGrid.replaceChildren(...tiles.filter((_,i)=>achievements[i].group==='business'));
   const slides=achievements.map(achievement=>Card.create({assets,achievement,onAction:openStep}));
   const dots=achievements.map((a,index)=>{
     const dot=document.createElement('button');dot.type='button';dot.dataset.index=index;
@@ -30,6 +35,36 @@
     }
   });
   carousel.close();
+  const isComplete=achievement=>achievement.criteria.every(c=>c.done);
+  function syncOverview(){
+    const hasPhoto=isComplete(achievements[0]);
+    profileAvatar.classList.toggle('has-photo',hasPhoto);
+    profileAvatar.querySelector('.bba-avatar-default').hidden=hasPhoto;
+    profileAvatar.querySelectorAll('.bba-avatar-layer').forEach(img=>img.hidden=!hasPhoto);
+    profileAvatar.querySelector('.bba-avatar-badge').hidden=!hasPhoto;
+    const next=achievements.find(a=>a.group==='level'&&!a.locked&&!isComplete(a));
+    levelNext.hidden=!next;
+    if(next){
+      levelAction.dataset.achievement=next.id;
+      document.querySelector('#level-next-title').textContent=next.overview.title;
+      document.querySelector('#level-next-description').textContent=next.overview.description;
+      levelAction.textContent=next.overview.button;
+    }
+    requestAnimationFrame(resize);
+  }
+  function refreshAchievements(){
+    achievements.forEach(a=>{if(a.prerequisite)a.locked=!isComplete(achievements.find(p=>p.id===a.prerequisite));});
+    achievements.forEach((a,i)=>{Card.update(slides[i],a);Card.updateCompact(tiles[i],a,assets);});
+    syncOverview();
+  }
+  levelAction.addEventListener('click',()=>{
+    const item=achievements.find(a=>a.id===levelAction.dataset.achievement);
+    if(!item)return;
+    if(item.id==='seller'){
+      const photo=item.criteria.find(c=>c.id==='profile-photo');photo.done=true;photo.description='Аватар добавлен';
+      refreshAchievements();Card.celebrate?.(tiles[0]);
+    }else open(item.id,true);
+  });
   function updateDots(index){
     dots.forEach((dot,i)=>dot.setAttribute('aria-current',String(i===index)));
     overlay.setAttribute('aria-label',achievements[index].title+' — галерея достижений');
@@ -53,7 +88,7 @@
     }
     tick(performance.now());
   }
-  async function open(id){
+  async function open(id,showAction=false){
     if(phase!=='closed')return;
     const index=achievements.findIndex(a=>a.id===id);if(index<0)return;
     phase='preparing';
@@ -63,12 +98,16 @@
     overlay.hidden=false;overlay.dataset.phase='opening';setReveal(0);
     openingTile.style.visibility='hidden';openingTile.setAttribute('aria-expanded','true');screen.inert=true;
     carousel.open(index);const destination=rectWithinApp(viewport.querySelector('.bb-coverflow__item.is-current'));
-    phase='opening';animateMorph(source,destination,true,achievements[index],()=>{phase='open';overlay.dataset.phase='open';setReveal(1);viewport.focus({preventScroll:true});Card.celebrate?.(slides[index]);});
+    phase='opening';animateMorph(source,destination,true,achievements[index],()=>{phase='open';overlay.dataset.phase='open';setReveal(1);viewport.focus({preventScroll:true});Card.celebrate?.(slides[index]);if(showAction)openStep(achievements[index]);});
   }
   function close(){
     if(phase!=='open')return;
     if(!step.hidden){closeStep();return;}
     const index=carousel.index,current=viewport.querySelector('.bb-coverflow__item.is-current'),from=rectWithinApp(current),target=tiles[index];
+    // Keep the closing destination visible even after swiping to another group.
+    const a=app.getBoundingClientRect(),t=target.getBoundingClientRect();
+    if(t.bottom>a.bottom-16)screen.scrollTop+=t.bottom-a.bottom+16;
+    else if(t.top<a.top+16)screen.scrollTop-=a.top+16-t.top;
     carousel.close();if(openingTile!==target)openingTile.style.visibility='';target.style.visibility='hidden';
     phase='closing';overlay.dataset.phase='closing';
     animateMorph(from,rectWithinApp(target),false,achievements[index],()=>{
@@ -79,6 +118,9 @@
   }
   function openStep(achievement){
     if(phase!=='open')return;
+    while(achievement.locked&&achievement.prerequisite)achievement=achievements.find(a=>a.id===achievement.prerequisite);
+    const targetIndex=achievements.indexOf(achievement);
+    if(carousel.index!==targetIndex)carousel.setIndex(targetIndex,{animate:true});
     pendingAction=achievement;step.querySelector('h2').textContent=achievement.action;
     step.querySelector('.bba-step-description').textContent=achievement.nextStep;
     step.hidden=false;viewport.inert=true;dotGroup.inert=true;
@@ -95,7 +137,7 @@
     if(!pendingAction)return;
     const item=pendingAction,index=achievements.indexOf(item),criterion=item.criteria.find(c=>!c.done);
     if(criterion){criterion.done=true;criterion.description='Выполнено';}
-    Card.update(slides[index],item);Card.updateCompact(tiles[index],item,assets);closeStep();
+    refreshAchievements();closeStep();
     if(item.criteria.every(c=>c.done))Card.celebrate?.(slides[index]);
   });
   overlay.querySelector('.bba-backdrop').addEventListener('click',close);
@@ -118,9 +160,11 @@
     }
   });
   const resize=()=>{
-    tiles.forEach(t=>Card.corners(t,t.offsetWidth,178,28,'#ededed'));
-    if(innerWidth>480)Card.corners(app,app.offsetWidth,app.offsetHeight,42);else app.style.clipPath='';
+    tiles.forEach(t=>Card.corners(t,t.offsetWidth,178,24,'#ededed'));
+    document.querySelectorAll('.bba-surface').forEach(s=>Card.corners(s,s.offsetWidth,s.offsetHeight,16));
+    if(!levelNext.hidden){Card.corners(levelNext,levelNext.offsetWidth,levelNext.offsetHeight,24,'#ededed');Card.corners(levelAction,levelAction.offsetWidth,50,16);}
+    if(innerWidth>480)Card.corners(app,app.offsetWidth,app.offsetHeight,32);else app.style.clipPath='';
   };
-  new ResizeObserver(resize).observe(app);resize();
+  new ResizeObserver(resize).observe(app);resize();syncOverview();
   const requested=new URLSearchParams(location.search).get('open');if(requested)open(requested==='1'?'verified':requested);
 })();

@@ -9,21 +9,42 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../../prototype-library/birbir-prototype-library.css">
-  <link rel="stylesheet" href="../../prototype-library/achievement-card.css?v=10">
-  <link rel="stylesheet" href="../../prototype-library/achievement-coverflow.css?v=10">
-  <link rel="stylesheet" href="screen.css?v=10">
+  <link rel="stylesheet" href="../../prototype-library/achievement-card.css?v=11">
+  <link rel="stylesheet" href="../../prototype-library/achievement-coverflow.css?v=11">
+  <link rel="stylesheet" href="screen.css?v=11">
 </head>
 <body>
   <main class="bba-app" id="achievement-app">
     <div class="bba-screen" id="achievement-screen">
-      <header class="bba-header"><a href="../../index.html" aria-label="Назад"><img src="../../assets/achievement-gallery/back.svg" width="24" height="24" alt=""></a></header>
-      <div class="bba-content">
-        <section class="bba-profile" aria-labelledby="screen-title">
-          <img src="../../assets/achievement-gallery/avatar.png" width="100" height="100" alt="">
-          <div><h1 id="screen-title">Мои достижения</h1><p>Зарабатывайте бейджи доверия<br>для роста продаж на BirBir</p></div>
+      <section class="bba-intro bba-surface">
+        <div class="bba-intro-body">
+          <a class="bba-back" href="../../index.html" aria-label="Назад"><img src="../../assets/achievement-gallery/back.svg" width="24" height="24" alt=""></a>
+          <div class="bba-profile" aria-labelledby="screen-title">
+            <div class="bba-avatar" id="profile-avatar">
+              <img class="bba-avatar-default" src="../../assets/achievement-gallery/avatar.png" width="80" height="80" alt="">
+              <img class="bba-avatar-layer" src="../../assets/achievement-gallery/avatar-base.png" width="80" height="80" alt="" hidden>
+              <img class="bba-avatar-layer" src="../../assets/achievement-gallery/avatar-user.png" width="80" height="80" alt="" hidden>
+              <span class="bba-avatar-badge" aria-label="Старт на BirBir — выполнено" hidden><span class="bba-avatar-badge-art"><img src="../../assets/achievement-gallery/seller.png" alt=""></span></span>
+            </div>
+            <div><h1 id="screen-title">Мои достижения</h1><p>Зарабатывайте бейджи доверия для роста продаж на BirBir</p></div>
+          </div>
+          <section class="bba-level-next" aria-labelledby="level-next-title">
+            <div class="bba-level-copy">
+              <p class="bba-level-eyebrow">Следующий уровень</p>
+              <div><h2 id="level-next-title">Добавить фото профиля</h2><p id="level-next-description">Или выбрать из набора</p></div>
+            </div>
+            <button class="bba-next-step bba-level-action" id="level-next-action" type="button">Добавить фото</button>
+          </section>
+        </div>
+      </section>
+      <section class="bba-levels bba-surface" aria-labelledby="levels-title">
+        <h2 class="bba-section-label" id="levels-title">Уровни</h2>
+        <div class="bba-grid" id="achievement-grid"></div>
+      </section>
+      <section class="bba-business bba-surface" aria-labelledby="business-title">
+        <h2 class="bba-section-label" id="business-title">Для бизнеса</h2>
+        <div class="bba-grid" id="business-grid"></div>
         </section>
-        <section class="bba-grid" id="achievement-grid" aria-label="Достижения"></section>
-      </div>
     </div>
     <section class="bba-overlay" id="achievement-overlay" role="dialog" aria-modal="true" aria-label="Проверенный — галерея достижений" hidden>
       <button class="bba-backdrop" type="button" aria-label="Закрыть галерею"></button>
@@ -42,9 +63,9 @@
       </section>
     </section>
   </main>
-  <script src="../../prototype-library/achievement-card.js?v=10"></script>
-  <script src="../../prototype-library/achievement-coverflow.js?v=10"></script>
-  <script src="achievements.js?v=10"></script>
-  <script src="screen.js?v=10"></script>
+  <script src="../../prototype-library/achievement-card.js?v=11"></script>
+  <script src="../../prototype-library/achievement-coverflow.js?v=11"></script>
+  <script src="achievements.js?v=11"></script>
+  <script src="screen.js?v=11"></script>
 </body>
 </html>
