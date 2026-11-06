@@ -54,10 +54,11 @@
   function compactState(achievement) {
     const done=achievement.criteria.filter(c=>c.done).length,total=achievement.criteria.length;
     const complete=done===total,business=achievement.group==='business',locked=!business&&!!achievement.locked;
-    return {done,total,complete,business,locked,progress:!business&&!locked&&!complete,
+    const detailsLabel=locked&&achievement.detailsLabel?String(achievement.detailsLabel):null;
+    return {done,total,complete,business,locked,detailsLabel,progress:!business&&!locked&&!complete,
       icon:locked&&achievement.lockedIcon?achievement.lockedIcon:achievement.icon,
       opacity:business?.3:locked?.45:complete?1:.3,
-      iconY:business||locked?24:17,textY:business||locked?114:107,
+      iconY:detailsLabel?13.5:business||locked?24:17,textY:detailsLabel?103.5:business||locked?114:107,
       subtitle:business?'Подробнее':locked?'Пока закрыт':complete?'Задание выполнено':`${done}/${total} выполнено`,
       badge:business?achievement.badge:null};
   }
@@ -66,6 +67,9 @@
     return `<img class="bba-mini__image" src="${src}" alt="" draggable="false" style="opacity:${state.opacity}">`+
       (state.progress?`<img class="bba-mini__image bba-mini__image-fill" src="${src}" alt="" draggable="false" style="clip-path:inset(${(1-state.done/state.total)*100}% 0 0)">`:'')+
       (state.badge?`<span class="bba-mini__badge">${escape(state.badge)}</span>`:'');
+  }
+  function artwork(achievement,assets) {
+    return compactMedia(compactState(achievement),assets);
   }
   function update(card,achievement) {
     celebrations.get(card)?.();
@@ -123,6 +127,11 @@
     text.style.color=state.locked?`rgb(${mix(133,41,p)},${mix(133,41,p)},${mix(133,41,p)})`:'';
     subtitle.style.color=state.business?`rgb(${mix(31,41,p)},${mix(147,41,p)},${mix(204,41,p)})`:'';
     subtitle.style.fontWeight=state.business?mix(500,400,p):400;
+    let compactLabel=text.querySelector('.bba-card__compact-label');
+    if(state.detailsLabel&&p<1) {
+      if(!compactLabel){compactLabel=document.createElement('span');compactLabel.className='bba-card__compact-label';compactLabel.textContent=state.detailsLabel;text.appendChild(compactLabel);}
+      compactLabel.style.opacity=1-p;
+    }else compactLabel?.remove();
     card.querySelector('.bba-card__progress').style.opacity=state.progress?1:p;
     const geometry={ width: mix(compactWidth, FULL.width * scale, p), height: mix(compactHeight, FULL.height * scale, p) };
     corners(card,geometry.width,geometry.height,mix(24,32*scale,p));
@@ -139,7 +148,7 @@
     el.dataset.achievement=achievement.id;el.dataset.complete=String(state.complete);
     el.dataset.group=state.business?'business':'level';el.dataset.locked=String(state.locked);
     el.style.setProperty('--mini-icon-y',state.iconY+'px');el.style.setProperty('--mini-text-y',state.textY+'px');
-    el.innerHTML=`<span class="bba-mini__media" aria-hidden="true">${compactMedia(state,assets)}</span><div class="bba-mini__text"><h2>${escape(achievement.title)}</h2><p>${state.subtitle}</p></div>`+
+    el.innerHTML=`<span class="bba-mini__media" aria-hidden="true">${compactMedia(state,assets)}</span><div class="bba-mini__text"><h2>${escape(achievement.title)}</h2><p>${state.subtitle}</p>${state.detailsLabel?`<p class="bba-mini__details-label">${escape(state.detailsLabel)}</p>`:''}</div>`+
       (state.progress?`<div class="bba-mini__progress"><span style="width:${state.done/state.total*100}%"></span></div>`:'');
     requestAnimationFrame(()=>{if(el.offsetWidth)corners(el,el.offsetWidth,178,24,'#ededed');});
   }
@@ -188,5 +197,5 @@
     timer=setTimeout(cancel,810);
     return true;
   }
-  window.BirBirAchievementCard = { create, update, compact, updateCompact, setProgress, corners, celebrate, geometry: FULL };
+  window.BirBirAchievementCard = { create, update, compact, updateCompact, artwork, setProgress, corners, celebrate, geometry: FULL };
 })();

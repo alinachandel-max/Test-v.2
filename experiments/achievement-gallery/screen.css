@@ -22,12 +22,13 @@ html.bba-gallery-open, .bba-gallery-open body { overflow:hidden;overscroll-behav
 .bba-avatar-badge-art img { position:absolute;left:-3px;top:-3.3px;width:24px;height:24px;max-width:none; }
 .bba-level-next { position:relative;display:flex;flex-direction:column;gap:16px;padding:16px;border:1px solid transparent;border-radius:24px; }
 .bba-level-next[hidden] { display:none; }
-.bba-level-copy { display:flex;flex-direction:column;gap:8px; }
+.bba-level-copy { display:flex;align-items:flex-start;gap:8px; }
+.bba-level-text { flex:1;min-width:0; }
+.bba-level-icon { position:relative;flex:none;width:40px;height:40px; }
 .bba-level-copy p,.bba-level-copy h2 { margin:0; }
-.bba-level-eyebrow { font-size:12px;line-height:15px;font-weight:500;color:var(--muted,#858585); }
 .bba-level-copy h2 { font-size:16px;line-height:19px;font-weight:600; }
 .bba-level-copy h2 + p { margin-top:4px;font-size:14px;line-height:17px; }
-.bba-level-next .bba-level-action { width:100%;height:50px;background:var(--accent,#b8057d);font-size:16px;line-height:19px;border-radius:16px; }
+.bba-level-next .bba-level-action { width:100%;height:50px;background:var(--task-color,#19b333);font-size:16px;line-height:19px;border-radius:16px; }
 .bba-levels,.bba-business { padding:16px; }
 .bba-section-label { margin:0 0 12px;font-size:14px;line-height:17px;font-weight:500;color:var(--muted,#858585); }
 .bba-grid { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:8px;row-gap:12px; }

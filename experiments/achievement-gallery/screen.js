@@ -46,6 +46,8 @@
     levelNext.hidden=!next;
     if(next){
       levelAction.dataset.achievement=next.id;
+      levelNext.style.setProperty('--task-color',next.color);
+      document.querySelector('#level-next-icon').innerHTML=Card.artwork(next,assets);
       document.querySelector('#level-next-title').textContent=next.overview.title;
       document.querySelector('#level-next-description').textContent=next.overview.description;
       levelAction.textContent=next.overview.button;
